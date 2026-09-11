@@ -1,0 +1,13 @@
+# Codex local state and build cache
+.codex*
+.gocache/
+
+# Local secrets and runtime data
+.env
+.env.*
+data/
+*.db
+
+# Editor files
+.idea/
+.vscode/
