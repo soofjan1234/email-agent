@@ -1,0 +1,9 @@
+From: support@example.test
+To: office@example.test
+Message-ID: <amb-reply@example.test>
+In-Reply-To: <amb-a@example.test>
+References: <amb-a@example.test> <amb-b@example.test>
+Date: Fri, 04 Sep 2026 13:20:00 +0000
+Subject: Re: Offline NAS
+
+Which device should we start with?

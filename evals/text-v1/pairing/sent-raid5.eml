@@ -1,0 +1,9 @@
+From: support@example.test
+To: customer.one@example.test
+Message-ID: <raid5-reply@example.test>
+In-Reply-To: <raid5-inbound@example.test>
+References: <raid5-inbound@example.test>
+Date: Fri, 04 Sep 2026 10:00:00 +0000
+Subject: Re: DS920+ RAID5 degraded
+
+Please stop heavy writes and send the storage pool screenshot.

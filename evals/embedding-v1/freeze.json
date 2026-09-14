@@ -1,0 +1,13 @@
+{
+  "model": "text-embedding-3-small",
+  "dimensions": 1536,
+  "index_version": "embedding-v1",
+  "distance": "cosine",
+  "recall_at_3": {
+    "product_doc": 1.0,
+    "approved_case": 1.0
+  },
+  "primary_language": "en",
+  "evaluated_at": "2026-09-13T07:24:19.310824+00:00",
+  "gateway": "api.ztoken.pro"
+}

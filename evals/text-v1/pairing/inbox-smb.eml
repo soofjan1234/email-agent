@@ -1,0 +1,7 @@
+From: customer.two@example.test
+To: support@example.test
+Message-ID: <smb-inbound@example.test>
+Date: Fri, 04 Sep 2026 11:00:00 +0000
+Subject: SMB access denied
+
+One Windows user cannot open the share.

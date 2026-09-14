@@ -5,7 +5,14 @@
 # Local secrets and runtime data
 .env
 .env.*
+!.env.example
 data/
+.venv/
+__pycache__/
+.pytest_cache/
+evals/embedding-v1/last-run.json
+evals/llm-json-v1/last-run.json
+evals/text-v1/last-run.json
 *.db
 
 # Editor files
