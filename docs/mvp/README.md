@@ -19,7 +19,7 @@
 | LLM JSON 与安全降级 | [验证设计](designs/2026-09-13-llm-json-truth-test-design.md) | [执行步骤](plans/2026-09-13-llm-json-truth-test.md) |
 | 英文规范化、配对与脱敏 | [验证设计](designs/2026-09-13-text-pairing-privacy-design.md) | [执行步骤](plans/2026-09-13-text-pairing-privacy.md) |
 
-[验证记录](validation.md)汇总实际证据与限制；工作进度统一维护在[状态账本](../status/2026/09.md)。
+[验证记录](validation.md)汇总实际证据与限制；设计与计划进度统一维护在[主题状态](status.md)的两张表中。
 
 ## 1. 项目目标
 

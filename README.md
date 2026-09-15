@@ -12,7 +12,7 @@
 - [数据库设计](docs/mvp/database-design.md)
 - [接口设计](docs/mvp/api-design.md)
 - [验证记录](docs/mvp/validation.md)
-- [工作状态账本](docs/status/2026/09.md)
+- [MVP 设计与计划状态](docs/mvp/status.md)
 
 ## 核心边界
 
