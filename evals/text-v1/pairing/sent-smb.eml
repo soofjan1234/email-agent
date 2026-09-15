@@ -1,0 +1,8 @@
+From: support@example.test
+To: customer.two@example.test
+Message-ID: <smb-reply@example.test>
+In-Reply-To: <smb-inbound@example.test>
+Date: Fri, 04 Sep 2026 11:20:00 +0000
+Subject: Re: SMB access denied
+
+Please send the shared folder permission screenshot.

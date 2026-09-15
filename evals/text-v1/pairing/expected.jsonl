@@ -1,0 +1,5 @@
+{"reply_file": "sent-raid5.eml", "inbound_files": ["inbox-raid5.eml"], "status": "paired", "pairing_method": "header"}
+{"reply_file": "sent-smb.eml", "inbound_files": ["inbox-smb.eml"], "status": "paired", "pairing_method": "header"}
+{"reply_file": "sent-smart.eml", "inbound_files": ["inbox-smart.eml"], "status": "paired", "pairing_method": "header"}
+{"reply_file": "sent-ambiguous.eml", "inbound_files": ["inbox-amb-a.eml", "inbox-amb-b.eml"], "status": "needs_review", "pairing_method": "header"}
+{"reply_file": "sent-noheader.eml", "inbound_files": [], "status": "needs_review", "pairing_method": "none"}

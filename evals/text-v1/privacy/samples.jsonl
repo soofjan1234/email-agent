@@ -1,0 +1,6 @@
+{"sample_id": "p-email", "source_text": "Please reply to alex.rivera@example.test about the DS920+.", "must_not_appear": ["alex.rivera@example.test"], "required_placeholders": ["[email]"]}
+{"sample_id": "p-phone", "source_text": "Call me on +1 415-555-0134 after the backup finishes.", "must_not_appear": ["+1 415-555-0134"], "required_placeholders": ["[phone]"]}
+{"sample_id": "p-serial", "source_text": "The failed disk is SN-7K2Q9M88 in bay 2.", "must_not_appear": ["SN-7K2Q9M88"], "required_placeholders": ["[device serial]"]}
+{"sample_id": "p-ip", "source_text": "The NAS is reachable at 203.0.113.44 on the WAN.", "must_not_appear": ["203.0.113.44"], "required_placeholders": ["[public ip]"]}
+{"sample_id": "p-account-token", "source_text": "username: office.admin\nThe API key is tok_9f3a12bcd445.", "must_not_appear": ["office.admin", "tok_9f3a12bcd445"], "required_placeholders": ["[account]", "[access token]"]}
+{"sample_id": "p-address-quote", "source_text": "Ship the spare to 221 Baker Street.\n-- \nAlex Rivera\n> On Fri, the customer wrote the original request.", "must_not_appear": ["221 Baker Street", "Alex Rivera", "original request"], "required_placeholders": ["[street address]"]}

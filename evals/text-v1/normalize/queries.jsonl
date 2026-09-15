@@ -1,0 +1,8 @@
+{"query_id": "n-raid5", "query": "Can I keep writing to a DS920+ volume after RAID5 degrades?", "must_keep": ["DS920+", "RAID5"]}
+{"query_id": "n-smart", "query": "DSM shows a S.M.A.R.T. warning with pending sectors.", "must_keep": ["S.M.A.R.T."]}
+{"query_id": "n-smb", "query": "Windows cannot open the SMB share after login.", "must_keep": ["SMB"]}
+{"query_id": "n-error13", "query": "Users get error 13 when they open a shared folder.", "must_keep": ["error 13"]}
+{"query_id": "n-ds220", "query": "Our DS220+ disappeared from the LAN.", "must_keep": ["DS220+"]}
+{"query_id": "n-ds1821", "query": "A DS1821+ RAID6 pool lost one disk.", "must_keep": ["DS1821+", "RAID6"]}
+{"query_id": "n-dsm72", "query": "Is DSM 7.2 required before we replace the disk?", "must_keep": ["DSM 7.2"]}
+{"query_id": "n-mixed", "query": "DS920+ S.M.A.R.T. and SMB both failed with error 13.", "must_keep": ["DS920+", "S.M.A.R.T.", "SMB", "error 13"]}

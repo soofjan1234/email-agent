@@ -1,0 +1,7 @@
+From: customer.one@example.test
+To: support@example.test
+Message-ID: <raid5-inbound@example.test>
+Date: Fri, 04 Sep 2026 09:00:00 +0000
+Subject: DS920+ RAID5 degraded
+
+Hello, our DS920+ RAID5 volume is degraded. Please advise.

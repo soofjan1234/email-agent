@@ -1,0 +1,10 @@
+{
+  "model": "gpt-4o-mini",
+  "json_mode": "json_schema",
+  "schema_pass_rate": 1.0,
+  "citation_pass": true,
+  "safety_pass": true,
+  "primary_language": "en",
+  "evaluated_at": "2026-09-13T07:50:49.715694+00:00",
+  "gateway": "api.ztoken.pro"
+}

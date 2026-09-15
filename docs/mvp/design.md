@@ -2,7 +2,7 @@
 
 ## 1. 背景与当前事实
 
-本项目面向 NAS 售后客服。第一版通过 API 或本地样例模拟收件，使用检索增强生成（RAG）查找相似历史案例和产品文档，由 Agent 生成回复草稿，再交给人工审核。审核通过后仅模拟发件并保存记录，不连接真实邮箱，也不产生真实外部副作用。
+本项目面向海外 NAS 售后客服。第一版通过 API 或本地样例模拟收件，使用检索增强生成（RAG）查找相似历史案例和产品文档，由 Agent 生成英文回复草稿，再交给人工审核。审核通过后仅模拟发件并保存记录，不连接真实邮箱，也不产生真实外部副作用。客户邮件、知识库、审核页面和模拟发件均为英文。
 
 项目名称为 `email-agent`。仓库当前只有设计文档，没有业务代码；已确认的产品范围不包含工单能力。
 
@@ -188,7 +188,7 @@ active → archived
 
 ### 9.2 知识格式
 
-第一版使用仓库内 Markdown 文件：
+第一版使用仓库内英文 Markdown 文件：
 
 - 产品文档包含产品型号、系统版本、问题分类、事实说明、排查步骤、风险提示和来源。
 - 已审核案例包含用户现象、适用条件、最终回复样板、人工修订说明和来源。
@@ -199,7 +199,7 @@ active → archived
 
 - 删除签名、免责声明、重复引用链和无关转发头，同时保留原始记录用于审计。
 - 脱敏邮箱、电话、地址、设备序列号、外网地址、账号和访问令牌。
-- 脱敏后的占位符保留语义类型，例如 `[设备序列号]`，避免破坏案例结构。
+- 脱敏后的占位符保留语义类型，例如 `[device serial]`、`[email]`，避免破坏案例结构。
 - 清洗和脱敏结果必须在案例发布页面中与受控原文对照审核。
 
 ### 9.4 切分
@@ -241,15 +241,15 @@ Agent 返回严格 JSON，后端不接受 JSON 之外的自由文本：
   "priority": "urgent",
   "risks": ["data_loss"],
   "knowledge_status": "high_risk",
-  "reason": "邮件描述存储池降级，继续写入可能扩大数据风险",
-  "missing_information": ["设备型号", "系统版本", "存储池状态截图"],
+  "reason": "The email describes a degraded storage pool; continued writes may increase data-loss risk.",
+  "missing_information": ["device model", "DSM version", "storage pool status screenshot"],
   "citations": [
     {
       "chunk_id": "uuid",
       "usage": "fact"
     }
   ],
-  "reply_draft": "您好，当前信息显示可能存在数据风险……",
+  "reply_draft": "Hello, the current information indicates a possible data-loss risk...",
   "requires_human_review": true
 }
 ```
@@ -332,6 +332,7 @@ MVP 不引入分布式链路系统，但在日志和审计记录中贯穿同一 
 ### 16.1 已决策
 
 - 领域：NAS 售后；
+- 目标用户为海外售后；客户邮件、知识库、Agent 回复草稿、审核页面和模拟发件均为英文；
 - 第一版模拟收件和发件；
 - 不包含工单；
 - 所有邮件进入 Agent；
@@ -346,7 +347,8 @@ MVP 不引入分布式链路系统，但在日志和审计记录中贯穿同一 
 - LangGraph 是 Agent 工作流运行状态的唯一来源，使用 PostgreSQL Checkpointer、Conditional Edges、有限 Cycles 和 `interrupt()`；
 - 人工中断不是单独采用 LangGraph 的充分理由，主要选型依据是高级 RAG 的非线性判断、回退和人工兜底；
 - 具体技术选择以[技术选型](tech-design.md)为准。
+- 第一版 Embedding 当前先用 `text-embedding-3-small` / 1536 / `embedding-v1`；其他 Embedding 待有可用 key 后补测，换模型必须新建索引版本并全量重嵌入。
 
 ### 16.2 进入计划前的技术验证
 
-模型、混合检索、中文分词、历史邮件配对、脱敏和任务可靠性的 truth test 统一记录在[技术选型](tech-design.md)。这些验证不阻塞业务设计成立，但应排在实施计划前部，未获得结果前不得固定模型、阈值和调优参数。
+模型、混合检索、英文关键词规范化、历史邮件配对、脱敏和任务可靠性的 truth test 统一记录在[技术选型](tech-design.md)。这些验证不阻塞业务设计成立，但应排在实施计划前部，未获得结果前不得固定模型、阈值和调优参数。

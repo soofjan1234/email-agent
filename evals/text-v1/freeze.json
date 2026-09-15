@@ -1,0 +1,16 @@
+{
+  "index_version": "text-v1",
+  "normalizer": "protect_identifiers_then_english",
+  "pairing": "header_first",
+  "redaction_placeholders": [
+    "[email]",
+    "[phone]",
+    "[device serial]",
+    "[public ip]",
+    "[account]",
+    "[access token]",
+    "[street address]"
+  ],
+  "primary_language": "en",
+  "evaluated_at": "2026-09-13T08:00:08.467013+00:00"
+}
