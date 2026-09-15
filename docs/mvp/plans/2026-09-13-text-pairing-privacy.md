@@ -1,5 +1,7 @@
 # 规范化、配对与脱敏实施计划
 
+适用范围：第一版专项验证；[MVP 入口](../README.md) · [验证记录](../validation.md)。
+
 依据已确认设计 [规范化/配对/脱敏验证](../designs/2026-09-13-text-pairing-privacy-design.md)。
 
 ## 任务

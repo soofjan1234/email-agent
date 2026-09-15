@@ -9,7 +9,17 @@
 - [数据库设计](database-design.md)：说明实体、关系、约束和数据生命周期。
 - [接口设计](api-design.md)：说明 HTTP 接口、请求响应、错误和幂等契约。
 
-本页只维护第一版做什么、不做什么以及怎样判断整体完成。实现方式由总体设计和专项设计维护，后续实施计划确认后再加入本组入口。
+本页只维护第一版范围与整体验收标准。以下专项材料维护各自验证方案及执行步骤，整体业务实施计划尚待编写。
+
+### 专项验证材料
+
+| 主题 | 设计 | 实施计划 |
+| --- | --- | --- |
+| Embedding | [验证设计](designs/2026-09-13-embedding-truth-test-design.md) | [执行步骤](plans/2026-09-13-embedding-truth-test.md) |
+| LLM JSON 与安全降级 | [验证设计](designs/2026-09-13-llm-json-truth-test-design.md) | [执行步骤](plans/2026-09-13-llm-json-truth-test.md) |
+| 英文规范化、配对与脱敏 | [验证设计](designs/2026-09-13-text-pairing-privacy-design.md) | [执行步骤](plans/2026-09-13-text-pairing-privacy.md) |
+
+[验证记录](validation.md)汇总实际证据与限制；工作进度统一维护在[状态账本](../status/2026/09.md)。
 
 ## 1. 项目目标
 

@@ -1,5 +1,7 @@
 # LLM JSON 与安全降级验证实施计划
 
+适用范围：第一版专项验证；[MVP 入口](../README.md) · [验证记录](../validation.md)。
+
 依据已确认设计 [LLM JSON 与安全降级验证](../designs/2026-09-13-llm-json-truth-test-design.md)。
 
 ## 范围

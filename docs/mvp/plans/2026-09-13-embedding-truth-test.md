@@ -1,5 +1,7 @@
 # Embedding 阻断性验证实施计划
 
+适用范围：第一版专项验证；[MVP 入口](../README.md) · [验证记录](../validation.md)。
+
 依据已确认设计 [Embedding 阻断性验证](../designs/2026-09-13-embedding-truth-test-design.md)。产品语言已冻结为英文。
 
 ## 范围
