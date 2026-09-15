@@ -114,4 +114,4 @@ LangGraph Checkpointer
 - 审计记录不保存模型密钥，普通日志不记录完整邮件正文。
 - 邮箱、电话、地址、设备序列号、外网地址、账号和访问令牌在进入案例库前必须脱敏。
 
-总体流程、状态机和知识生产规则见[技术设计](my-skills/designs/2026-09-10-nas-after-sales-email-agent-design.md)。
+总体流程、状态机和知识生产规则见[总体设计](design.md)。

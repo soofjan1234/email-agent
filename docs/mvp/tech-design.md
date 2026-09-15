@@ -332,4 +332,4 @@ SQLite 不能替代 PostgreSQL 集成测试，因为它无法证明 pgvector、G
 
 第一版只能冻结已经完成阻断性验证的模型、维度和安全边界。RRF 参数、召回数量等效果参数先使用保守默认值，不把未经比较的结果表述为最优。
 
-总体业务流程见[技术设计](my-skills/designs/2026-09-10-nas-after-sales-email-agent-design.md)，数据实体见[数据库设计](database-design.md)，HTTP 契约见[接口设计](api-design.md)。
+总体业务流程见[总体设计](design.md)，数据实体见[数据库设计](database-design.md)，HTTP 契约见[接口设计](api-design.md)。

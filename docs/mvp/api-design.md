@@ -111,4 +111,4 @@
 
 停止检索已发布案例，但保留历史引用和审计记录。已发布案例的修改必须生成新版本。
 
-数据库实体和幂等约束见[数据库设计](database-design.md)，总体流程见[技术设计](my-skills/designs/2026-09-10-nas-after-sales-email-agent-design.md)。
+数据库实体和幂等约束见[数据库设计](database-design.md)，总体流程见[总体设计](design.md)。
