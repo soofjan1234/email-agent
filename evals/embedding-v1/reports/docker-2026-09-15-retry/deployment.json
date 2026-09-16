@@ -1,0 +1,70 @@
+[
+  {
+    "alias": "snowflake",
+    "model": {
+      "model": "Snowflake/snowflake-arctic-embed-m-v1.5",
+      "revision": "e58a8f756156a1293d763f17e3aae643474e9b8a",
+      "dimensions": 768,
+      "query_prefix": "Represent this sentence for searching relevant passages: "
+    },
+    "started_at": "2026-09-15T07:39:10.800984+00:00",
+    "startup_exit_code": 0,
+    "startup_output": " Container email-embedding-eval-embedding-1  Recreate\n Container email-embedding-eval-embedding-1  Recreated\n Container email-embedding-eval-embedding-1  Starting\n Container email-embedding-eval-embedding-1  Started\n",
+    "ready": true,
+    "startup_wait_seconds": 8.411619700025767,
+    "evaluation_exit_code": 0,
+    "post_run_resource_snapshot": "{\"BlockIO\":\"0B / 0B\",\"CPUPerc\":\"0.32%\",\"Container\":\"email-embedding-eval-embedding-1\",\"ID\":\"0b2b690e4df8\",\"MemPerc\":\"9.95%\",\"MemUsage\":\"815.4MiB / 8GiB\",\"Name\":\"email-embedding-eval-embedding-1\",\"NetIO\":\"656kB / 329kB\",\"PIDs\":\"13\"}",
+    "image_memory_cpu": "\"sha256:f50bc806338120e138d774236098580f7e5840dbe8bc001ef64615847c1685e8\" 8589934592 4000000000"
+  },
+  {
+    "alias": "nomic",
+    "model": {
+      "model": "nomic-ai/nomic-embed-text-v1.5",
+      "revision": "e5cf08aadaa33385f5990def41f7a23405aec398",
+      "dimensions": 768,
+      "query_prefix": "search_query: ",
+      "document_prefix": "search_document: "
+    },
+    "started_at": "2026-09-15T07:39:23.104181+00:00",
+    "startup_exit_code": 0,
+    "startup_output": " Container email-embedding-eval-embedding-1  Recreate\n Container email-embedding-eval-embedding-1  Recreated\n Container email-embedding-eval-embedding-1  Starting\n Container email-embedding-eval-embedding-1  Started\n",
+    "ready": true,
+    "startup_wait_seconds": 229.2527606000076,
+    "evaluation_exit_code": 0,
+    "post_run_resource_snapshot": "{\"BlockIO\":\"0B / 0B\",\"CPUPerc\":\"0.29%\",\"Container\":\"email-embedding-eval-embedding-1\",\"ID\":\"e616ab67f546\",\"MemPerc\":\"14.10%\",\"MemUsage\":\"1.128GiB / 8GiB\",\"Name\":\"email-embedding-eval-embedding-1\",\"NetIO\":\"575MB / 8.87MB\",\"PIDs\":\"14\"}",
+    "image_memory_cpu": "\"sha256:f50bc806338120e138d774236098580f7e5840dbe8bc001ef64615847c1685e8\" 8589934592 4000000000"
+  },
+  {
+    "alias": "bge-m3",
+    "model": {
+      "model": "BAAI/bge-m3",
+      "revision": "5617a9f61b028005a4858fdac845db406aefb181",
+      "dimensions": 1024
+    },
+    "started_at": "2026-09-15T07:43:17.347213+00:00",
+    "startup_exit_code": 0,
+    "startup_output": " Container email-embedding-eval-embedding-1  Recreate\n Container email-embedding-eval-embedding-1  Recreated\n Container email-embedding-eval-embedding-1  Starting\n Container email-embedding-eval-embedding-1  Started\n",
+    "ready": true,
+    "startup_wait_seconds": 90.1269327000482,
+    "evaluation_exit_code": 0,
+    "post_run_resource_snapshot": "{\"BlockIO\":\"0B / 0B\",\"CPUPerc\":\"0.43%\",\"Container\":\"email-embedding-eval-embedding-1\",\"ID\":\"004c1c347c7e\",\"MemPerc\":\"21.16%\",\"MemUsage\":\"1.693GiB / 8GiB\",\"Name\":\"email-embedding-eval-embedding-1\",\"NetIO\":\"259MB / 4.29MB\",\"PIDs\":\"13\"}",
+    "image_memory_cpu": "\"sha256:f50bc806338120e138d774236098580f7e5840dbe8bc001ef64615847c1685e8\" 8589934592 4000000000"
+  },
+  {
+    "alias": "qwen3",
+    "model": {
+      "model": "Qwen/Qwen3-Embedding-0.6B",
+      "revision": "97b0c614be4d77ee51c0cef4e5f07c00f9eb65b3",
+      "dimensions": 1024,
+      "query_prefix": "Instruct: Given an English NAS support question, retrieve relevant passages that answer the question.\nQuery: "
+    },
+    "started_at": "2026-09-15T07:44:57.184775+00:00",
+    "startup_exit_code": 0,
+    "startup_output": " Container email-embedding-eval-embedding-1  Recreate\n Container email-embedding-eval-embedding-1  Recreated\n Container email-embedding-eval-embedding-1  Starting\n Container email-embedding-eval-embedding-1  Started\n",
+    "ready": true,
+    "startup_wait_seconds": 20.433652699983213,
+    "evaluation_exit_code": 0,
+    "post_run_resource_snapshot": "{\"BlockIO\":\"0B / 0B\",\"CPUPerc\":\"12.38%\",\"Container\":\"email-embedding-eval-embedding-1\",\"ID\":\"6c7c430f78b7\",\"MemPerc\":\"30.47%\",\"MemUsage\":\"2.438GiB / 8GiB\",\"Name\":\"email-embedding-eval-embedding-1\",\"NetIO\":\"50.8kB / 412kB\",\"PIDs\":\"24\"}",
+    "image_memory_cpu": "\"sha256:f50bc806338120e138d774236098580f7e5840dbe8bc001ef64615847c1685e8\" 8589934592 4000000000"
+  }
+]

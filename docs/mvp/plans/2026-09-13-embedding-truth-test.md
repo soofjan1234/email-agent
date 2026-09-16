@@ -1,4 +1,6 @@
-# Embedding 阻断性验证实施计划
+# Embedding 网关验证实施计划（已退役）
+
+> 2026-09-15：本计划对应的 API key 网关选型路线已废弃，以下内容仅供历史追溯，命令不作为当前操作指南。新方向见 [Docker 开放模型对比设计](../designs/2026-09-13-embedding-truth-test-design.md)。原代码及历史测试完成状态保留，新部署转入 [Docker 实施计划](2026-09-15-docker-embedding-comparison.md)；不要按本计划自动覆盖冻结记录。
 
 适用范围：第一版专项验证；[MVP 入口](../README.md) · [验证记录](../validation.md)。
 
@@ -43,6 +45,8 @@
 - 前置：T3，本地 `.env` 可用
 
 ## 最终验证
+
+2026-09-15 补测完成：使用现有 `HttpEmbedder` 与 `evaluate_model` 调用 `local_server` 的 Qwen3 0.6B，独立保存结果，不调用自动冻结入口。真实接口结果与 12 项相关回归证据见[验证记录](../validation.md)，现有冻结记录保持不变。
 
 ```text
 pytest tests/eval -q

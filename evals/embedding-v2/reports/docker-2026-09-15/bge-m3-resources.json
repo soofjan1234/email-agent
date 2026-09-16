@@ -1,0 +1,194 @@
+[
+  {
+    "at": "2026-09-15T08:17:21.056813+00:00",
+    "exit_code": 0,
+    "raw": "{\"BlockIO\":\"0B / 0B\",\"CPUPerc\":\"399.08%\",\"Container\":\"email-embedding-eval-embedding-1\",\"ID\":\"df676355902c\",\"MemPerc\":\"21.02%\",\"MemUsage\":\"1.682GiB / 8GiB\",\"Name\":\"email-embedding-eval-embedding-1\",\"NetIO\":\"83kB / 710kB\",\"PIDs\":\"13\"}",
+    "error": ""
+  },
+  {
+    "at": "2026-09-15T08:17:23.818683+00:00",
+    "exit_code": 0,
+    "raw": "{\"BlockIO\":\"0B / 0B\",\"CPUPerc\":\"395.32%\",\"Container\":\"email-embedding-eval-embedding-1\",\"ID\":\"df676355902c\",\"MemPerc\":\"21.03%\",\"MemUsage\":\"1.682GiB / 8GiB\",\"Name\":\"email-embedding-eval-embedding-1\",\"NetIO\":\"87.5kB / 866kB\",\"PIDs\":\"13\"}",
+    "error": ""
+  },
+  {
+    "at": "2026-09-15T08:17:26.837341+00:00",
+    "exit_code": 0,
+    "raw": "{\"BlockIO\":\"0B / 0B\",\"CPUPerc\":\"391.91%\",\"Container\":\"email-embedding-eval-embedding-1\",\"ID\":\"df676355902c\",\"MemPerc\":\"21.04%\",\"MemUsage\":\"1.683GiB / 8GiB\",\"Name\":\"email-embedding-eval-embedding-1\",\"NetIO\":\"95kB / 1.13MB\",\"PIDs\":\"13\"}",
+    "error": ""
+  },
+  {
+    "at": "2026-09-15T08:17:29.612109+00:00",
+    "exit_code": 0,
+    "raw": "{\"BlockIO\":\"0B / 0B\",\"CPUPerc\":\"400.95%\",\"Container\":\"email-embedding-eval-embedding-1\",\"ID\":\"df676355902c\",\"MemPerc\":\"21.05%\",\"MemUsage\":\"1.684GiB / 8GiB\",\"Name\":\"email-embedding-eval-embedding-1\",\"NetIO\":\"101kB / 1.33MB\",\"PIDs\":\"13\"}",
+    "error": ""
+  },
+  {
+    "at": "2026-09-15T08:17:32.321842+00:00",
+    "exit_code": 0,
+    "raw": "{\"BlockIO\":\"0B / 0B\",\"CPUPerc\":\"398.67%\",\"Container\":\"email-embedding-eval-embedding-1\",\"ID\":\"df676355902c\",\"MemPerc\":\"21.04%\",\"MemUsage\":\"1.684GiB / 8GiB\",\"Name\":\"email-embedding-eval-embedding-1\",\"NetIO\":\"108kB / 1.59MB\",\"PIDs\":\"13\"}",
+    "error": ""
+  },
+  {
+    "at": "2026-09-15T08:17:35.633027+00:00",
+    "exit_code": 0,
+    "raw": "{\"BlockIO\":\"0B / 0B\",\"CPUPerc\":\"393.80%\",\"Container\":\"email-embedding-eval-embedding-1\",\"ID\":\"df676355902c\",\"MemPerc\":\"21.05%\",\"MemUsage\":\"1.684GiB / 8GiB\",\"Name\":\"email-embedding-eval-embedding-1\",\"NetIO\":\"116kB / 1.85MB\",\"PIDs\":\"13\"}",
+    "error": ""
+  },
+  {
+    "at": "2026-09-15T08:17:38.359297+00:00",
+    "exit_code": 0,
+    "raw": "{\"BlockIO\":\"0B / 0B\",\"CPUPerc\":\"396.79%\",\"Container\":\"email-embedding-eval-embedding-1\",\"ID\":\"df676355902c\",\"MemPerc\":\"21.05%\",\"MemUsage\":\"1.684GiB / 8GiB\",\"Name\":\"email-embedding-eval-embedding-1\",\"NetIO\":\"122kB / 2.11MB\",\"PIDs\":\"13\"}",
+    "error": ""
+  },
+  {
+    "at": "2026-09-15T08:17:41.057770+00:00",
+    "exit_code": 0,
+    "raw": "{\"BlockIO\":\"0B / 0B\",\"CPUPerc\":\"394.46%\",\"Container\":\"email-embedding-eval-embedding-1\",\"ID\":\"df676355902c\",\"MemPerc\":\"21.05%\",\"MemUsage\":\"1.684GiB / 8GiB\",\"Name\":\"email-embedding-eval-embedding-1\",\"NetIO\":\"130kB / 2.47MB\",\"PIDs\":\"13\"}",
+    "error": ""
+  },
+  {
+    "at": "2026-09-15T08:17:43.755280+00:00",
+    "exit_code": 0,
+    "raw": "{\"BlockIO\":\"0B / 0B\",\"CPUPerc\":\"391.09%\",\"Container\":\"email-embedding-eval-embedding-1\",\"ID\":\"df676355902c\",\"MemPerc\":\"21.05%\",\"MemUsage\":\"1.684GiB / 8GiB\",\"Name\":\"email-embedding-eval-embedding-1\",\"NetIO\":\"136kB / 2.84MB\",\"PIDs\":\"13\"}",
+    "error": ""
+  },
+  {
+    "at": "2026-09-15T08:17:46.765500+00:00",
+    "exit_code": 0,
+    "raw": "{\"BlockIO\":\"0B / 0B\",\"CPUPerc\":\"395.73%\",\"Container\":\"email-embedding-eval-embedding-1\",\"ID\":\"df676355902c\",\"MemPerc\":\"21.05%\",\"MemUsage\":\"1.684GiB / 8GiB\",\"Name\":\"email-embedding-eval-embedding-1\",\"NetIO\":\"144kB / 3.3MB\",\"PIDs\":\"13\"}",
+    "error": ""
+  },
+  {
+    "at": "2026-09-15T08:17:49.465819+00:00",
+    "exit_code": 0,
+    "raw": "{\"BlockIO\":\"0B / 0B\",\"CPUPerc\":\"393.39%\",\"Container\":\"email-embedding-eval-embedding-1\",\"ID\":\"df676355902c\",\"MemPerc\":\"21.06%\",\"MemUsage\":\"1.684GiB / 8GiB\",\"Name\":\"email-embedding-eval-embedding-1\",\"NetIO\":\"150kB / 3.56MB\",\"PIDs\":\"13\"}",
+    "error": ""
+  },
+  {
+    "at": "2026-09-15T08:17:52.164849+00:00",
+    "exit_code": 0,
+    "raw": "{\"BlockIO\":\"0B / 0B\",\"CPUPerc\":\"397.61%\",\"Container\":\"email-embedding-eval-embedding-1\",\"ID\":\"df676355902c\",\"MemPerc\":\"21.06%\",\"MemUsage\":\"1.685GiB / 8GiB\",\"Name\":\"email-embedding-eval-embedding-1\",\"NetIO\":\"158kB / 3.87MB\",\"PIDs\":\"13\"}",
+    "error": ""
+  },
+  {
+    "at": "2026-09-15T08:17:55.583772+00:00",
+    "exit_code": 0,
+    "raw": "{\"BlockIO\":\"0B / 0B\",\"CPUPerc\":\"395.51%\",\"Container\":\"email-embedding-eval-embedding-1\",\"ID\":\"df676355902c\",\"MemPerc\":\"21.06%\",\"MemUsage\":\"1.685GiB / 8GiB\",\"Name\":\"email-embedding-eval-embedding-1\",\"NetIO\":\"165kB / 4.08MB\",\"PIDs\":\"13\"}",
+    "error": ""
+  },
+  {
+    "at": "2026-09-15T08:17:58.292120+00:00",
+    "exit_code": 0,
+    "raw": "{\"BlockIO\":\"0B / 0B\",\"CPUPerc\":\"394.06%\",\"Container\":\"email-embedding-eval-embedding-1\",\"ID\":\"df676355902c\",\"MemPerc\":\"21.06%\",\"MemUsage\":\"1.685GiB / 8GiB\",\"Name\":\"email-embedding-eval-embedding-1\",\"NetIO\":\"172kB / 4.34MB\",\"PIDs\":\"13\"}",
+    "error": ""
+  },
+  {
+    "at": "2026-09-15T08:18:01.007339+00:00",
+    "exit_code": 0,
+    "raw": "{\"BlockIO\":\"0B / 0B\",\"CPUPerc\":\"399.17%\",\"Container\":\"email-embedding-eval-embedding-1\",\"ID\":\"df676355902c\",\"MemPerc\":\"21.05%\",\"MemUsage\":\"1.684GiB / 8GiB\",\"Name\":\"email-embedding-eval-embedding-1\",\"NetIO\":\"178kB / 4.55MB\",\"PIDs\":\"13\"}",
+    "error": ""
+  },
+  {
+    "at": "2026-09-15T08:18:03.731054+00:00",
+    "exit_code": 0,
+    "raw": "{\"BlockIO\":\"0B / 0B\",\"CPUPerc\":\"398.40%\",\"Container\":\"email-embedding-eval-embedding-1\",\"ID\":\"df676355902c\",\"MemPerc\":\"21.05%\",\"MemUsage\":\"1.684GiB / 8GiB\",\"Name\":\"email-embedding-eval-embedding-1\",\"NetIO\":\"184kB / 4.75MB\",\"PIDs\":\"13\"}",
+    "error": ""
+  },
+  {
+    "at": "2026-09-15T08:18:06.751899+00:00",
+    "exit_code": 0,
+    "raw": "{\"BlockIO\":\"0B / 0B\",\"CPUPerc\":\"397.00%\",\"Container\":\"email-embedding-eval-embedding-1\",\"ID\":\"df676355902c\",\"MemPerc\":\"21.06%\",\"MemUsage\":\"1.685GiB / 8GiB\",\"Name\":\"email-embedding-eval-embedding-1\",\"NetIO\":\"191kB / 5.01MB\",\"PIDs\":\"13\"}",
+    "error": ""
+  },
+  {
+    "at": "2026-09-15T08:18:09.461374+00:00",
+    "exit_code": 0,
+    "raw": "{\"BlockIO\":\"0B / 0B\",\"CPUPerc\":\"396.76%\",\"Container\":\"email-embedding-eval-embedding-1\",\"ID\":\"df676355902c\",\"MemPerc\":\"21.05%\",\"MemUsage\":\"1.684GiB / 8GiB\",\"Name\":\"email-embedding-eval-embedding-1\",\"NetIO\":\"197kB / 5.27MB\",\"PIDs\":\"13\"}",
+    "error": ""
+  },
+  {
+    "at": "2026-09-15T08:18:12.163270+00:00",
+    "exit_code": 0,
+    "raw": "{\"BlockIO\":\"0B / 0B\",\"CPUPerc\":\"397.69%\",\"Container\":\"email-embedding-eval-embedding-1\",\"ID\":\"df676355902c\",\"MemPerc\":\"21.06%\",\"MemUsage\":\"1.685GiB / 8GiB\",\"Name\":\"email-embedding-eval-embedding-1\",\"NetIO\":\"204kB / 5.63MB\",\"PIDs\":\"13\"}",
+    "error": ""
+  },
+  {
+    "at": "2026-09-15T08:18:15.611660+00:00",
+    "exit_code": 0,
+    "raw": "{\"BlockIO\":\"0B / 0B\",\"CPUPerc\":\"398.45%\",\"Container\":\"email-embedding-eval-embedding-1\",\"ID\":\"df676355902c\",\"MemPerc\":\"21.06%\",\"MemUsage\":\"1.685GiB / 8GiB\",\"Name\":\"email-embedding-eval-embedding-1\",\"NetIO\":\"213kB / 6.1MB\",\"PIDs\":\"13\"}",
+    "error": ""
+  },
+  {
+    "at": "2026-09-15T08:18:18.313393+00:00",
+    "exit_code": 0,
+    "raw": "{\"BlockIO\":\"0B / 0B\",\"CPUPerc\":\"394.82%\",\"Container\":\"email-embedding-eval-embedding-1\",\"ID\":\"df676355902c\",\"MemPerc\":\"21.06%\",\"MemUsage\":\"1.685GiB / 8GiB\",\"Name\":\"email-embedding-eval-embedding-1\",\"NetIO\":\"221kB / 6.57MB\",\"PIDs\":\"13\"}",
+    "error": ""
+  },
+  {
+    "at": "2026-09-15T08:18:21.035814+00:00",
+    "exit_code": 0,
+    "raw": "{\"BlockIO\":\"0B / 0B\",\"CPUPerc\":\"386.11%\",\"Container\":\"email-embedding-eval-embedding-1\",\"ID\":\"df676355902c\",\"MemPerc\":\"21.06%\",\"MemUsage\":\"1.685GiB / 8GiB\",\"Name\":\"email-embedding-eval-embedding-1\",\"NetIO\":\"228kB / 6.83MB\",\"PIDs\":\"13\"}",
+    "error": ""
+  },
+  {
+    "at": "2026-09-15T08:18:23.826311+00:00",
+    "exit_code": 0,
+    "raw": "{\"BlockIO\":\"0B / 0B\",\"CPUPerc\":\"393.21%\",\"Container\":\"email-embedding-eval-embedding-1\",\"ID\":\"df676355902c\",\"MemPerc\":\"21.06%\",\"MemUsage\":\"1.685GiB / 8GiB\",\"Name\":\"email-embedding-eval-embedding-1\",\"NetIO\":\"234kB / 7.03MB\",\"PIDs\":\"13\"}",
+    "error": ""
+  },
+  {
+    "at": "2026-09-15T08:18:26.843375+00:00",
+    "exit_code": 0,
+    "raw": "{\"BlockIO\":\"0B / 0B\",\"CPUPerc\":\"400.52%\",\"Container\":\"email-embedding-eval-embedding-1\",\"ID\":\"df676355902c\",\"MemPerc\":\"21.06%\",\"MemUsage\":\"1.685GiB / 8GiB\",\"Name\":\"email-embedding-eval-embedding-1\",\"NetIO\":\"241kB / 7.29MB\",\"PIDs\":\"13\"}",
+    "error": ""
+  },
+  {
+    "at": "2026-09-15T08:18:29.549409+00:00",
+    "exit_code": 0,
+    "raw": "{\"BlockIO\":\"0B / 0B\",\"CPUPerc\":\"397.65%\",\"Container\":\"email-embedding-eval-embedding-1\",\"ID\":\"df676355902c\",\"MemPerc\":\"21.05%\",\"MemUsage\":\"1.684GiB / 8GiB\",\"Name\":\"email-embedding-eval-embedding-1\",\"NetIO\":\"249kB / 7.55MB\",\"PIDs\":\"13\"}",
+    "error": ""
+  },
+  {
+    "at": "2026-09-15T08:18:32.240526+00:00",
+    "exit_code": 0,
+    "raw": "{\"BlockIO\":\"0B / 0B\",\"CPUPerc\":\"400.24%\",\"Container\":\"email-embedding-eval-embedding-1\",\"ID\":\"df676355902c\",\"MemPerc\":\"21.06%\",\"MemUsage\":\"1.685GiB / 8GiB\",\"Name\":\"email-embedding-eval-embedding-1\",\"NetIO\":\"256kB / 7.81MB\",\"PIDs\":\"13\"}",
+    "error": ""
+  },
+  {
+    "at": "2026-09-15T08:18:35.596161+00:00",
+    "exit_code": 0,
+    "raw": "{\"BlockIO\":\"0B / 0B\",\"CPUPerc\":\"397.18%\",\"Container\":\"email-embedding-eval-embedding-1\",\"ID\":\"df676355902c\",\"MemPerc\":\"21.06%\",\"MemUsage\":\"1.685GiB / 8GiB\",\"Name\":\"email-embedding-eval-embedding-1\",\"NetIO\":\"265kB / 8.12MB\",\"PIDs\":\"13\"}",
+    "error": ""
+  },
+  {
+    "at": "2026-09-15T08:18:38.303273+00:00",
+    "exit_code": 0,
+    "raw": "{\"BlockIO\":\"0B / 0B\",\"CPUPerc\":\"393.87%\",\"Container\":\"email-embedding-eval-embedding-1\",\"ID\":\"df676355902c\",\"MemPerc\":\"21.06%\",\"MemUsage\":\"1.685GiB / 8GiB\",\"Name\":\"email-embedding-eval-embedding-1\",\"NetIO\":\"271kB / 8.38MB\",\"PIDs\":\"13\"}",
+    "error": ""
+  },
+  {
+    "at": "2026-09-15T08:18:41.012723+00:00",
+    "exit_code": 0,
+    "raw": "{\"BlockIO\":\"0B / 0B\",\"CPUPerc\":\"396.75%\",\"Container\":\"email-embedding-eval-embedding-1\",\"ID\":\"df676355902c\",\"MemPerc\":\"21.06%\",\"MemUsage\":\"1.685GiB / 8GiB\",\"Name\":\"email-embedding-eval-embedding-1\",\"NetIO\":\"278kB / 8.74MB\",\"PIDs\":\"13\"}",
+    "error": ""
+  },
+  {
+    "at": "2026-09-15T08:18:43.728751+00:00",
+    "exit_code": 0,
+    "raw": "{\"BlockIO\":\"0B / 0B\",\"CPUPerc\":\"393.51%\",\"Container\":\"email-embedding-eval-embedding-1\",\"ID\":\"df676355902c\",\"MemPerc\":\"21.05%\",\"MemUsage\":\"1.684GiB / 8GiB\",\"Name\":\"email-embedding-eval-embedding-1\",\"NetIO\":\"285kB / 9.11MB\",\"PIDs\":\"13\"}",
+    "error": ""
+  },
+  {
+    "at": "2026-09-15T08:18:46.731989+00:00",
+    "exit_code": 0,
+    "raw": "{\"BlockIO\":\"0B / 0B\",\"CPUPerc\":\"395.43%\",\"Container\":\"email-embedding-eval-embedding-1\",\"ID\":\"df676355902c\",\"MemPerc\":\"21.06%\",\"MemUsage\":\"1.684GiB / 8GiB\",\"Name\":\"email-embedding-eval-embedding-1\",\"NetIO\":\"294kB / 9.63MB\",\"PIDs\":\"13\"}",
+    "error": ""
+  },
+  {
+    "at": "2026-09-15T08:18:49.420660+00:00",
+    "exit_code": 0,
+    "raw": "{\"BlockIO\":\"0B / 0B\",\"CPUPerc\":\"396.73%\",\"Container\":\"email-embedding-eval-embedding-1\",\"ID\":\"df676355902c\",\"MemPerc\":\"21.06%\",\"MemUsage\":\"1.684GiB / 8GiB\",\"Name\":\"email-embedding-eval-embedding-1\",\"NetIO\":\"300kB / 9.83MB\",\"PIDs\":\"13\"}",
+    "error": ""
+  }
+]

@@ -1,0 +1,35 @@
+{
+  "model": "nomic",
+  "configuration": {
+    "model": "nomic-ai/nomic-embed-text-v1.5",
+    "revision": "e5cf08aadaa33385f5990def41f7a23405aec398",
+    "dimensions": 768,
+    "query_prefix": "search_query: ",
+    "document_prefix": "search_document: "
+  },
+  "startup_exit_code": 0,
+  "startup_output": " Container email-embedding-eval-embedding-1  Recreate\n Container email-embedding-eval-embedding-1  Recreated\n Container email-embedding-eval-embedding-1  Starting\n Container email-embedding-eval-embedding-1  Started\n",
+  "startup_wait_seconds": 5.825024600024335,
+  "runtime": "\"sha256:f50bc806338120e138d774236098580f7e5840dbe8bc001ef64615847c1685e8\" 8589934592 4000000000",
+  "identity": {
+    "model_id": "nomic-ai/nomic-embed-text-v1.5",
+    "model_sha": "e5cf08aadaa33385f5990def41f7a23405aec398",
+    "model_dtype": "float32",
+    "served_model_name": "nomic-ai/nomic-embed-text-v1.5",
+    "model_type": {
+      "embedding": {
+        "pooling": "mean"
+      }
+    },
+    "max_concurrent_requests": 1,
+    "max_input_length": 512,
+    "max_batch_tokens": 512,
+    "max_batch_requests": 8,
+    "max_client_batch_size": 1,
+    "auto_truncate": true,
+    "tokenization_workers": 2,
+    "version": "1.9.3",
+    "sha": "06670157fb6c1523482219bdb2d1660277d38088",
+    "docker_label": "sha-0667015"
+  }
+}

@@ -9,7 +9,7 @@
 已冻结事实：
 
 - 产品语言为英文。
-- Embedding 为 `text-embedding-3-small` / 1536 / `embedding-v1`。
+- 2026-09-13 验证时的 Embedding 为 `text-embedding-3-small` / 1536 / `embedding-v1`，仅作为历史背景。2026-09-15 已转为 [Docker 开放模型对比](2026-09-13-embedding-truth-test-design.md)，本地扩展集三轮对比已完成，生产模型与维度尚未冻结；不影响本专项使用固定检索夹具得到的 LLM 验证结论。
 - Agent 输出必须是严格 JSON，`requires_human_review` 恒为 `true`。
 - `citations[].chunk_id` 必须来自本次检索结果；历史案例不能单独作为产品事实。
 - `sufficient` 以外的 `knowledge_status` 不得给出确定性修复步骤。
@@ -145,7 +145,7 @@ evals/llm-json-v1/
 
 - 评测邮件和知识片段继续使用虚构英文内容，不放真实客户数据。
 - 提示注入样例只用于证明规则不被邮件改写，不作为越权手段。
-- 本条通过只冻结聊天模型，不改变已冻结的 Embedding。
+- 本条通过只冻结聊天模型，不决定 Embedding 的模型或维度；Embedding 当前状态以其专项设计与验证记录为准。
 
 ## 10. 已决策
 

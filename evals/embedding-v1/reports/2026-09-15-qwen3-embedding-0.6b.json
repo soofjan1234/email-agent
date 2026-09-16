@@ -1,0 +1,271 @@
+{
+  "model": "qwen3-embedding:0.6b",
+  "dimensions": 1024,
+  "gateway": "192.168.100.102",
+  "summary": {
+    "product_doc": {
+      "recall_at_1": 1.0,
+      "recall_at_3": 1.0,
+      "mrr": 1.0,
+      "scored_queries": 8.0
+    },
+    "approved_case": {
+      "recall_at_1": 1.0,
+      "recall_at_3": 1.0,
+      "mrr": 1.0,
+      "scored_queries": 5.0
+    }
+  },
+  "identifier_hits": {
+    "passed": [
+      "q-raid5-degraded",
+      "q-smart",
+      "q-smb",
+      "q-error-13",
+      "q-ds220-offline"
+    ],
+    "failed": []
+  },
+  "passed": true,
+  "evaluated_at": "2026-09-15T06:49:42.804691+00:00",
+  "rows": [
+    {
+      "query_id": "q-raid5-degraded",
+      "source_type": "product_doc",
+      "relevant_chunk_ids": [
+        "pd-raid5-degraded-01"
+      ],
+      "ranked_ids": [
+        "pd-raid5-degraded-01",
+        "pd-dsm-update-01",
+        "pd-raid6-rebuild-01"
+      ],
+      "tags": [
+        "identifier",
+        "raid"
+      ]
+    },
+    {
+      "query_id": "q-smart",
+      "source_type": "product_doc",
+      "relevant_chunk_ids": [
+        "pd-smart-warning-01"
+      ],
+      "ranked_ids": [
+        "pd-smart-warning-01",
+        "pd-raid5-degraded-01",
+        "pd-dsm-update-01"
+      ],
+      "tags": [
+        "identifier",
+        "smart"
+      ]
+    },
+    {
+      "query_id": "q-smb",
+      "source_type": "product_doc",
+      "relevant_chunk_ids": [
+        "pd-smb-permission-01"
+      ],
+      "ranked_ids": [
+        "pd-smb-permission-01",
+        "pd-error-13-01",
+        "pd-ds220-offline-01"
+      ],
+      "tags": [
+        "identifier",
+        "smb"
+      ]
+    },
+    {
+      "query_id": "q-error-13",
+      "source_type": "product_doc",
+      "relevant_chunk_ids": [
+        "pd-error-13-01"
+      ],
+      "ranked_ids": [
+        "pd-error-13-01",
+        "pd-smb-permission-01",
+        "pd-storage-pool-crash-01"
+      ],
+      "tags": [
+        "identifier",
+        "error"
+      ]
+    },
+    {
+      "query_id": "q-ds220-offline",
+      "source_type": "product_doc",
+      "relevant_chunk_ids": [
+        "pd-ds220-offline-01"
+      ],
+      "ranked_ids": [
+        "pd-ds220-offline-01",
+        "pd-dsm-update-01",
+        "pd-raid5-degraded-01"
+      ],
+      "tags": [
+        "identifier",
+        "model"
+      ]
+    },
+    {
+      "query_id": "q-pool-crash",
+      "source_type": "product_doc",
+      "relevant_chunk_ids": [
+        "pd-storage-pool-crash-01"
+      ],
+      "ranked_ids": [
+        "pd-storage-pool-crash-01",
+        "pd-raid6-rebuild-01",
+        "pd-smart-warning-01"
+      ],
+      "tags": [
+        "risk"
+      ]
+    },
+    {
+      "query_id": "q-snapshot",
+      "source_type": "product_doc",
+      "relevant_chunk_ids": [
+        "pd-snapshot-restore-01"
+      ],
+      "ranked_ids": [
+        "pd-snapshot-restore-01",
+        "pd-dsm-update-01",
+        "pd-raid5-degraded-01"
+      ],
+      "tags": [
+        "product"
+      ]
+    },
+    {
+      "query_id": "q-raid6-rebuild",
+      "source_type": "product_doc",
+      "relevant_chunk_ids": [
+        "pd-raid6-rebuild-01"
+      ],
+      "ranked_ids": [
+        "pd-raid6-rebuild-01",
+        "pd-raid5-degraded-01",
+        "pd-dsm-update-01"
+      ],
+      "tags": [
+        "raid"
+      ]
+    },
+    {
+      "query_id": "q-case-raid5-tone",
+      "source_type": "approved_case",
+      "relevant_chunk_ids": [
+        "ac-raid5-tone-01"
+      ],
+      "ranked_ids": [
+        "ac-raid5-tone-01",
+        "ac-no-format-01",
+        "ac-info-request-01"
+      ],
+      "tags": [
+        "case"
+      ]
+    },
+    {
+      "query_id": "q-case-smb",
+      "source_type": "approved_case",
+      "relevant_chunk_ids": [
+        "ac-smb-access-01"
+      ],
+      "ranked_ids": [
+        "ac-smb-access-01",
+        "ac-smart-replace-01",
+        "ac-vip-outage-01"
+      ],
+      "tags": [
+        "case"
+      ]
+    },
+    {
+      "query_id": "q-case-no-format",
+      "source_type": "approved_case",
+      "relevant_chunk_ids": [
+        "ac-no-format-01"
+      ],
+      "ranked_ids": [
+        "ac-no-format-01",
+        "ac-raid5-tone-01",
+        "ac-info-request-01"
+      ],
+      "tags": [
+        "case"
+      ]
+    },
+    {
+      "query_id": "q-case-info",
+      "source_type": "approved_case",
+      "relevant_chunk_ids": [
+        "ac-info-request-01"
+      ],
+      "ranked_ids": [
+        "ac-info-request-01",
+        "ac-vip-outage-01",
+        "ac-raid5-tone-01"
+      ],
+      "tags": [
+        "case"
+      ]
+    },
+    {
+      "query_id": "q-case-smart",
+      "source_type": "approved_case",
+      "relevant_chunk_ids": [
+        "ac-smart-replace-01"
+      ],
+      "ranked_ids": [
+        "ac-smart-replace-01",
+        "ac-raid5-tone-01",
+        "ac-no-format-01"
+      ],
+      "tags": [
+        "case"
+      ]
+    },
+    {
+      "query_id": "q-oos-printer",
+      "source_type": "product_doc",
+      "relevant_chunk_ids": [],
+      "ranked_ids": [
+        "pd-ds220-offline-01",
+        "pd-hybrid-share-01",
+        "pd-dsm-update-01"
+      ],
+      "tags": [
+        "oos"
+      ]
+    }
+  ],
+  "provider": "local_server",
+  "endpoint": "http://192.168.100.102:30000/v1/embeddings",
+  "input_mode": "raw_text_no_instruction",
+  "batches": [
+    {
+      "texts": 17,
+      "seconds": 53.84346999996342,
+      "dimensions": 1024
+    },
+    {
+      "texts": 14,
+      "seconds": 13.760194600035902,
+      "dimensions": 1024
+    }
+  ],
+  "chunk_counts": {
+    "product_doc": 10,
+    "approved_case": 7
+  },
+  "query_count": 14,
+  "out_of_knowledge_queries": 1,
+  "dataset_sha256": {
+    "chunks.jsonl": "4d51d74b4bce44ceab5064c0192877e6891e741ccc9eb68cd64c55af7d4a4fa9",
+    "queries.jsonl": "22f1e49f2243cefebe859e4f104c9a4b3b86a7c1c802a0c6799996eca6d24a07"
+  }
+}

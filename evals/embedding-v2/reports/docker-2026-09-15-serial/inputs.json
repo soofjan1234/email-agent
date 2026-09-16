@@ -1,0 +1,60 @@
+{
+  "dataset": {
+    "version": "embedding-v2",
+    "origin": "synthetic fictional ArcNAS catalog; no customer data",
+    "independent_human_review": false,
+    "chunks": 104,
+    "queries": 128,
+    "scenario_groups": 26,
+    "split_policy": "g01-g08 dev; g09-g26 heldout; shared complete corpus; no tuning after viewing heldout",
+    "label_status": "synthetic_author_reviewed",
+    "sha256": {
+      "dev/chunks.jsonl": "6f78949ba76524b335e20356881d8236c4b8d6a8423ecfb288ebfc71b8288af3",
+      "dev/queries.jsonl": "5599663d8f8e55d833ef59a88e7a888b952d2e7496956f485b186989aa7e9721",
+      "heldout/chunks.jsonl": "6f78949ba76524b335e20356881d8236c4b8d6a8423ecfb288ebfc71b8288af3",
+      "heldout/queries.jsonl": "11acecb35e6b2591fce7168988be2e183086e16e62a7df79774035b28a3089fb"
+    },
+    "counts": {
+      "dev": {
+        "queries": 40,
+        "scored": 36,
+        "oos": 4
+      },
+      "heldout": {
+        "queries": 88,
+        "scored": 84,
+        "oos": 4
+      }
+    }
+  },
+  "models": {
+    "snowflake": {
+      "model": "Snowflake/snowflake-arctic-embed-m-v1.5",
+      "revision": "e58a8f756156a1293d763f17e3aae643474e9b8a",
+      "dimensions": 768,
+      "query_prefix": "Represent this sentence for searching relevant passages: "
+    },
+    "nomic": {
+      "model": "nomic-ai/nomic-embed-text-v1.5",
+      "revision": "e5cf08aadaa33385f5990def41f7a23405aec398",
+      "dimensions": 768,
+      "query_prefix": "search_query: ",
+      "document_prefix": "search_document: "
+    },
+    "bge-m3": {
+      "model": "BAAI/bge-m3",
+      "revision": "5617a9f61b028005a4858fdac845db406aefb181",
+      "dimensions": 1024
+    },
+    "qwen3": {
+      "model": "Qwen/Qwen3-Embedding-0.6B",
+      "revision": "97b0c614be4d77ee51c0cef4e5f07c00f9eb65b3",
+      "dimensions": 1024,
+      "query_prefix": "Instruct: Given an English NAS support question, retrieve relevant passages that answer the question.\nQuery: "
+    }
+  },
+  "rounds": 3,
+  "max_concurrent_requests": 1,
+  "max_client_batch_size": 1,
+  "started_at": "2026-09-15T08:29:48.505598+00:00"
+}

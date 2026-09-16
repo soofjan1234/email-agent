@@ -29,13 +29,13 @@ _SIGNATURE_RE = re.compile(r"\n-- \n.*", re.DOTALL)
 _QUOTE_RE = re.compile(r"^\s*>.*$", re.MULTILINE)
 
 
-def redact_case_text(source_text: str) -> tuple[str, str]:
+def redact_case_text(source_text: str, *, strip_mail_noise: bool = True) -> tuple[str, str]:
     """返回 (案例文本, 原文)。原文不做破坏性修改。"""
 
     original = source_text
     # 1. 先去掉签名和引用链，只作用于案例候选。
-    cleaned = _SIGNATURE_RE.sub("", source_text)
-    cleaned = _QUOTE_RE.sub("", cleaned)
+    cleaned = _SIGNATURE_RE.sub("", source_text) if strip_mail_noise else source_text
+    cleaned = _QUOTE_RE.sub("", cleaned) if strip_mail_noise else cleaned
     # 2. 再按类型替换敏感值。
     cleaned = _EMAIL_RE.sub("[email]", cleaned)
     cleaned = _SERIAL_RE.sub("[device serial]", cleaned)

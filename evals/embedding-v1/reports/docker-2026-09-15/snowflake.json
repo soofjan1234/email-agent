@@ -1,0 +1,38 @@
+{
+  "experiment": "docker-smoke-v1",
+  "configuration": {
+    "model": "Snowflake/snowflake-arctic-embed-m-v1.5",
+    "revision": "e58a8f756156a1293d763f17e3aae643474e9b8a",
+    "dimensions": 768,
+    "query_prefix": "Represent this sentence for searching relevant passages: ",
+    "document_prefix": ""
+  },
+  "dataset_sha256": {
+    "chunks.jsonl": "4d51d74b4bce44ceab5064c0192877e6891e741ccc9eb68cd64c55af7d4a4fa9",
+    "queries.jsonl": "22f1e49f2243cefebe859e4f104c9a4b3b86a7c1c802a0c6799996eca6d24a07"
+  },
+  "service": {
+    "model_id": "Snowflake/snowflake-arctic-embed-m-v1.5",
+    "model_sha": "e58a8f756156a1293d763f17e3aae643474e9b8a",
+    "model_dtype": "float32",
+    "served_model_name": "Snowflake/snowflake-arctic-embed-m-v1.5",
+    "model_type": {
+      "embedding": {
+        "pooling": "cls"
+      }
+    },
+    "max_concurrent_requests": 4,
+    "max_input_length": 512,
+    "max_batch_tokens": 16384,
+    "max_batch_requests": 8,
+    "max_client_batch_size": 8,
+    "auto_truncate": true,
+    "tokenization_workers": 2,
+    "version": "1.9.3",
+    "sha": "06670157fb6c1523482219bdb2d1660277d38088",
+    "docker_label": "sha-0667015"
+  },
+  "error_type": "HTTPStatusError",
+  "http_status": 429,
+  "batches": []
+}

@@ -36,10 +36,10 @@ def evaluate_model(dataset: Dataset, embedder: HttpEmbedder) -> ModelReport:
     """对全部片段和查询编码后，按 source_type 做内存余弦检索。"""
 
     # 1. 先编码知识片段，再编码查询，避免把查询向量写进语料。
-    chunk_vectors = embedder.embed([chunk.content for chunk in dataset.chunks])
+    chunk_vectors = embedder.embed_documents([chunk.content for chunk in dataset.chunks])
     for chunk, vector in zip(dataset.chunks, chunk_vectors, strict=True):
         chunk.embedding = vector
-    query_vectors = embedder.embed([query.query for query in dataset.queries])
+    query_vectors = embedder.embed_queries([query.query for query in dataset.queries])
 
     rows: list[dict[str, object]] = []
     identifier_rows: list[dict[str, object]] = []

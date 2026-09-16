@@ -1,0 +1,7 @@
+Message-ID: <question@example.test>
+From: Alice <alice@example.test>
+To: support@example.test
+Subject: SMB connection problem
+Content-Type: text/plain; charset=utf-8
+
+SMB fails on DS923+. Contact alice@example.test. Device SNABCDEF1234.

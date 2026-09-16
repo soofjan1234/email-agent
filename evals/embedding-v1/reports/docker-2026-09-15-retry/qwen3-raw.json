@@ -1,0 +1,328 @@
+{
+  "experiment": "docker-smoke-v1-qwen-raw-control",
+  "configuration": {
+    "model": "Qwen/Qwen3-Embedding-0.6B",
+    "revision": "97b0c614be4d77ee51c0cef4e5f07c00f9eb65b3",
+    "dimensions": 1024,
+    "query_prefix": "",
+    "document_prefix": ""
+  },
+  "dataset_sha256": {
+    "chunks.jsonl": "4d51d74b4bce44ceab5064c0192877e6891e741ccc9eb68cd64c55af7d4a4fa9",
+    "queries.jsonl": "22f1e49f2243cefebe859e4f104c9a4b3b86a7c1c802a0c6799996eca6d24a07"
+  },
+  "service": {
+    "model_id": "Qwen/Qwen3-Embedding-0.6B",
+    "model_sha": "97b0c614be4d77ee51c0cef4e5f07c00f9eb65b3",
+    "model_dtype": "float32",
+    "served_model_name": "Qwen/Qwen3-Embedding-0.6B",
+    "model_type": {
+      "embedding": {
+        "pooling": "last_token"
+      }
+    },
+    "max_concurrent_requests": 4,
+    "max_input_length": 512,
+    "max_batch_tokens": 512,
+    "max_batch_requests": 4,
+    "max_client_batch_size": 4,
+    "auto_truncate": true,
+    "tokenization_workers": 2,
+    "version": "1.9.3",
+    "sha": "06670157fb6c1523482219bdb2d1660277d38088",
+    "docker_label": "sha-0667015"
+  },
+  "report": {
+    "model": "Qwen/Qwen3-Embedding-0.6B",
+    "dimensions": 1024,
+    "gateway": "127.0.0.1",
+    "summary": {
+      "product_doc": {
+        "recall_at_1": 1.0,
+        "recall_at_3": 1.0,
+        "mrr": 1.0,
+        "scored_queries": 8.0
+      },
+      "approved_case": {
+        "recall_at_1": 0.8,
+        "recall_at_3": 1.0,
+        "mrr": 0.9,
+        "scored_queries": 5.0
+      }
+    },
+    "identifier_hits": {
+      "passed": [
+        "q-raid5-degraded",
+        "q-smart",
+        "q-smb",
+        "q-error-13",
+        "q-ds220-offline"
+      ],
+      "failed": []
+    },
+    "passed": true,
+    "evaluated_at": "2026-09-15T07:46:56.426822+00:00",
+    "rows": [
+      {
+        "query_id": "q-raid5-degraded",
+        "source_type": "product_doc",
+        "relevant_chunk_ids": [
+          "pd-raid5-degraded-01"
+        ],
+        "ranked_ids": [
+          "pd-raid5-degraded-01",
+          "pd-dsm-update-01",
+          "pd-raid6-rebuild-01"
+        ],
+        "tags": [
+          "identifier",
+          "raid"
+        ]
+      },
+      {
+        "query_id": "q-smart",
+        "source_type": "product_doc",
+        "relevant_chunk_ids": [
+          "pd-smart-warning-01"
+        ],
+        "ranked_ids": [
+          "pd-smart-warning-01",
+          "pd-raid5-degraded-01",
+          "pd-storage-pool-crash-01"
+        ],
+        "tags": [
+          "identifier",
+          "smart"
+        ]
+      },
+      {
+        "query_id": "q-smb",
+        "source_type": "product_doc",
+        "relevant_chunk_ids": [
+          "pd-smb-permission-01"
+        ],
+        "ranked_ids": [
+          "pd-smb-permission-01",
+          "pd-error-13-01",
+          "pd-ds220-offline-01"
+        ],
+        "tags": [
+          "identifier",
+          "smb"
+        ]
+      },
+      {
+        "query_id": "q-error-13",
+        "source_type": "product_doc",
+        "relevant_chunk_ids": [
+          "pd-error-13-01"
+        ],
+        "ranked_ids": [
+          "pd-error-13-01",
+          "pd-smb-permission-01",
+          "pd-ds220-offline-01"
+        ],
+        "tags": [
+          "identifier",
+          "error"
+        ]
+      },
+      {
+        "query_id": "q-ds220-offline",
+        "source_type": "product_doc",
+        "relevant_chunk_ids": [
+          "pd-ds220-offline-01"
+        ],
+        "ranked_ids": [
+          "pd-ds220-offline-01",
+          "pd-dsm-update-01",
+          "pd-raid5-degraded-01"
+        ],
+        "tags": [
+          "identifier",
+          "model"
+        ]
+      },
+      {
+        "query_id": "q-pool-crash",
+        "source_type": "product_doc",
+        "relevant_chunk_ids": [
+          "pd-storage-pool-crash-01"
+        ],
+        "ranked_ids": [
+          "pd-storage-pool-crash-01",
+          "pd-smart-warning-01",
+          "pd-raid6-rebuild-01"
+        ],
+        "tags": [
+          "risk"
+        ]
+      },
+      {
+        "query_id": "q-snapshot",
+        "source_type": "product_doc",
+        "relevant_chunk_ids": [
+          "pd-snapshot-restore-01"
+        ],
+        "ranked_ids": [
+          "pd-snapshot-restore-01",
+          "pd-dsm-update-01",
+          "pd-raid5-degraded-01"
+        ],
+        "tags": [
+          "product"
+        ]
+      },
+      {
+        "query_id": "q-raid6-rebuild",
+        "source_type": "product_doc",
+        "relevant_chunk_ids": [
+          "pd-raid6-rebuild-01"
+        ],
+        "ranked_ids": [
+          "pd-raid6-rebuild-01",
+          "pd-raid5-degraded-01",
+          "pd-snapshot-restore-01"
+        ],
+        "tags": [
+          "raid"
+        ]
+      },
+      {
+        "query_id": "q-case-raid5-tone",
+        "source_type": "approved_case",
+        "relevant_chunk_ids": [
+          "ac-raid5-tone-01"
+        ],
+        "ranked_ids": [
+          "ac-raid5-tone-01",
+          "ac-ds220-reboot-01",
+          "ac-no-format-01"
+        ],
+        "tags": [
+          "case"
+        ]
+      },
+      {
+        "query_id": "q-case-smb",
+        "source_type": "approved_case",
+        "relevant_chunk_ids": [
+          "ac-smb-access-01"
+        ],
+        "ranked_ids": [
+          "ac-smb-access-01",
+          "ac-info-request-01",
+          "ac-smart-replace-01"
+        ],
+        "tags": [
+          "case"
+        ]
+      },
+      {
+        "query_id": "q-case-no-format",
+        "source_type": "approved_case",
+        "relevant_chunk_ids": [
+          "ac-no-format-01"
+        ],
+        "ranked_ids": [
+          "ac-info-request-01",
+          "ac-no-format-01",
+          "ac-raid5-tone-01"
+        ],
+        "tags": [
+          "case"
+        ]
+      },
+      {
+        "query_id": "q-case-info",
+        "source_type": "approved_case",
+        "relevant_chunk_ids": [
+          "ac-info-request-01"
+        ],
+        "ranked_ids": [
+          "ac-info-request-01",
+          "ac-vip-outage-01",
+          "ac-smart-replace-01"
+        ],
+        "tags": [
+          "case"
+        ]
+      },
+      {
+        "query_id": "q-case-smart",
+        "source_type": "approved_case",
+        "relevant_chunk_ids": [
+          "ac-smart-replace-01"
+        ],
+        "ranked_ids": [
+          "ac-smart-replace-01",
+          "ac-raid5-tone-01",
+          "ac-info-request-01"
+        ],
+        "tags": [
+          "case"
+        ]
+      },
+      {
+        "query_id": "q-oos-printer",
+        "source_type": "product_doc",
+        "relevant_chunk_ids": [],
+        "ranked_ids": [
+          "pd-snapshot-restore-01",
+          "pd-hybrid-share-01",
+          "pd-ds220-offline-01"
+        ],
+        "tags": [
+          "oos"
+        ]
+      }
+    ]
+  },
+  "batches": [
+    {
+      "role": "document",
+      "texts": 4,
+      "seconds": 2.7170607000007294
+    },
+    {
+      "role": "document",
+      "texts": 4,
+      "seconds": 2.4028180000022985
+    },
+    {
+      "role": "document",
+      "texts": 4,
+      "seconds": 2.2228906999807805
+    },
+    {
+      "role": "document",
+      "texts": 4,
+      "seconds": 2.16595439997036
+    },
+    {
+      "role": "document",
+      "texts": 1,
+      "seconds": 0.4926967999781482
+    },
+    {
+      "role": "query",
+      "texts": 4,
+      "seconds": 1.336984499997925
+    },
+    {
+      "role": "query",
+      "texts": 4,
+      "seconds": 1.2928997999988496
+    },
+    {
+      "role": "query",
+      "texts": 4,
+      "seconds": 1.2752245999872684
+    },
+    {
+      "role": "query",
+      "texts": 2,
+      "seconds": 0.6041592999827117
+    }
+  ]
+}

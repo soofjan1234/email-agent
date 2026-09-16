@@ -1,0 +1,26 @@
+{
+  "snowflake": {
+    "model": "Snowflake/snowflake-arctic-embed-m-v1.5",
+    "revision": "e58a8f756156a1293d763f17e3aae643474e9b8a",
+    "dimensions": 768,
+    "query_prefix": "Represent this sentence for searching relevant passages: "
+  },
+  "nomic": {
+    "model": "nomic-ai/nomic-embed-text-v1.5",
+    "revision": "e5cf08aadaa33385f5990def41f7a23405aec398",
+    "dimensions": 768,
+    "query_prefix": "search_query: ",
+    "document_prefix": "search_document: "
+  },
+  "bge-m3": {
+    "model": "BAAI/bge-m3",
+    "revision": "5617a9f61b028005a4858fdac845db406aefb181",
+    "dimensions": 1024
+  },
+  "qwen3": {
+    "model": "Qwen/Qwen3-Embedding-0.6B",
+    "revision": "97b0c614be4d77ee51c0cef4e5f07c00f9eb65b3",
+    "dimensions": 1024,
+    "query_prefix": "Instruct: Given an English NAS support question, retrieve relevant passages that answer the question.\nQuery: "
+  }
+}

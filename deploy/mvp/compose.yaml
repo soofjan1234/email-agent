@@ -1,0 +1,56 @@
+name: email-agent-mvp
+
+x-app: &app
+  image: email-agent-mvp:local
+  build:
+    context: ../..
+    dockerfile: deploy/mvp/Dockerfile
+  environment:
+    DATABASE_URL: ${MVP_DATABASE_URL:?Set the container database URL in .env}
+    TEST_DATABASE_URL: ${MVP_TEST_DATABASE_URL:?Set the independent container test database URL in .env}
+    MAILBOX_ID: ${MAILBOX_ID:-local-mock}
+    MAILBOX_ROOT: /app/data/mock-mailbox
+    MAIL_SYNC_PAGE_SIZE: ${MAIL_SYNC_PAGE_SIZE:-100}
+    WORKER_POLL_SECONDS: ${WORKER_POLL_SECONDS:-2}
+    KNOWLEDGE_ROOT: /app/data/knowledge
+    KNOWLEDGE_SOURCE_ID: ${KNOWLEDGE_SOURCE_ID:-local-products}
+    KNOWLEDGE_MAX_BYTES: ${KNOWLEDGE_MAX_BYTES:-2000000}
+    EMBEDDING_MODEL: ${EMBEDDING_MODEL:-Snowflake/snowflake-arctic-embed-m-v1.5}
+    EMBEDDING_REVISION: ${EMBEDDING_REVISION:-e58a8f756156a1293d763f17e3aae643474e9b8a}
+    EMBEDDING_DIMENSIONS: ${EMBEDDING_DIMENSIONS:-768}
+    EMBEDDING_QUERY_PREFIX: '${EMBEDDING_QUERY_PREFIX:-Represent this sentence for searching relevant passages: }'
+    EMBEDDING_DOCUMENT_PREFIX: ${EMBEDDING_DOCUMENT_PREFIX:-}
+    EMBEDDING_INDEX_VERSION: ${EMBEDDING_INDEX_VERSION:-dev-snowflake-m-v1.5-001}
+    EMBEDDING_BASE_URL: ${MVP_EMBEDDING_BASE_URL:-http://host.docker.internal:18080}
+  volumes:
+    - ../../data/mock-mailbox:/app/data/mock-mailbox:ro
+    - ../../data/knowledge:/app/data/knowledge:ro
+
+services:
+  postgres:
+    profiles: ['bundled-db']
+    image: pgvector/pgvector:0.8.2-pg17-bookworm
+    environment:
+      POSTGRES_USER: email_agent
+      POSTGRES_PASSWORD: local-dev-only
+      POSTGRES_DB: email_agent
+    ports:
+      - '127.0.0.1:55432:5432'
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./init-test-db.sql:/docker-entrypoint-initdb.d/10-test-db.sql:ro
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U email_agent -d email_agent']
+      interval: 2s
+      timeout: 3s
+      retries: 30
+  api:
+    <<: *app
+    ports:
+      - '127.0.0.1:8000:8000'
+  worker:
+    <<: *app
+    command: ['python', '-m', 'worker']
+
+volumes:
+  postgres-data:

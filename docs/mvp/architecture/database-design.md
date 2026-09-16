@@ -55,6 +55,10 @@ LangGraph Checkpointer
 - `product_model`、`os_version`、`category` 等过滤元数据；
 - 文档版本变更时重新生成，不原地覆盖历史审计引用的内容。
 
+A3 的 `0003_knowledge` 增量迁移增加：文档 `content_hash`、`index_version`、`source_metadata`、受控 `raw_content`；片段 `section_path`、`source_metadata`、`token_count`。来源元数据保留相对路径或候选标识、明确适用范围及案例审核来源。指纹覆盖清洗正文、标题、元数据、切分版本和完整模型身份；相同文本与索引身份的已有片段可复用向量，但新文档仍有独立片段 ID。
+
+发布按来源取得 PostgreSQL 事务锁，完成所有嵌入后一次事务写入文档与片段、归档旧版本。任何写入或提交失败整体回滚；无半成品 active 版本。旧片段不删除，`active_chunks_statement()` 只选择有效文档的片段，为 A4 提供基础查询。
+
 ### 3.4 `reviews`
 
 - `id`、`email_id`、`graph_thread_id`、`checkpoint_id`；
@@ -83,11 +87,13 @@ LangGraph Checkpointer
 
 - `id`：配对记录 UUID；
 - `inbound_message_id`、`outbound_message_id`：历史收件与回复标识；
-- `pairing_method`：`header`、`subject_time` 或 `manual`；
+- `pairing_method`：MVP 仅使用 `header`，人工确认不改变协议头来源；模糊或手动建立关系留到第二版；
 - `pairing_confidence`：只用于排序待审核配对，不作为自动发布条件；
 - 原始邮件与回复的受控引用；
 - `status`：`paired`、`needs_review` 或 `rejected`；
 - `created_at`、`updated_at`。
+
+本表仅保存全量关系识别后确定的一对一配对。每个收件和回复分别保持唯一，不能从复杂关联中拆出一对一记录。未匹配、复杂或不确定关系保留原始邮件与任务处理原因，不伪造配对记录。
 
 ### 3.8 `case_candidates`
 
@@ -100,6 +106,32 @@ LangGraph Checkpointer
 - `created_at`、`updated_at`。
 
 `active` 案例才能进入 RAG。`candidate` 和 `reviewed` 案例不得被检索，避免未经二次审核的回复污染知识库。
+
+A3 增加 `revision`、`reviewer`、`fact_sources` 和受控 `raw_review`。所有修改按固定顺序锁配对和候选；`expected_revision` 防止过期审核/发布覆盖新内容。已发布案例重新审核时新修订为 reviewed，旧 published_document_id 保持有效直至新版本提交；这里只允许检索之前已审核发布的文档，不暴露新修订。原始人工输入不进入普通接口或审计事件，已发布文档保存对应原文快照。
+
+### 3.9 历史初始化任务持久化
+
+历史初始化任务属于 Graph 外的业务任务。持久化邮箱标识、初始化边界、收件与已发送邮件扫描位置、处理阶段、状态、失败原因及暂不支持关系的处理记录。
+
+同一邮箱的初始化任务保持唯一，启动检查幂等创建或恢复；多进程不得重复执行。成功表示全部扫描、关系识别和候选生成完成，不能仅以拉取完成判定成功。邮件保存和扫描进度提交必须保证崩溃恢复不漏数据；历史候选按配对来源唯一。初始化完成后从保存的边界继续增量同步。
+
+持久化实体：
+
+- `mail_sync_jobs`：邮箱标识、模式、请求幂等键、状态、阶段、边界摘要、收件/发件游标、扫描与候选计数、未支持原因以及失败信息。历史模式按邮箱建立唯一部分索引。
+- `mail_sources`：固定快照的文件序号、相对来源、目录类别、内容哈希和原始字节。快照成功提交后不再依赖源文件可用性；任务接口不返回这些原文。
+- `mail_messages`：从快照解析的协议头、主题、正文及未支持原因，引用 `mail_sources`。按邮箱、目录、Message-ID 与内容哈希去重；相同 Message-ID 的不同原文全部保留并作为歧义排除。
+
+`historical_email_pairs` 增加 `mailbox_id`、`sync_job_id`，每个邮箱内的收件与回复分别唯一，原文引用指向内部 `mail_messages` 标识；不把历史记录写入供新邮件 Graph 使用的 `emails` 表。
+
+初始化使用固定文件集合及原始字节快照作为边界，两个目录的快照和边界摘要一次事务提交。后续按快照序号逐页读取，邮件与游标同事务提交；全量关联识别完成后，再逐页生成候选。执行期间使用同一 PostgreSQL 连接的邮箱会话锁，连接关闭即释放，已提交页保持可恢复，不增加租约状态机。
+
+### 3.10 `embedding_indexes`
+
+向量列通过单一索引身份记录绑定本次建库配置：`index_version`、模型、revision、维度、查询前缀和文档前缀。`knowledge_chunks.index_version` 外键引用该记录；向量列的实际维度在初次迁移时确定。应用启动和事务入口核对完整身份，写片段时继续验证维度、有限值及非零向量。
+
+同一向量列不混用多个编码空间。模型或模板变更须通过独立索引/迁移和重新嵌入切换，不允许应用会话改写现有身份。该记录描述开发索引，不替代生产冻结记录。
+
+审计基础额外保存 `request_id` 和 `checkpoint_id`，与邮件、Graph thread 标识共同关联请求及运行上下文。
 
 ## 4. 一致性与安全要求
 
@@ -114,4 +146,4 @@ LangGraph Checkpointer
 - 审计记录不保存模型密钥，普通日志不记录完整邮件正文。
 - 邮箱、电话、地址、设备序列号、外网地址、账号和访问令牌在进入案例库前必须脱敏。
 
-总体流程、状态机和知识生产规则见[总体设计](design.md)。
+总体流程、状态机和知识生产规则见[总体设计](../design.md)。

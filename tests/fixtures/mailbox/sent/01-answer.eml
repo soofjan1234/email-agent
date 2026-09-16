@@ -1,0 +1,7 @@
+Message-ID: <answer@example.test>
+In-Reply-To: <question@example.test>
+References: <question@example.test>
+From: support@example.test
+Subject: Re: SMB connection problem
+
+Please check the SMB service status. Do not reset the NAS.

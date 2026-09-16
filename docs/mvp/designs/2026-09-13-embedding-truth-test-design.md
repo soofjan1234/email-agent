@@ -1,166 +1,124 @@
-# Embedding 阻断性验证设计
+# Docker 开放 Embedding 模型对比设计
 
-适用范围：第一版专项验证；[MVP 入口](../README.md) · [验证记录](../validation.md)。
+适用范围：英文 NAS 售后检索的模型选型；[MVP 入口](../README.md) · [验证记录](../validation.md) · [状态账本](../status.md)。
 
-## 1. 背景与当前事实
+> 2026-09-15 用户已确认改为 Docker 部署开放模型进行对比。本文替代原来的 API key 网关候选方案。用户随后授权继续实施；本机 Docker 四模型已完成扩展集三轮对比及批次缺陷规避重测；独立标注复核与生产验证尚未完成。具体进度见状态账本。
 
-技术选型 15.1 第 1 条要求：在建库前用小规模固定 NAS 查询集比较可用 Embedding 模型，确认基本 Recall@K 后冻结模型和向量维度。Embedding 或维度变更会触发全量重嵌入，不能在同一向量列混用。
+## 1. 目标与废弃范围
 
-本地已提供 OpenAI-compatible 网关配置（`.env`，不入库）：`OPENAI_BASE_URL` 指向 `https://api.ztoken.pro/v1`。2026-09-13 英文评测已通过：`text-embedding-3-small`，1536 维，两路 Recall@3 均为 1.0。同网关对 BGE 返回「无可用渠道」。当前先冻结并继续用这一个模型推进后续工作；其他 Embedding 等拿到可用 key 后再用同一评测集补测。冻结记录见 `evals/embedding-v1/freeze.json`。
+目标：在可控机器上部署开放 Embedding 模型，用相同英文 NAS 数据集比较召回质量、延迟和资源占用，选出生产模型及固定输入方式。
 
-已冻结、本验证不得改动的约束：
+废弃以下现行说明：
 
-- 目标用户为海外售后；客户邮件、知识库、回复草稿和本次评测全部使用英文。
-- 生产接入走 `Embedder.embed(texts)`，底层使用 OpenAI-compatible HTTP。
-- 检索按 `product_doc` 和 `approved_case` 分路，每路最多 3 条。
-- MVP 向量检索是 pgvector 精确余弦；本验证只证明模型本身的召回，不比较关键词、RRF 或重排。
-- 测试夹具不得存放真实客户数据。
+- 以第三方网关和 API key 是否可用筛选 Embedding 模型。
+- 等待新 key 才能补测 BGE 等开放模型。
+- 默认继续使用 `text-embedding-3-small` / 1536 建库。
+- 运行旧 CLI 后自动将任一过线模型写成新的冻结模型。
 
-## 2. 目标与非目标
+废弃范围仅限 Embedding 选型路线，不改变生成式 LLM 的接入方案。容器服务仍可通过 HTTP 提供向量；是否需要服务访问令牌由实际部署决定，不再依赖外部模型供应商密钥。本文不删除本地 `.env`、历史报告或旧代码。
 
-### 2.1 目标
+保持约束：英文邮件和知识库、`product_doc` 与 `approved_case` 分路、每路 Top-3、余弦检索、虚构脱敏夹具。本轮不引入数据库、关键词融合、重排、微调或业务应用。
 
-- 冻结第一版唯一 Embedding 模型名、向量维度和索引版本标签。
-- 证明该模型在固定英文 NAS 样例上，对产品文档和已审核案例都能达到基本 Recall@3。
-- 证明英文查询中的产品标识（型号、错误码、`RAID5`、`S.M.A.R.T.`、`SMB`）不会导致相关片段掉出 Top-3。
-- 留下可重复运行的评测集、脚本和冻结记录，供后续换模型时对照。
+## 2. 当前事实与证据边界
 
-### 2.2 非目标
+- 2026-09-13 OpenAI small 的历史冻结摘要：1536 维，两路 Recall@3 均为 1.0。
+- 2026-09-15 公司服务补测：17 条片段、14 条查询，Qwen 返回 1024 维，两路 Recall@1、Recall@3、MRR 均为 1.0，5 条标识查询全部命中。完整证据见[验证记录](../validation.md)。
+- 公司 `192.168.100.102:30000` 的 `/health` 返回 `Qwen3-Embedding-0.6B`、`device=cpu`。其 OpenAPI 标题为 `Qwen3-Embedding Service`，仅公开 `/v1/embeddings`、`/health`，请求模型没有 `model` 字段。它不能作为已验证的多模型路由网关。
+- CPU 是现有进程的运行设备，不能据此断言服务器没有 GPU。尚未确认服务器登录入口、部署授权、硬件配置、Docker 状态和可用资源。
+- 现有小样本只能证明基本接入与召回，不足以区分模型优劣；公司单轮耗时也不能用于不同机器间的模型速度排名。
 
-- 不搭建 FastAPI、PostgreSQL、LangGraph 或审核页面。
-- 不比较分词方案、RRF 参数、召回数量或重排模型。
-- 不把中文查询纳入评测集或冻结条件。
-- 不把本次分数表述为全局最优，只判定是否越过建库门槛。
-- 不在未获凭据时虚构“已验证通过”的模型名。
+## 3. 候选模型
 
-## 3. 候选方案
-
-### 3.1 怎么跑
-
-| 方案 | 做法 | 优点 | 代价 | 结论 |
+| 阶段 | 模型 ID | 默认维度 | 定位与限制 | 官方资料 |
 | --- | --- | --- | --- | --- |
-| A. 离线评测脚本 + 内存余弦 | 评测集入库外文件；同一 `Embedder` 适配器对语料和查询编码；NumPy 余弦取 Top-K | 与“建库前验证”一致；不引入表结构；和生产接口同协议 | 不证明 pgvector 索引行为 | **已确认** |
-| B. 先建最小 pgvector | 为本次验证单独建库和 `vector(N)` 列 | 更接近上线检索 | 维度未冻结就建列，正好踩中要避免的重嵌入 | 不采用 |
-| C. 仅本地 sentence-transformers | 不走 HTTP，直接加载开源权重 | 无凭据也能出数 | 和生产 `Embedder` 不是同一路径，冻结结果可能作废 | 仅当生产也改为本地模型时才考虑 |
+| 首轮 | `Qwen/Qwen3-Embedding-0.6B` | 1024 | 多语言、32K 上下文；保留现有候选，在可控容器中重跑 | [模型卡](https://huggingface.co/Qwen/Qwen3-Embedding-0.6B) |
+| 首轮 | `nomic-ai/nomic-embed-text-v1.5` | 768 | 英文检索、最长 8192 tokens；实际长上下文支持需核对推理配置；Apache-2.0 | [模型卡](https://huggingface.co/nomic-ai/nomic-embed-text-v1.5) |
+| 首轮 | `Snowflake/snowflake-arctic-embed-m-v1.5` | 768 | 约 109M 参数，英文检索与向量压缩候选；Apache-2.0 | [模型卡](https://huggingface.co/Snowflake/snowflake-arctic-embed-m-v1.5) |
+| 首轮 | `BAAI/bge-m3` | 1024 | 多语言、8192 tokens；只测试稠密向量；MIT | [模型卡](https://huggingface.co/BAAI/bge-m3) |
+| 第二轮 | `Alibaba-NLP/gte-Qwen2-1.5B-instruct` | 1536 | 多语言、32K 上下文；用于验证更大模型的收益；Apache-2.0 | [模型卡](https://huggingface.co/Alibaba-NLP/gte-Qwen2-1.5B-instruct) |
+| 条件候选 | `jinaai/jina-embeddings-v3` | 以实际配置为准 | 多语言、多任务；公开权重为 CC BY-NC 4.0，公司商业部署需另行取得适用授权，不纳入默认生产候选 | [模型卡与许可](https://huggingface.co/jinaai/jina-embeddings-v3) |
 
-### 3.2 比哪些模型
+`text-embedding-3-small` 仅作为已有历史参考，不参与本轮 Docker 部署。首轮先使用默认维度和固定精度，不同时调整量化、维度及输入方式，以免无法解释差异。
 
-只比较**同一网关上实际可用**、且能通过 OpenAI-compatible `/v1/embeddings` 调用的模型。下表是预调研候选，不是已冻结名单。
+## 4. 部署设计
 
-| 方案 | 来源 | 默认维度 | 仍维护 | 英文售后 / 标识 | 部署风险 | 是否纳入本次 | 理由 |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| OpenAI `text-embedding-3-small` | [OpenAI Embeddings](https://developers.openai.com/api/docs/guides/embeddings) | 1536 | 是 | 英文检索基线，支持型号和协议标识 | 依赖 OpenAI 或兼容代理 | 网关有则优先测 | 面向海外英文邮件，作为默认对照 |
-| BGE-M3 | [Hugging Face 模型卡](https://huggingface.co/BAAI/bge-m3)；多家网关提供兼容接口 | 1024 | 是 | 英文与术语标识都强，长文本 8192 | 需确认网关是否提供 | 网关有则测 | 维度更小，适合作为 small 的对照 |
-| 英文专用 BGE（如 `bge-large-en-v1.5`） | [BGE 模型卡](https://huggingface.co/BAAI/bge-large-en-v1.5) | 1024 | 是 | 英文检索成熟 | 需确认网关是否提供 | 网关有则测 | 现在用户是海外英文，不再因为中文不足而排除 |
-| OpenAI `text-embedding-3-large` | 同上 OpenAI 文档 | 3072 | 是 | 通常优于 small | 向量宽，后续存储和备份更贵 | 默认不测 | 第一版没有证据需要 3072；small 不达标再补测 |
-| 通义 `text-embedding-v3` / `v4` | [DashScope 文本向量](https://help.aliyun.com/zh/model-studio/text-embedding-synchronous-api)、[OpenAI 兼容接口](https://docs.qwencloud.com/api-reference/text-embedding/openai-embedding) | 1024（可缩短） | 是 | 中文更常见，英文可用 | 需 DashScope / 兼容代理 | 默认不测 | 不是海外英文场景的首选；仅当网关只有这类模型时才测 |
-| 旧 ada-002 | OpenAI 旧模型 | 1536 | 维护优先级低 | 英文可用但已被 v3 替代 | 低 | 不测 | 已被 `text-embedding-3-small` 覆盖 |
-| 重排 / BGE-M3 sparse·ColBERT | 各模型卡 | 不适用 | 是 | 可能改善排序 | 超出 MVP 检索形态 | 不测 | 属于 15.2 |
+### 4.1 服务边界
 
-网关上只有一个可用模型时，仍跑完整评测；通过则冻结该模型，不补造其他厂商对比。
+评测程序 → HTTP 适配器 → 单模型 Docker 服务 → 固定版本权重。
 
-## 4. 已确认方案
+每个服务显式绑定一个模型和独立端口。请求里的模型名不能代替服务端实际加载证明；报告必须记录模型仓库、权重 revision、镜像版本或 digest、推理引擎及精度。容器日志或受控部署配置应能证明实际加载身份。
 
-2026-09-13 已确认采用方案 A，不采用 B、C。
+评测部署使用独立 Compose 配置，与业务 Compose 分开；一次只启动一个候选，避免模型争抢 CPU、内存或 GPU。下载缓存使用持久卷，服务就绪后再启动评测。没有服务器部署入口时，可先选择具备 Docker 的开发机，记录硬件，不覆盖公司的现有服务。
 
-1. 在仓库内放版本化英文评测集，不含真实客户数据。查询、产品文档和已审核案例均用英文撰写；`RAID5`、`S.M.A.R.T.`、`SMB`、型号和错误码保留原样。
-2. 用最小 `HttpEmbedder` 调用 OpenAI-compatible 接口，批量得到固定维度向量。
-3. 查询与片段都做 L2 归一化后算余弦；`product_doc` 与 `approved_case` 分开取 Top-3。
-4. 输出每模型的 Recall@1、Recall@3、MRR，以及标识类查询是否全部命中。
-5. 达到门槛的模型中，优先选维度更小、延迟和费用更低者；写入冻结记录后再允许建 `embedding` 列。
+### 4.2 推理引擎候选
 
-切分规则与主设计 9.4 一致：按标题和语义段落切，不按固定字数粗切。本验证语料预先切好并写上稳定 `chunk_id`，避免评测时现场切分漂移。
+| 方案 | 适用理由 | 验证点 |
+| --- | --- | --- |
+| TEI | 专门提供 Embedding HTTP 服务，有 Docker 部署方式；优先评估 | 固定版本对目标模型、CPU/GPU、pooling 和输入指令的支持 |
+| Infinity | 作为模型兼容性的备选；Nomic 官方模型卡提供 Docker 示例 | 引擎及模型版本、向量一致性、查询/文档输入支持 |
+| 官方 Python 加载方式封装容器 | 前两者不支持所需模型行为时使用 | 需要自行维护 HTTP 服务、批处理和运行依赖 |
 
-## 5. 评测集契约
+参考：[TEI](https://github.com/huggingface/text-embeddings-inference)、[Infinity](https://github.com/michaelfeil/infinity)。最终镜像、设备和端口需在检查目标机器后确定；本文不提供未经验证的统一启动命令，不假设一个镜像兼容全部模型。
 
-建议路径：
+## 5. 输入适配与公平比较
 
-```text
-evals/embedding-v1/
-  corpus/product_docs/*.md
-  corpus/approved_cases/*.md
-  chunks.jsonl
-  queries.jsonl
-  README.md
-```
+同一份业务文本和相关性标注保持不变，每个模型按官方检索输入规范编码。模型专用处理放在适配器，不能写入原始语料。
 
-`chunks.jsonl` 每行：
+| 模型 | 查询侧 | 文档侧 |
+| --- | --- | --- |
+| Qwen3 0.6B | 固定英文检索任务指令，记录完整模板；另保留裸文本消融对照 | 不添加查询指令 |
+| Nomic v1.5 | `search_query: ` 前缀 | `search_document: ` 前缀 |
+| Snowflake M v1.5 | 使用固定 revision 的官方查询 prompt | 按官方文档编码方式 |
+| BGE-M3 | 原始文本，无额外查询指令 | 原始文本，仅取 dense 输出 |
+| GTE-Qwen2（第二轮） | 官方查询侧任务指令 | 不添加查询指令 |
 
-```json
-{
-  "chunk_id": "pd-raid5-degraded-01",
-  "source_type": "product_doc",
-  "title": "RAID5 degraded-mode write limits",
-  "product_model": "DS920+",
-  "language": "en",
-  "content": "..."
-}
-```
+Qwen 的裸文本与指令版分别报告，不能用测试集逐条调模板。实际启用的 tokenizer、截断规则、pooling、归一化及最大输入长度都进入报告。
 
-`queries.jsonl` 每行：
+接口采用 `embed_queries(texts)` 与 `embed_documents(texts)` 显式区分输入角色，运行器调用这两个方法。旧 `embed(texts)` 保留兼容，TEI 适配器禁止无角色调用；不依靠请求顺序猜测角色。
 
-```json
-{
-  "query_id": "q-raid5-degraded",
-  "query": "Can I keep writing to a DS920+ volume after RAID5 degrades?",
-  "source_type": "product_doc",
-  "language": "en",
-  "relevant_chunk_ids": ["pd-raid5-degraded-01"],
-  "tags": ["identifier", "raid"]
-}
-```
+共同短文本集要求每条输入经各模型 tokenizer 检查均未截断。长文本另设测试组，列出各模型支持范围与实际截断，不混入共同排名。同模型多次调用及跨批次均应校验维度一致、向量有限且非零。
 
-规模下限：
+## 6. 评测设计
 
-- 产品文档片段 ≥ 8，已审核案例片段 ≥ 6，合计约 20–30 条。
-- 查询 ≥ 12，全部为英文，且同时覆盖：只查产品事实、只查案例表达、技术标识、易混型号/阵列级别、知识库外问题。
-- 每条计入 Recall 的查询 `language` 必须为 `en`。
-- 每条查询至少 1 个标注相关 `chunk_id`；知识库外查询的相关集为空，只报告误召回，不计入 Recall 分母。
+### 6.1 数据集
 
-语料由项目编写脱敏虚构的英文售后内容，不复制厂商未授权文档，不使用真实工单。
+保留 `evals/embedding-v1/` 作为历史冒烟集。新对比集独立版本化：[embedding-v2](../../../evals/embedding-v2/README.md) 已实现 104 条片段、128 条查询，开发集 40、保留集 88；属于虚构 ArcNAS 合成数据，尚未经独立人工复核。
 
-## 6. 通过标准
+覆盖英文缩写、拼写错误、口语邮件、相似故障、易混型号、RAID 级别、错误码、协议名称、跨片段问题和知识库外问题。分别标注两路相关片段；无答案查询相关集为空，不计入 Recall。开发集用于固定输入模板，保留集用于最终报告，避免在同一批题目上反复调参后宣称泛化效果。
 
-主指标只统计 `language=en` 的查询，按 `source_type` 分开计算，K 取 3（与每路最多 3 条一致）。
+所有模型使用相同版本与 SHA-256 的语料、查询和标注。人工复核相关性；保存逐查询排名及差异案例，不仅保存总分。
 
-| 检查 | 通过线 |
-| --- | --- |
-| `product_doc` Recall@3 | ≥ 0.80 |
-| `approved_case` Recall@3 | ≥ 0.80 |
-| 带 `identifier` 标签的查询 | 每条至少 1 个相关片段进入该路 Top-3 |
-| 向量维度 | 同一次运行内全部向量长度一致，并写入冻结记录 |
-| 跨路污染 | 记录但不阻断；留给 15.2 混合检索 |
+### 6.2 质量指标与选择
 
-全部模型未过线时：不冻结、不建向量列，只保留报告和下一步候选（例如补测 `text-embedding-3-large` 或扩大易混负例）。
+沿用基本门槛：两路 Recall@3 均 ≥ 0.80；所有标识查询至少一个相关片段进入该路 Top-3；输出维度和数值校验通过。
 
-## 7. 冻结输出
+同时报告 Recall@1、Recall@3、MRR、各路计分查询数、标识命中数及失败案例。门槛只决定能否入选，不自动决定谁最好。质量接近时比较延迟、内存和运维成本；存在明显取舍时提交结果供选择，不预先认定某个模型获胜。
 
-通过后只追加一份机器可读记录，例如 `evals/embedding-v1/freeze.json`：
+无答案查询单独列出返回候选与分数。没有独立校准并验证阈值时，不把 Top-3 返回或相似度直接解释为可回答/拒答能力。
 
-- `model`
-- `dimensions`
-- `index_version`（建议 `embedding-v1`）
-- `distance`：`cosine`
-- `recall_at_3`（分路，英文查询）
-- `primary_language`：`en`
-- `evaluated_at`
-- `gateway`（仅主机名，不含密钥）
+### 6.3 性能和资源
 
-冻结记录是后续 Alembic `vector(N)` 和重嵌入策略的唯一依据。报告同时给出数量、关键字段和结果哈希，不把向量全文写入文档。
+在同一机器、相同 CPU 配额或 GPU、相同输入及批量设置下逐模型测量：
 
-## 8. 风险与安全
+- 首次启动：区分下载时间、加载/就绪时间和首次推理延迟。
+- 稳态：预热后测查询延迟 p50/p95、整批建库耗时、吞吐和错误数；建议固定顺序运行至少 3 轮，记录样本数和并发。
+- 资源：记录容器内存、主机 CPU 使用情况；有 GPU 时记录显存。保持相同采样方式和间隔，不把权重文件大小当作运行内存。
+- 成本：记录实际资源和使用时长；没有计费或电耗数据时不虚构金额。
 
-- 没有可用网关就无法出冻结结论；脚本和评测集可以先写，冻结必须等真实调用。
-- 密钥只进本地 `.env`，不进仓库、日志或冻结文件。
-- 评测集禁止真实邮箱、电话、序列号和访问凭据。
-- 不同模型维度不同，比较只看名次指标，不把向量写进同一列。
+若推理引擎或精度不同，结果标为“部署方案对比”，不能把差异全部归因于模型。服务失败、超时或内存不足应独立报告，不静默剔除。
 
-## 9. 已决策与剩余输入
+## 7. 结果与冻结管理
 
-已决策：
+新报告至少包含：模型实际身份、输入模板、数据集哈希、设备与资源配额、推理版本、维度与精度、逐查询结果、汇总指标、计时与资源记录、失败信息及运行日期。报告和日志不包含凭据。
 
-- 验证方式采用方案 A（离线评测脚本 + 内存余弦）。
-- 目标用户为海外售后；客户邮件、知识库、回复草稿、审核页面和本次评测全部使用英文。
-- 不先建 pgvector，不改用本地 sentence-transformers，除非生产接入也改为本地模型。
+评测默认只写独立报告，不覆盖历史 `evals/embedding-v1/freeze.json`。该文件保留为 OpenAI 历史证据，已退出本次新部署的建库依据；当前尚无 Docker 开放模型的新冻结结论。
 
-2026-09-13 已冻结：`text-embedding-3-small` / 1536 / `embedding-v1`。当前先用这一套推进建库和后续阻断性验证。BGE 等其他模型待有可用渠道或新 key 后再补测，不阻塞 15.1 其余条目。补测后若仍采用现模型，只需更新评测报告；若改选模型或维度，必须新建索引版本并全量重嵌入，不能在同一向量列混用。
+选定模型后才创建新的冻结记录与索引版本，并明确包含权重、输入模板、pooling、维度及距离函数。已有向量数据必须全量重嵌入并验证后切换；即便维度相同，不同模型或输入配置也不能混用。没有现存向量库时按新冻结维度首次建库。
+
+## 8. 实施前检查与当前状态
+
+Docker Compose、模型版本清单、显式角色适配器及独立评测入口已实现，见[操作说明](../../../deploy/embedding/README.md)。扩展数据集和三轮本地比较已完成，见[结果](../../../evals/embedding-v2/RESULTS.md)；独立标注复核和生产验证尚未完成。TEI 1.9.3 Qwen 的等长批次缺陷已通过探针复现，当前四模型统一单输入、单并发请求，避免将后端异常误判为模型质量差异。
+
+本机资源、Docker、角色接口及四模型接入已验证，实际步骤见 [Docker 实施计划](../plans/2026-09-15-docker-embedding-comparison.md)。当前使用 TEI CPU 1.9.3；Qwen 走 Candle，其他模型的后端以报告日志为准。旧 API key 评测计划仅供历史追溯，不作为新部署执行步骤。
+
+文档验收：旧网关选型明确退役、四个首轮候选和条件候选可追溯、部署及评测边界清楚、入口与状态一致、历史证据保留。部署验收需另以真实容器、模型身份、输入正确性及完整对比报告证明。

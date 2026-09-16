@@ -1,0 +1,10 @@
+.git
+.codex*
+.gocache
+.venv
+.env
+.env.*
+data
+**/__pycache__
+.pytest_cache
+*.egg-info

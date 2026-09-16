@@ -1,0 +1,34 @@
+# 独立实验项目；单服务顺序换模型，不载入仓库根目录的网关凭据。
+name: email-embedding-eval
+services:
+  embedding:
+    image: ghcr.io/huggingface/text-embeddings-inference:cpu-1.9@sha256:ad950d30878eceb72aaf32024d26fa2b1d04a75304fa0b4776b49aa1941fea07
+    ports:
+      - "127.0.0.1:18080:80"
+    volumes:
+      - model-cache:/data
+    cpus: 4
+    mem_limit: 8g
+    environment:
+      OMP_NUM_THREADS: "4"
+      MKL_NUM_THREADS: "4"
+    command:
+      - --model-id
+      - ${EMBED_MODEL_ID:-Snowflake/snowflake-arctic-embed-m-v1.5}
+      - --revision
+      - ${EMBED_MODEL_REVISION:-e58a8f756156a1293d763f17e3aae643474e9b8a}
+      - --dtype
+      - float32
+      - --max-client-batch-size
+      - ${EMBED_MAX_CLIENT_BATCH_SIZE:-1}
+      - --max-concurrent-requests
+      # 同时限制 HTTP 批次和服务并发，避免 Qwen Candle 合并等长输入。
+      # max-batch-requests 会被本镜像预热结果覆盖，不能用它保证单序列。
+      - ${EMBED_MAX_CONCURRENT_REQUESTS:-1}
+      # 首轮只跑共同短文本，限制 CPU 预热/批处理规模；客户端仍禁止输入截断。
+      - --max-batch-tokens
+      - "512"
+      - --tokenization-workers
+      - "2"
+volumes:
+  model-cache:

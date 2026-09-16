@@ -1,0 +1,33 @@
+{
+  "model": "bge-m3",
+  "configuration": {
+    "model": "BAAI/bge-m3",
+    "revision": "5617a9f61b028005a4858fdac845db406aefb181",
+    "dimensions": 1024
+  },
+  "startup_exit_code": 0,
+  "startup_output": " Container email-embedding-eval-embedding-1  Recreate\n Container email-embedding-eval-embedding-1  Recreated\n Container email-embedding-eval-embedding-1  Starting\n Container email-embedding-eval-embedding-1  Started\n",
+  "startup_wait_seconds": 8.697326400026213,
+  "runtime": "\"sha256:f50bc806338120e138d774236098580f7e5840dbe8bc001ef64615847c1685e8\" 8589934592 4000000000",
+  "identity": {
+    "model_id": "BAAI/bge-m3",
+    "model_sha": "5617a9f61b028005a4858fdac845db406aefb181",
+    "model_dtype": "float32",
+    "served_model_name": "BAAI/bge-m3",
+    "model_type": {
+      "embedding": {
+        "pooling": "cls"
+      }
+    },
+    "max_concurrent_requests": 4,
+    "max_input_length": 512,
+    "max_batch_tokens": 512,
+    "max_batch_requests": 8,
+    "max_client_batch_size": 4,
+    "auto_truncate": true,
+    "tokenization_workers": 2,
+    "version": "1.9.3",
+    "sha": "06670157fb6c1523482219bdb2d1660277d38088",
+    "docker_label": "sha-0667015"
+  }
+}

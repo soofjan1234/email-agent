@@ -1,0 +1,28 @@
+{
+  "version": "embedding-v2",
+  "origin": "synthetic fictional ArcNAS catalog; no customer data",
+  "independent_human_review": false,
+  "chunks": 104,
+  "queries": 128,
+  "scenario_groups": 26,
+  "split_policy": "g01-g08 dev; g09-g26 heldout; shared complete corpus; no tuning after viewing heldout",
+  "label_status": "synthetic_author_reviewed",
+  "sha256": {
+    "dev/chunks.jsonl": "6f78949ba76524b335e20356881d8236c4b8d6a8423ecfb288ebfc71b8288af3",
+    "dev/queries.jsonl": "5599663d8f8e55d833ef59a88e7a888b952d2e7496956f485b186989aa7e9721",
+    "heldout/chunks.jsonl": "6f78949ba76524b335e20356881d8236c4b8d6a8423ecfb288ebfc71b8288af3",
+    "heldout/queries.jsonl": "11acecb35e6b2591fce7168988be2e183086e16e62a7df79774035b28a3089fb"
+  },
+  "counts": {
+    "dev": {
+      "queries": 40,
+      "scored": 36,
+      "oos": 4
+    },
+    "heldout": {
+      "queries": 88,
+      "scored": 84,
+      "oos": 4
+    }
+  }
+}

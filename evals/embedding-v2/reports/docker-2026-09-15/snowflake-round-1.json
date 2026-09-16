@@ -1,0 +1,6473 @@
+{
+  "experiment": "docker-expanded-v2",
+  "round": 1,
+  "configuration": {
+    "model": "Snowflake/snowflake-arctic-embed-m-v1.5",
+    "revision": "e58a8f756156a1293d763f17e3aae643474e9b8a",
+    "dimensions": 768,
+    "query_prefix": "Represent this sentence for searching relevant passages: "
+  },
+  "dataset_sha256": {
+    "dev/chunks.jsonl": "6f78949ba76524b335e20356881d8236c4b8d6a8423ecfb288ebfc71b8288af3",
+    "dev/queries.jsonl": "5599663d8f8e55d833ef59a88e7a888b952d2e7496956f485b186989aa7e9721",
+    "heldout/chunks.jsonl": "6f78949ba76524b335e20356881d8236c4b8d6a8423ecfb288ebfc71b8288af3",
+    "heldout/queries.jsonl": "11acecb35e6b2591fce7168988be2e183086e16e62a7df79774035b28a3089fb"
+  },
+  "service": {
+    "model_id": "Snowflake/snowflake-arctic-embed-m-v1.5",
+    "model_sha": "e58a8f756156a1293d763f17e3aae643474e9b8a",
+    "model_dtype": "float32",
+    "served_model_name": "Snowflake/snowflake-arctic-embed-m-v1.5",
+    "model_type": {
+      "embedding": {
+        "pooling": "cls"
+      }
+    },
+    "max_concurrent_requests": 4,
+    "max_input_length": 512,
+    "max_batch_tokens": 512,
+    "max_batch_requests": 8,
+    "max_client_batch_size": 4,
+    "auto_truncate": true,
+    "tokenization_workers": 2,
+    "version": "1.9.3",
+    "sha": "06670157fb6c1523482219bdb2d1660277d38088",
+    "docker_label": "sha-0667015"
+  },
+  "warmup_batches": [
+    {
+      "role": "document",
+      "texts": 4,
+      "seconds": 0.17741320002824068
+    },
+    {
+      "role": "query",
+      "texts": 4,
+      "seconds": 0.11188770004082471
+    }
+  ],
+  "batches": [
+    {
+      "role": "document",
+      "texts": 4,
+      "seconds": 0.16834779997589067
+    },
+    {
+      "role": "document",
+      "texts": 4,
+      "seconds": 0.15755210001952946
+    },
+    {
+      "role": "document",
+      "texts": 4,
+      "seconds": 0.17517430003499612
+    },
+    {
+      "role": "document",
+      "texts": 4,
+      "seconds": 0.15109890000894666
+    },
+    {
+      "role": "document",
+      "texts": 4,
+      "seconds": 0.16075209999689832
+    },
+    {
+      "role": "document",
+      "texts": 4,
+      "seconds": 0.1444966999697499
+    },
+    {
+      "role": "document",
+      "texts": 4,
+      "seconds": 0.15436679997947067
+    },
+    {
+      "role": "document",
+      "texts": 4,
+      "seconds": 0.15145060000941157
+    },
+    {
+      "role": "document",
+      "texts": 4,
+      "seconds": 0.2070730000268668
+    },
+    {
+      "role": "document",
+      "texts": 4,
+      "seconds": 0.16209130000788718
+    },
+    {
+      "role": "document",
+      "texts": 4,
+      "seconds": 0.13072990003274754
+    },
+    {
+      "role": "document",
+      "texts": 4,
+      "seconds": 0.18228409998118877
+    },
+    {
+      "role": "document",
+      "texts": 4,
+      "seconds": 0.1844903000164777
+    },
+    {
+      "role": "document",
+      "texts": 4,
+      "seconds": 0.2325622999924235
+    },
+    {
+      "role": "document",
+      "texts": 4,
+      "seconds": 0.21684250002726912
+    },
+    {
+      "role": "document",
+      "texts": 4,
+      "seconds": 0.18737050000345334
+    },
+    {
+      "role": "document",
+      "texts": 4,
+      "seconds": 0.17313920002197847
+    },
+    {
+      "role": "document",
+      "texts": 4,
+      "seconds": 0.16148810001323
+    },
+    {
+      "role": "document",
+      "texts": 4,
+      "seconds": 0.2152007999829948
+    },
+    {
+      "role": "document",
+      "texts": 4,
+      "seconds": 0.1635987000190653
+    },
+    {
+      "role": "document",
+      "texts": 4,
+      "seconds": 0.20491680002305657
+    },
+    {
+      "role": "document",
+      "texts": 4,
+      "seconds": 0.15037250000750646
+    },
+    {
+      "role": "document",
+      "texts": 4,
+      "seconds": 0.15346840000711381
+    },
+    {
+      "role": "document",
+      "texts": 4,
+      "seconds": 0.19627880002371967
+    },
+    {
+      "role": "document",
+      "texts": 4,
+      "seconds": 0.18147880001924932
+    },
+    {
+      "role": "document",
+      "texts": 4,
+      "seconds": 0.16853689996059984
+    },
+    {
+      "role": "query",
+      "texts": 4,
+      "seconds": 0.13850090000778437
+    },
+    {
+      "role": "query",
+      "texts": 4,
+      "seconds": 0.1447080000070855
+    },
+    {
+      "role": "query",
+      "texts": 4,
+      "seconds": 0.14933060004841536
+    },
+    {
+      "role": "query",
+      "texts": 4,
+      "seconds": 0.13095740001881495
+    },
+    {
+      "role": "query",
+      "texts": 4,
+      "seconds": 0.10395429999334738
+    },
+    {
+      "role": "query",
+      "texts": 4,
+      "seconds": 0.14965159998973832
+    },
+    {
+      "role": "query",
+      "texts": 4,
+      "seconds": 0.11772650002967566
+    },
+    {
+      "role": "query",
+      "texts": 4,
+      "seconds": 0.09639479999896139
+    },
+    {
+      "role": "query",
+      "texts": 4,
+      "seconds": 0.19248420000076294
+    },
+    {
+      "role": "query",
+      "texts": 4,
+      "seconds": 0.11787169997114688
+    },
+    {
+      "role": "query",
+      "texts": 4,
+      "seconds": 0.14752250001765788
+    },
+    {
+      "role": "query",
+      "texts": 4,
+      "seconds": 0.13234080001711845
+    },
+    {
+      "role": "query",
+      "texts": 4,
+      "seconds": 0.1526754000224173
+    },
+    {
+      "role": "query",
+      "texts": 4,
+      "seconds": 0.18866809998871759
+    },
+    {
+      "role": "query",
+      "texts": 4,
+      "seconds": 0.13718699995661154
+    },
+    {
+      "role": "query",
+      "texts": 4,
+      "seconds": 0.1479801000095904
+    },
+    {
+      "role": "query",
+      "texts": 4,
+      "seconds": 0.13138630002504215
+    },
+    {
+      "role": "query",
+      "texts": 4,
+      "seconds": 0.13664059998700395
+    },
+    {
+      "role": "query",
+      "texts": 4,
+      "seconds": 0.11403779999818653
+    },
+    {
+      "role": "query",
+      "texts": 4,
+      "seconds": 0.10401820001425222
+    },
+    {
+      "role": "query",
+      "texts": 4,
+      "seconds": 0.1262527999933809
+    },
+    {
+      "role": "query",
+      "texts": 4,
+      "seconds": 0.13659519999055192
+    },
+    {
+      "role": "query",
+      "texts": 4,
+      "seconds": 0.10638959996867925
+    },
+    {
+      "role": "query",
+      "texts": 4,
+      "seconds": 0.1277997000142932
+    },
+    {
+      "role": "query",
+      "texts": 4,
+      "seconds": 0.11910519999219105
+    },
+    {
+      "role": "query",
+      "texts": 4,
+      "seconds": 0.1302684999536723
+    },
+    {
+      "role": "query",
+      "texts": 4,
+      "seconds": 0.10095809999620542
+    },
+    {
+      "role": "query",
+      "texts": 4,
+      "seconds": 0.09903540002414957
+    },
+    {
+      "role": "query",
+      "texts": 4,
+      "seconds": 0.1951452000066638
+    },
+    {
+      "role": "query",
+      "texts": 4,
+      "seconds": 0.19349829998100176
+    },
+    {
+      "role": "query",
+      "texts": 4,
+      "seconds": 0.16711390001000836
+    },
+    {
+      "role": "query",
+      "texts": 4,
+      "seconds": 0.10340449999785051
+    }
+  ],
+  "timing": {
+    "document": {
+      "batches": 26,
+      "inputs": 104,
+      "total_seconds": 4.535162200161722,
+      "p50_batch_ms": 168.44234996824525,
+      "p95_batch_ms": 216.43207501620054,
+      "inputs_per_second": 22.931925124153533
+    },
+    "query": {
+      "batches": 32,
+      "inputs": 128,
+      "total_seconds": 4.339603200030979,
+      "p50_batch_ms": 131.8635500210803,
+      "p95_batch_ms": 192.9405449918704,
+      "inputs_per_second": 29.495784314816216
+    }
+  },
+  "partitions": {
+    "dev": {
+      "summary": {
+        "product_doc": {
+          "recall_at_1": 0.8333333333333334,
+          "recall_at_3": 1.0,
+          "mrr": 0.9444444444444444,
+          "scored_queries": 18.0
+        },
+        "approved_case": {
+          "recall_at_1": 0.9166666666666666,
+          "recall_at_3": 1.0,
+          "mrr": 0.9722222222222222,
+          "scored_queries": 18.0
+        }
+      },
+      "identifier_hits": {
+        "passed": [
+          "q-pd-raid5-one",
+          "q-ac-raid5-one",
+          "q-pd-raid5-two",
+          "q-ac-raid5-two",
+          "q-pd-smart-link",
+          "q-pd-backup-auth",
+          "q-ac-backup-auth",
+          "q-pd-backup-full",
+          "q-ac-backup-full",
+          "q-pd-model-a210",
+          "q-ac-model-a210",
+          "q-pd-model-a210plus",
+          "q-ac-model-a210plus"
+        ],
+        "failed": []
+      },
+      "rows": [
+        {
+          "query_id": "q-pd-raid5-one",
+          "source_type": "product_doc",
+          "relevant_chunk_ids": [
+            "pd-raid5-one"
+          ],
+          "ranked_ids": [
+            "pd-raid5-one",
+            "pd-raid5-two",
+            "pd-lan-address"
+          ],
+          "tags": [
+            "contrast",
+            "email",
+            "identifier",
+            "single_fact"
+          ],
+          "query": "RAID 5 is limping along after just one disk died. Do I swap that disk or start a fresh pool?",
+          "ranked_scores": [
+            0.5723013109929921,
+            0.49334488480598454,
+            0.34263815086149596
+          ]
+        },
+        {
+          "query_id": "q-ac-raid5-one",
+          "source_type": "approved_case",
+          "relevant_chunk_ids": [
+            "ac-raid5-one"
+          ],
+          "ranked_ids": [
+            "ac-raid5-one",
+            "ac-raid5-two",
+            "ac-disk-sata"
+          ],
+          "tags": [
+            "contrast",
+            "email",
+            "identifier",
+            "single_fact"
+          ],
+          "query": "Need an approved reply for a RAID5 customer with one dead disk: what must we confirm before replacement?",
+          "ranked_scores": [
+            0.5389389773578167,
+            0.4197677350036251,
+            0.39616740743866863
+          ]
+        },
+        {
+          "query_id": "q-pd-raid5-two",
+          "source_type": "product_doc",
+          "relevant_chunk_ids": [
+            "pd-raid5-two"
+          ],
+          "ranked_ids": [
+            "pd-raid5-two",
+            "pd-raid5-one",
+            "pd-firmware-rebuild"
+          ],
+          "tags": [
+            "contrast",
+            "email",
+            "identifier",
+            "single_fact"
+          ],
+          "query": "Two drives are missing from my RAID5, not one. Should I follow the usual replacement-and-repair instructions?",
+          "ranked_scores": [
+            0.5476229616271229,
+            0.5431101949182398,
+            0.37136939941168756
+          ]
+        },
+        {
+          "query_id": "q-ac-raid5-two",
+          "source_type": "approved_case",
+          "relevant_chunk_ids": [
+            "ac-raid5-two"
+          ],
+          "ranked_ids": [
+            "ac-raid5-two",
+            "ac-raid5-one",
+            "ac-sync-delete"
+          ],
+          "tags": [
+            "contrast",
+            "email",
+            "identifier",
+            "single_fact"
+          ],
+          "query": "What approved wording handles two RAID5 members disappearing and routes the case for recovery rather than a routine rebuild?",
+          "ranked_scores": [
+            0.48745719663523013,
+            0.45872241949829196,
+            0.36172243158689965
+          ]
+        },
+        {
+          "query_id": "q-pd-smart-media",
+          "source_type": "product_doc",
+          "relevant_chunk_ids": [
+            "pd-smart-media"
+          ],
+          "ranked_ids": [
+            "pd-smart-media",
+            "pd-smart-link",
+            "pd-ups-link"
+          ],
+          "tags": [
+            "contrast",
+            "email",
+            "single_fact"
+          ],
+          "query": "The short SMART test passed but pending sectors went from 2 to 48. Is the warning gone?",
+          "ranked_scores": [
+            0.4228035131780742,
+            0.2521063088788092,
+            0.24746995043867714
+          ]
+        },
+        {
+          "query_id": "q-ac-smart-media",
+          "source_type": "approved_case",
+          "relevant_chunk_ids": [
+            "ac-smart-media"
+          ],
+          "ranked_ids": [
+            "ac-smart-media",
+            "ac-quota-volume",
+            "ac-smart-link"
+          ],
+          "tags": [
+            "colloquial",
+            "contrast",
+            "email",
+            "single_fact"
+          ],
+          "query": "Need the safe customer reply: quick test passed, yet pending sectors keep climbing. What should we ask them to send?",
+          "ranked_scores": [
+            0.4717138001525256,
+            0.38093130599156827,
+            0.369149574018993
+          ]
+        },
+        {
+          "query_id": "q-pd-smart-link",
+          "source_type": "product_doc",
+          "relevant_chunk_ids": [
+            "pd-smart-link"
+          ],
+          "ranked_ids": [
+            "pd-smart-link",
+            "pd-smart-media",
+            "pd-cache-write"
+          ],
+          "tags": [
+            "contrast",
+            "email",
+            "identifier",
+            "single_fact"
+          ],
+          "query": "Only UDMA CRC keeps going up; reallocated and pending stay zero. Does that prove the disk surface is bad?",
+          "ranked_scores": [
+            0.44990866430519044,
+            0.4249861859518378,
+            0.330494821108846
+          ]
+        },
+        {
+          "query_id": "q-ac-smart-link",
+          "source_type": "approved_case",
+          "relevant_chunk_ids": [
+            "ac-smart-link"
+          ],
+          "ranked_ids": [
+            "ac-smart-link",
+            "ac-smart-media",
+            "ac-raid5-one"
+          ],
+          "tags": [
+            "contrast",
+            "email",
+            "single_fact"
+          ],
+          "query": "Which reply requests bay and counter history for interface errors without prematurely calling the disk media defective?",
+          "ranked_scores": [
+            0.5093690087530577,
+            0.39713612005583854,
+            0.38570154281999947
+          ]
+        },
+        {
+          "query_id": "q-pd-smb-acl",
+          "source_type": "product_doc",
+          "relevant_chunk_ids": [
+            "pd-smb-acl"
+          ],
+          "ranked_ids": [
+            "pd-smb-acl",
+            "pd-smb-credential",
+            "pd-encrypted-acl"
+          ],
+          "tags": [
+            "colloquial",
+            "contrast",
+            "email",
+            "single_fact",
+            "typo"
+          ],
+          "query": "Hi team, web login is OK. Only my Windows user gets acccess denied on the finance share; coworkers are fine. Where do we start?",
+          "ranked_scores": [
+            0.475594387289161,
+            0.4037908760498077,
+            0.3903707333367676
+          ]
+        },
+        {
+          "query_id": "q-ac-smb-acl",
+          "source_type": "approved_case",
+          "relevant_chunk_ids": [
+            "ac-smb-acl"
+          ],
+          "ranked_ids": [
+            "ac-smb-acl",
+            "ac-encrypted-key",
+            "ac-mail-auth"
+          ],
+          "tags": [
+            "contrast",
+            "email",
+            "single_fact"
+          ],
+          "query": "Approved first response when one Windows account is denied a share but can sign into the web console?",
+          "ranked_scores": [
+            0.5074471025922603,
+            0.3678154319432304,
+            0.3520146980200608
+          ]
+        },
+        {
+          "query_id": "q-pd-smb-credential",
+          "source_type": "product_doc",
+          "relevant_chunk_ids": [
+            "pd-smb-credential"
+          ],
+          "ranked_ids": [
+            "pd-smb-credential",
+            "pd-smb-acl",
+            "pd-encrypted-acl"
+          ],
+          "tags": [
+            "contrast",
+            "email",
+            "single_fact"
+          ],
+          "query": "Windows refuses a second username on the same NAS and says multiple connections are not allowed. Is this an ACL issue?",
+          "ranked_scores": [
+            0.6321420231649042,
+            0.42812592467064825,
+            0.41923001491091716
+          ]
+        },
+        {
+          "query_id": "q-ac-smb-credential",
+          "source_type": "approved_case",
+          "relevant_chunk_ids": [
+            "ac-smb-credential"
+          ],
+          "ranked_ids": [
+            "ac-smb-credential",
+            "ac-smb-acl",
+            "ac-firewall-service"
+          ],
+          "tags": [
+            "contrast",
+            "email",
+            "single_fact"
+          ],
+          "query": "Need approved wording for Windows refusing a different NAS username because another connection already exists.",
+          "ranked_scores": [
+            0.5528930987636256,
+            0.42399905510146735,
+            0.40025016519902773
+          ]
+        },
+        {
+          "query_id": "q-pd-lan-address",
+          "source_type": "product_doc",
+          "relevant_chunk_ids": [
+            "pd-lan-address"
+          ],
+          "ranked_ids": [
+            "pd-lan-address",
+            "pd-vlan-port",
+            "pd-support-standard"
+          ],
+          "tags": [
+            "contrast",
+            "email",
+            "single_fact"
+          ],
+          "query": "Changed routers yesterday; the old NAS bookmark times out. Should I initialize the disks to get it back on the LAN?",
+          "ranked_scores": [
+            0.5291562300214167,
+            0.4331759582502719,
+            0.39746414051982426
+          ]
+        },
+        {
+          "query_id": "q-ac-lan-address",
+          "source_type": "approved_case",
+          "relevant_chunk_ids": [
+            "ac-lan-address"
+          ],
+          "ranked_ids": [
+            "ac-lan-address",
+            "ac-vlan-port",
+            "ac-firewall-service"
+          ],
+          "tags": [
+            "contrast",
+            "email",
+            "single_fact"
+          ],
+          "query": "Which approved reply asks for network evidence after a router swap makes the old NAS address unreachable?",
+          "ranked_scores": [
+            0.5147238656119708,
+            0.4318148748038814,
+            0.41627030197426584
+          ]
+        },
+        {
+          "query_id": "q-pd-lan-dns",
+          "source_type": "product_doc",
+          "relevant_chunk_ids": [
+            "pd-lan-dns"
+          ],
+          "ranked_ids": [
+            "pd-lan-address",
+            "pd-lan-dns",
+            "pd-ddns-stale"
+          ],
+          "tags": [
+            "colloquial",
+            "contrast",
+            "email",
+            "single_fact",
+            "typo"
+          ],
+          "query": "IPs fine, names dead. 192.0.2.20 opens the box but nas-office wont. Is the LAN cable the problem?",
+          "ranked_scores": [
+            0.4698716888900507,
+            0.4664706821445117,
+            0.4165030901414529
+          ]
+        },
+        {
+          "query_id": "q-ac-lan-dns",
+          "source_type": "approved_case",
+          "relevant_chunk_ids": [
+            "ac-lan-dns"
+          ],
+          "ranked_ids": [
+            "ac-lan-dns",
+            "ac-lan-address",
+            "ac-support-standard"
+          ],
+          "tags": [
+            "contrast",
+            "email",
+            "single_fact"
+          ],
+          "query": "How should we reply when the numerical NAS address works but its saved name fails?",
+          "ranked_scores": [
+            0.45398911854576446,
+            0.42183642413320654,
+            0.38812459194076765
+          ]
+        },
+        {
+          "query_id": "q-pd-snapshot-file",
+          "source_type": "product_doc",
+          "relevant_chunk_ids": [
+            "pd-snapshot-file"
+          ],
+          "ranked_ids": [
+            "pd-snapshot-file",
+            "pd-replica-lag",
+            "pd-snapshot-space"
+          ],
+          "tags": [
+            "contrast",
+            "email",
+            "single_fact"
+          ],
+          "query": "I deleted one spreadsheet an hour ago; don't undo everyone else's work. Which recovery scope fits?",
+          "ranked_scores": [
+            0.4336421921965362,
+            0.36336061010108855,
+            0.3333912952400687
+          ]
+        },
+        {
+          "query_id": "q-ac-snapshot-file",
+          "source_type": "approved_case",
+          "relevant_chunk_ids": [
+            "ac-snapshot-file"
+          ],
+          "ranked_ids": [
+            "ac-snapshot-file",
+            "ac-search-index",
+            "ac-quota-user"
+          ],
+          "tags": [
+            "contrast",
+            "email",
+            "single_fact"
+          ],
+          "query": "Approved reply for recovering one deleted document while preserving other users' newer files?",
+          "ranked_scores": [
+            0.476533058998889,
+            0.44482396608648633,
+            0.3895370954709992
+          ]
+        },
+        {
+          "query_id": "q-pd-snapshot-space",
+          "source_type": "product_doc",
+          "relevant_chunk_ids": [
+            "pd-snapshot-space"
+          ],
+          "ranked_ids": [
+            "pd-snapshot-space",
+            "pd-snapshot-file",
+            "pd-sync-delete"
+          ],
+          "tags": [
+            "contrast",
+            "email",
+            "single_fact"
+          ],
+          "query": "Erased a huge folder but free space barely moved. Could old snapshots still be holding it?",
+          "ranked_scores": [
+            0.45843391853227805,
+            0.4065162583564614,
+            0.32723151725938615
+          ]
+        },
+        {
+          "query_id": "q-ac-snapshot-space",
+          "source_type": "approved_case",
+          "relevant_chunk_ids": [
+            "ac-snapshot-space"
+          ],
+          "ranked_ids": [
+            "ac-snapshot-space",
+            "ac-backup-full",
+            "ac-snapshot-file"
+          ],
+          "tags": [
+            "contrast",
+            "email",
+            "single_fact"
+          ],
+          "query": "Which approved response explains low free space after deletion and asks for retention evidence rather than restoring files?",
+          "ranked_scores": [
+            0.47047672314780314,
+            0.44745110528857024,
+            0.4035354835389022
+          ]
+        },
+        {
+          "query_id": "q-pd-backup-auth",
+          "source_type": "product_doc",
+          "relevant_chunk_ids": [
+            "pd-backup-auth"
+          ],
+          "ranked_ids": [
+            "pd-backup-auth",
+            "pd-backup-full",
+            "pd-encrypted-key"
+          ],
+          "tags": [
+            "contrast",
+            "email",
+            "identifier",
+            "single_fact"
+          ],
+          "query": "BK-401 appeared right after the backup account password rotated. Do I need to clear destination space?",
+          "ranked_scores": [
+            0.5775142205673663,
+            0.5174063916114056,
+            0.38858790707198104
+          ]
+        },
+        {
+          "query_id": "q-ac-backup-auth",
+          "source_type": "approved_case",
+          "relevant_chunk_ids": [
+            "ac-backup-auth"
+          ],
+          "ranked_ids": [
+            "ac-backup-auth",
+            "ac-mail-auth",
+            "ac-backup-full"
+          ],
+          "tags": [
+            "contrast",
+            "email",
+            "identifier",
+            "single_fact"
+          ],
+          "query": "What approved reply handles BK-401 after a credential rotation without asking the customer to email a password?",
+          "ranked_scores": [
+            0.5438808080569992,
+            0.42303498672804496,
+            0.36804881073855933
+          ]
+        },
+        {
+          "query_id": "q-pd-backup-full",
+          "source_type": "product_doc",
+          "relevant_chunk_ids": [
+            "pd-backup-full"
+          ],
+          "ranked_ids": [
+            "pd-backup-full",
+            "pd-backup-auth",
+            "pd-encrypted-key"
+          ],
+          "tags": [
+            "contrast",
+            "email",
+            "identifier",
+            "single_fact"
+          ],
+          "query": "The nightly job says BK-507, while sign-in to the target still works. Should I reset its password?",
+          "ranked_scores": [
+            0.4029095917279553,
+            0.375903238899163,
+            0.3547439131892479
+          ]
+        },
+        {
+          "query_id": "q-ac-backup-full",
+          "source_type": "approved_case",
+          "relevant_chunk_ids": [
+            "ac-backup-full"
+          ],
+          "ranked_ids": [
+            "ac-backup-full",
+            "ac-snapshot-space",
+            "ac-quota-user"
+          ],
+          "tags": [
+            "contrast",
+            "email",
+            "identifier",
+            "single_fact"
+          ],
+          "query": "Approved response to BK-507 when the destination login works but the backup cannot allocate space?",
+          "ranked_scores": [
+            0.5146026003888693,
+            0.42213489326285963,
+            0.3980779525808537
+          ]
+        },
+        {
+          "query_id": "q-pd-model-a210",
+          "source_type": "product_doc",
+          "relevant_chunk_ids": [
+            "pd-model-a210"
+          ],
+          "ranked_ids": [
+            "pd-model-a210plus",
+            "pd-model-a210",
+            "pd-disk-sata"
+          ],
+          "tags": [
+            "colloquial",
+            "contrast",
+            "email",
+            "identifier",
+            "negation",
+            "single_fact"
+          ],
+          "query": "Pls check the sticker: A210 WITHOUT the plus. Can I use the extra-memory kit sold for A210+?",
+          "ranked_scores": [
+            0.538328569361179,
+            0.5109474796668625,
+            0.27167675451309725
+          ]
+        },
+        {
+          "query_id": "q-ac-model-a210",
+          "source_type": "approved_case",
+          "relevant_chunk_ids": [
+            "ac-model-a210"
+          ],
+          "ranked_ids": [
+            "ac-model-a210",
+            "ac-model-a210plus",
+            "ac-disk-sata"
+          ],
+          "tags": [
+            "contrast",
+            "email",
+            "identifier",
+            "single_fact"
+          ],
+          "query": "Which approved answer explains why an A210 owner should not receive the A210+ memory upgrade procedure?",
+          "ranked_scores": [
+            0.5898592839395105,
+            0.47512554418654346,
+            0.34686087256817616
+          ]
+        },
+        {
+          "query_id": "q-pd-model-a210plus",
+          "source_type": "product_doc",
+          "relevant_chunk_ids": [
+            "pd-model-a210plus"
+          ],
+          "ranked_ids": [
+            "pd-model-a210plus",
+            "pd-model-a210",
+            "pd-disk-nvme"
+          ],
+          "tags": [
+            "contrast",
+            "email",
+            "identifier",
+            "single_fact"
+          ],
+          "query": "Mine is definitely A210+. What do you need to check before I add a memory module?",
+          "ranked_scores": [
+            0.5710737789210791,
+            0.49245286268334637,
+            0.3779049743078065
+          ]
+        },
+        {
+          "query_id": "q-ac-model-a210plus",
+          "source_type": "approved_case",
+          "relevant_chunk_ids": [
+            "ac-model-a210plus"
+          ],
+          "ranked_ids": [
+            "ac-model-a210plus",
+            "ac-model-a210",
+            "ac-disk-sata"
+          ],
+          "tags": [
+            "contrast",
+            "email",
+            "identifier",
+            "single_fact"
+          ],
+          "query": "Approved reply for an A210+ user who wants to install extra RAM and has a module part number?",
+          "ranked_scores": [
+            0.6589330549733179,
+            0.6226223373083695,
+            0.43928035310345603
+          ]
+        },
+        {
+          "query_id": "q-pd-mfa-lost",
+          "source_type": "product_doc",
+          "relevant_chunk_ids": [
+            "pd-mfa-lost"
+          ],
+          "ranked_ids": [
+            "pd-mfa-lost",
+            "pd-account-lock",
+            "pd-encrypted-acl"
+          ],
+          "tags": [
+            "contrast",
+            "email",
+            "single_fact"
+          ],
+          "query": "Password is fine, but my authenticator phone was stolen. Does changing the password get me past the code screen?",
+          "ranked_scores": [
+            0.4752123743249917,
+            0.40894206438035346,
+            0.28874072538010054
+          ]
+        },
+        {
+          "query_id": "q-ac-mfa-lost",
+          "source_type": "approved_case",
+          "relevant_chunk_ids": [
+            "ac-mfa-lost"
+          ],
+          "ranked_ids": [
+            "ac-mfa-lost",
+            "ac-backup-full",
+            "ac-log-redact"
+          ],
+          "tags": [
+            "contrast",
+            "email",
+            "single_fact"
+          ],
+          "query": "Need approved wording for a lost authenticator phone, with a known password, without collecting secret recovery codes.",
+          "ranked_scores": [
+            0.4982522737354327,
+            0.35689094950543665,
+            0.3489715520592169
+          ]
+        },
+        {
+          "query_id": "q-pd-account-lock",
+          "source_type": "product_doc",
+          "relevant_chunk_ids": [
+            "pd-account-lock"
+          ],
+          "ranked_ids": [
+            "pd-account-lock",
+            "pd-mfa-lost",
+            "pd-encrypted-acl"
+          ],
+          "tags": [
+            "contrast",
+            "email",
+            "single_fact"
+          ],
+          "query": "It says locked after too many wrong passwords. I still have my authenticator. Should MFA be disabled?",
+          "ranked_scores": [
+            0.5978108783352629,
+            0.4770882381278301,
+            0.35657096661932275
+          ]
+        },
+        {
+          "query_id": "q-ac-account-lock",
+          "source_type": "approved_case",
+          "relevant_chunk_ids": [
+            "ac-account-lock"
+          ],
+          "ranked_ids": [
+            "ac-account-lock",
+            "ac-mfa-lost",
+            "ac-replica-lag"
+          ],
+          "tags": [
+            "contrast",
+            "email",
+            "single_fact"
+          ],
+          "query": "Which approved reply handles a password-attempt lockout while leaving the customer's working second factor enabled?",
+          "ranked_scores": [
+            0.4701806095570588,
+            0.38098634868231396,
+            0.33765512187780816
+          ]
+        },
+        {
+          "query_id": "q-pd-g01-dual",
+          "source_type": "product_doc",
+          "relevant_chunk_ids": [
+            "pd-raid5-one",
+            "pd-raid5-two"
+          ],
+          "ranked_ids": [
+            "pd-raid5-one",
+            "pd-raid5-two",
+            "pd-firmware-rebuild"
+          ],
+          "tags": [
+            "multi_fact",
+            "contrast",
+            "email"
+          ],
+          "query": "Two separate tickets need different guidance. First: RAID 5 is limping along after just one disk died. Do I swap that disk or start a fresh pool? Second: Two drives are missing from my RAID5, not one. Should I follow the usual replacement-and-repair instructions?",
+          "ranked_scores": [
+            0.573438964593041,
+            0.5243295517206276,
+            0.3777167459277565
+          ]
+        },
+        {
+          "query_id": "q-ac-g01-dual",
+          "source_type": "approved_case",
+          "relevant_chunk_ids": [
+            "ac-raid5-one",
+            "ac-raid5-two"
+          ],
+          "ranked_ids": [
+            "ac-raid5-one",
+            "ac-raid5-two",
+            "ac-replica-lag"
+          ],
+          "tags": [
+            "multi_fact",
+            "contrast",
+            "email"
+          ],
+          "query": "Two separate tickets need different guidance. First: Need an approved reply for a RAID5 customer with one dead disk: what must we confirm before replacement? Second: What approved wording handles two RAID5 members disappearing and routes the case for recovery rather than a routine rebuild?",
+          "ranked_scores": [
+            0.5168290201748447,
+            0.46529401291175393,
+            0.4175299287796753
+          ]
+        },
+        {
+          "query_id": "q-pd-g05-dual",
+          "source_type": "product_doc",
+          "relevant_chunk_ids": [
+            "pd-snapshot-file",
+            "pd-snapshot-space"
+          ],
+          "ranked_ids": [
+            "pd-snapshot-file",
+            "pd-snapshot-space",
+            "pd-replica-lag"
+          ],
+          "tags": [
+            "multi_fact",
+            "contrast",
+            "email"
+          ],
+          "query": "Two separate tickets need different guidance. First: I deleted one spreadsheet an hour ago; don't undo everyone else's work. Which recovery scope fits? Second: Erased a huge folder but free space barely moved. Could old snapshots still be holding it?",
+          "ranked_scores": [
+            0.48499672433510677,
+            0.46714056793763326,
+            0.4207659902023474
+          ]
+        },
+        {
+          "query_id": "q-ac-g05-dual",
+          "source_type": "approved_case",
+          "relevant_chunk_ids": [
+            "ac-snapshot-file",
+            "ac-snapshot-space"
+          ],
+          "ranked_ids": [
+            "ac-backup-full",
+            "ac-snapshot-space",
+            "ac-snapshot-file"
+          ],
+          "tags": [
+            "multi_fact",
+            "contrast",
+            "email"
+          ],
+          "query": "Two separate tickets need different guidance. First: Approved reply for recovering one deleted document while preserving other users' newer files? Second: Which approved response explains low free space after deletion and asks for retention evidence rather than restoring files?",
+          "ranked_scores": [
+            0.4734830737177649,
+            0.4729602639565185,
+            0.438567229223788
+          ]
+        },
+        {
+          "query_id": "q-oos-01",
+          "source_type": "product_doc",
+          "relevant_chunk_ids": [],
+          "ranked_ids": [
+            "pd-disk-nvme",
+            "pd-disk-sata",
+            "pd-model-a210"
+          ],
+          "tags": [
+            "oos"
+          ],
+          "query": "What is the list price in euros of the ArcNAS A420 replacement motherboard?",
+          "ranked_scores": [
+            0.4313391179493075,
+            0.4189559197257143,
+            0.38715243719640596
+          ]
+        },
+        {
+          "query_id": "q-oos-02",
+          "source_type": "approved_case",
+          "relevant_chunk_ids": [],
+          "ranked_ids": [
+            "ac-replica-lag",
+            "ac-firmware-rebuild",
+            "ac-raid5-one"
+          ],
+          "tags": [
+            "oos"
+          ],
+          "query": "Find the approved response stating the exact shipping date for replacement order RMA-77891.",
+          "ranked_scores": [
+            0.32464976359321085,
+            0.31747373345490126,
+            0.30184170982139247
+          ]
+        },
+        {
+          "query_id": "q-oos-03",
+          "source_type": "product_doc",
+          "relevant_chunk_ids": [],
+          "ranked_ids": [
+            "pd-backup-full",
+            "pd-support-standard",
+            "pd-wan-cgnat"
+          ],
+          "tags": [
+            "oos"
+          ],
+          "query": "What is the baggage allowance for my flight from Paris to Tokyo next Tuesday?",
+          "ranked_scores": [
+            0.13501622520362527,
+            0.11895894016590593,
+            0.1183062437899994
+          ]
+        },
+        {
+          "query_id": "q-oos-04",
+          "source_type": "approved_case",
+          "relevant_chunk_ids": [],
+          "ranked_ids": [
+            "ac-sync-conflict",
+            "ac-mfa-lost",
+            "ac-replica-lag"
+          ],
+          "tags": [
+            "oos"
+          ],
+          "query": "Find an approved reply explaining a denied claim for dental insurance.",
+          "ranked_scores": [
+            0.29855692872317563,
+            0.29289454992024516,
+            0.2926907682089002
+          ]
+        }
+      ]
+    },
+    "heldout": {
+      "summary": {
+        "product_doc": {
+          "recall_at_1": 0.8095238095238095,
+          "recall_at_3": 1.0,
+          "mrr": 0.9404761904761905,
+          "scored_queries": 42.0
+        },
+        "approved_case": {
+          "recall_at_1": 0.8571428571428571,
+          "recall_at_3": 1.0,
+          "mrr": 0.9642857142857143,
+          "scored_queries": 42.0
+        }
+      },
+      "identifier_hits": {
+        "passed": [
+          "q-pd-nfs-root",
+          "q-ac-nfs-root",
+          "q-ac-nfs-subnet",
+          "q-pd-iscsi-auth",
+          "q-ac-iscsi-auth",
+          "q-pd-iscsi-lun",
+          "q-ac-iscsi-lun",
+          "q-pd-wan-cgnat",
+          "q-ac-wan-cgnat",
+          "q-pd-disk-sata",
+          "q-ac-disk-sata",
+          "q-pd-disk-nvme",
+          "q-ac-disk-nvme",
+          "q-pd-mail-port",
+          "q-ac-mail-port",
+          "q-pd-mail-auth",
+          "q-ac-mail-auth",
+          "q-pd-firewall-service",
+          "q-pd-replica-lag"
+        ],
+        "failed": []
+      },
+      "rows": [
+        {
+          "query_id": "q-pd-nfs-root",
+          "source_type": "product_doc",
+          "relevant_chunk_ids": [
+            "pd-nfs-root"
+          ],
+          "ranked_ids": [
+            "pd-nfs-root",
+            "pd-nfs-subnet",
+            "pd-encrypted-acl"
+          ],
+          "tags": [
+            "contrast",
+            "email",
+            "identifier",
+            "single_fact"
+          ],
+          "query": "NFS mounts fine and users write fine, but sudo touch gets permission denied. Is the client subnet blocked?",
+          "ranked_scores": [
+            0.510786371182179,
+            0.4978041918563006,
+            0.3939031879512621
+          ]
+        },
+        {
+          "query_id": "q-ac-nfs-root",
+          "source_type": "approved_case",
+          "relevant_chunk_ids": [
+            "ac-nfs-root"
+          ],
+          "ranked_ids": [
+            "ac-nfs-root",
+            "ac-nfs-subnet",
+            "ac-firewall-service"
+          ],
+          "tags": [
+            "contrast",
+            "email",
+            "identifier",
+            "single_fact"
+          ],
+          "query": "Approved response when only client root cannot write to an otherwise working NFS export?",
+          "ranked_scores": [
+            0.5546550322589726,
+            0.49502741928948235,
+            0.42602710446788683
+          ]
+        },
+        {
+          "query_id": "q-pd-nfs-subnet",
+          "source_type": "product_doc",
+          "relevant_chunk_ids": [
+            "pd-nfs-subnet"
+          ],
+          "ranked_ids": [
+            "pd-nfs-subnet",
+            "pd-nfs-root",
+            "pd-vlan-port"
+          ],
+          "tags": [
+            "contrast",
+            "email",
+            "single_fact"
+          ],
+          "query": "Moved Linux clients to a different VLAN; now mount is denied before any files open. Should I change root squash?",
+          "ranked_scores": [
+            0.5405251192646208,
+            0.5279866674822908,
+            0.4530471646446059
+          ]
+        },
+        {
+          "query_id": "q-ac-nfs-subnet",
+          "source_type": "approved_case",
+          "relevant_chunk_ids": [
+            "ac-nfs-subnet"
+          ],
+          "ranked_ids": [
+            "ac-nfs-subnet",
+            "ac-vlan-port",
+            "ac-lan-address"
+          ],
+          "tags": [
+            "colloquial",
+            "contrast",
+            "email",
+            "identifier",
+            "single_fact"
+          ],
+          "query": "Looking for the customer response: after a VLAN move, NFS cannot even mount. Ask about networks or root mapping?",
+          "ranked_scores": [
+            0.5906305049953722,
+            0.46488699683939305,
+            0.44773939162708554
+          ]
+        },
+        {
+          "query_id": "q-pd-iscsi-auth",
+          "source_type": "product_doc",
+          "relevant_chunk_ids": [
+            "pd-iscsi-auth"
+          ],
+          "ranked_ids": [
+            "pd-iscsi-auth",
+            "pd-iscsi-lun",
+            "pd-raid5-one"
+          ],
+          "tags": [
+            "contrast",
+            "email",
+            "identifier",
+            "single_fact"
+          ],
+          "query": "iSCSI discovery sees the target, but CHAP login fails. Would repairing the LUN filesystem help?",
+          "ranked_scores": [
+            0.6944440534017884,
+            0.6178651627819031,
+            0.3851854365673697
+          ]
+        },
+        {
+          "query_id": "q-ac-iscsi-auth",
+          "source_type": "approved_case",
+          "relevant_chunk_ids": [
+            "ac-iscsi-auth"
+          ],
+          "ranked_ids": [
+            "ac-iscsi-auth",
+            "ac-iscsi-lun",
+            "ac-log-redact"
+          ],
+          "tags": [
+            "contrast",
+            "email",
+            "identifier",
+            "single_fact"
+          ],
+          "query": "Approved response to an iSCSI CHAP login failure that requests settings without exposing secrets?",
+          "ranked_scores": [
+            0.4828731487229584,
+            0.4570126232911812,
+            0.3865444723527881
+          ]
+        },
+        {
+          "query_id": "q-pd-iscsi-lun",
+          "source_type": "product_doc",
+          "relevant_chunk_ids": [
+            "pd-iscsi-lun"
+          ],
+          "ranked_ids": [
+            "pd-iscsi-lun",
+            "pd-iscsi-auth",
+            "pd-encrypted-key"
+          ],
+          "tags": [
+            "colloquial",
+            "contrast",
+            "email",
+            "identifier",
+            "negation",
+            "single_fact",
+            "typo"
+          ],
+          "query": "iscsi is CONNECTED, no disks in the host tho. Do we really need a new CHAP password?",
+          "ranked_scores": [
+            0.5677779866472508,
+            0.5298097650732192,
+            0.45974992441798135
+          ]
+        },
+        {
+          "query_id": "q-ac-iscsi-lun",
+          "source_type": "approved_case",
+          "relevant_chunk_ids": [
+            "ac-iscsi-lun"
+          ],
+          "ranked_ids": [
+            "ac-iscsi-lun",
+            "ac-iscsi-auth",
+            "ac-disk-sata"
+          ],
+          "tags": [
+            "contrast",
+            "email",
+            "identifier",
+            "single_fact"
+          ],
+          "query": "Which reply requests LUN mapping when a connected iSCSI initiator sees no storage device?",
+          "ranked_scores": [
+            0.579367875237457,
+            0.44792840450915405,
+            0.3719770957301888
+          ]
+        },
+        {
+          "query_id": "q-pd-quota-user",
+          "source_type": "product_doc",
+          "relevant_chunk_ids": [
+            "pd-quota-user"
+          ],
+          "ranked_ids": [
+            "pd-quota-volume",
+            "pd-quota-user",
+            "pd-backup-full"
+          ],
+          "tags": [
+            "colloquial",
+            "contrast",
+            "email",
+            "single_fact",
+            "typo"
+          ],
+          "query": "Guys, I cant save but everyone else can, theres 2 TB left. My user gets quota exceeded. Buy disks?",
+          "ranked_scores": [
+            0.4371231986544961,
+            0.42373015569229244,
+            0.3283175685722136
+          ]
+        },
+        {
+          "query_id": "q-ac-quota-user",
+          "source_type": "approved_case",
+          "relevant_chunk_ids": [
+            "ac-quota-user"
+          ],
+          "ranked_ids": [
+            "ac-quota-user",
+            "ac-quota-volume",
+            "ac-backup-full"
+          ],
+          "tags": [
+            "contrast",
+            "email",
+            "single_fact"
+          ],
+          "query": "Approved reply for one user's quota error on a volume that still has plenty of space?",
+          "ranked_scores": [
+            0.4396547617640224,
+            0.40617023311370937,
+            0.39298580688206625
+          ]
+        },
+        {
+          "query_id": "q-pd-quota-volume",
+          "source_type": "product_doc",
+          "relevant_chunk_ids": [
+            "pd-quota-volume"
+          ],
+          "ranked_ids": [
+            "pd-quota-volume",
+            "pd-quota-user",
+            "pd-smart-media"
+          ],
+          "tags": [
+            "contrast",
+            "email",
+            "single_fact"
+          ],
+          "query": "Nobody can save and the volume shows 100 percent used. Will raising my personal quota solve it?",
+          "ranked_scores": [
+            0.4049045946280596,
+            0.3080778148015806,
+            0.2825463081738795
+          ]
+        },
+        {
+          "query_id": "q-ac-quota-volume",
+          "source_type": "approved_case",
+          "relevant_chunk_ids": [
+            "ac-quota-volume"
+          ],
+          "ranked_ids": [
+            "ac-quota-volume",
+            "ac-quota-user",
+            "ac-backup-full"
+          ],
+          "tags": [
+            "contrast",
+            "email",
+            "single_fact"
+          ],
+          "query": "Which approved response handles all users losing write access because the volume itself is full?",
+          "ranked_scores": [
+            0.43141055900051845,
+            0.3848403844316957,
+            0.37648286714816515
+          ]
+        },
+        {
+          "query_id": "q-pd-tls-name",
+          "source_type": "product_doc",
+          "relevant_chunk_ids": [
+            "pd-tls-name"
+          ],
+          "ranked_ids": [
+            "pd-tls-name",
+            "pd-tls-expired",
+            "pd-lan-dns"
+          ],
+          "tags": [
+            "colloquial",
+            "contrast",
+            "email",
+            "negation",
+            "single_fact",
+            "typo"
+          ],
+          "query": "Cert isnt expired (next year!), browser just says WRONG NAME when I use the IP. What is mismatched?",
+          "ranked_scores": [
+            0.5796914319740296,
+            0.47561259265713846,
+            0.37371508076697696
+          ]
+        },
+        {
+          "query_id": "q-ac-tls-name",
+          "source_type": "approved_case",
+          "relevant_chunk_ids": [
+            "ac-tls-name"
+          ],
+          "ranked_ids": [
+            "ac-tls-expired",
+            "ac-tls-name",
+            "ac-sync-conflict"
+          ],
+          "tags": [
+            "contrast",
+            "email",
+            "single_fact"
+          ],
+          "query": "Approved reply for a certificate name mismatch even though the expiry date is in the future?",
+          "ranked_scores": [
+            0.48471012659049334,
+            0.3998819962630398,
+            0.31550551648186015
+          ]
+        },
+        {
+          "query_id": "q-pd-tls-expired",
+          "source_type": "product_doc",
+          "relevant_chunk_ids": [
+            "pd-tls-expired"
+          ],
+          "ranked_ids": [
+            "pd-tls-name",
+            "pd-tls-expired",
+            "pd-mail-port"
+          ],
+          "tags": [
+            "contrast",
+            "email",
+            "single_fact"
+          ],
+          "query": "The URL matches the certificate, but it expired yesterday. Can fixing DNS remove the warning?",
+          "ranked_scores": [
+            0.5647664957727986,
+            0.5236920633022929,
+            0.33561064874633784
+          ]
+        },
+        {
+          "query_id": "q-ac-tls-expired",
+          "source_type": "approved_case",
+          "relevant_chunk_ids": [
+            "ac-tls-expired"
+          ],
+          "ranked_ids": [
+            "ac-tls-expired",
+            "ac-tls-name",
+            "ac-lan-dns"
+          ],
+          "tags": [
+            "contrast",
+            "email",
+            "single_fact"
+          ],
+          "query": "Which approved response checks certificate renewal and service assignment for an expired certificate with the correct name?",
+          "ranked_scores": [
+            0.4558320461565833,
+            0.34502224991174507,
+            0.2819562803657717
+          ]
+        },
+        {
+          "query_id": "q-pd-ddns-stale",
+          "source_type": "product_doc",
+          "relevant_chunk_ids": [
+            "pd-ddns-stale"
+          ],
+          "ranked_ids": [
+            "pd-ddns-stale",
+            "pd-lan-dns",
+            "pd-tls-expired"
+          ],
+          "tags": [
+            "contrast",
+            "email",
+            "single_fact"
+          ],
+          "query": "From outside, today's public IP works but the DDNS name goes nowhere. Do my shares need recreating?",
+          "ranked_scores": [
+            0.4947442090963571,
+            0.41369750793714705,
+            0.3584594322874274
+          ]
+        },
+        {
+          "query_id": "q-ac-ddns-stale",
+          "source_type": "approved_case",
+          "relevant_chunk_ids": [
+            "ac-ddns-stale"
+          ],
+          "ranked_ids": [
+            "ac-ddns-stale",
+            "ac-lan-dns",
+            "ac-replica-lag"
+          ],
+          "tags": [
+            "contrast",
+            "email",
+            "single_fact"
+          ],
+          "query": "Approved reply when direct access to the current public IP succeeds but the DDNS name is stale?",
+          "ranked_scores": [
+            0.49815503662513294,
+            0.386428388892854,
+            0.34387423075431683
+          ]
+        },
+        {
+          "query_id": "q-pd-wan-cgnat",
+          "source_type": "product_doc",
+          "relevant_chunk_ids": [
+            "pd-wan-cgnat"
+          ],
+          "ranked_ids": [
+            "pd-wan-cgnat",
+            "pd-ddns-stale",
+            "pd-lan-address"
+          ],
+          "tags": [
+            "contrast",
+            "email",
+            "identifier",
+            "single_fact"
+          ],
+          "query": "My router WAN is 100.72.4.9 and forwarding never works from outside. Will refreshing DDNS be enough?",
+          "ranked_scores": [
+            0.46862981947344157,
+            0.4585158590261055,
+            0.39207452601018644
+          ]
+        },
+        {
+          "query_id": "q-ac-wan-cgnat",
+          "source_type": "approved_case",
+          "relevant_chunk_ids": [
+            "ac-wan-cgnat"
+          ],
+          "ranked_ids": [
+            "ac-wan-cgnat",
+            "ac-ddns-stale",
+            "ac-lan-address"
+          ],
+          "tags": [
+            "colloquial",
+            "contrast",
+            "email",
+            "identifier",
+            "single_fact"
+          ],
+          "query": "Need wording for a customer whose WAN is 100.72.4.9; port forwards are there but offsite access never works. What do we explain?",
+          "ranked_scores": [
+            0.4301518634545415,
+            0.3631417846252918,
+            0.3436836780970651
+          ]
+        },
+        {
+          "query_id": "q-pd-sync-delete",
+          "source_type": "product_doc",
+          "relevant_chunk_ids": [
+            "pd-sync-delete"
+          ],
+          "ranked_ids": [
+            "pd-sync-delete",
+            "pd-snapshot-file",
+            "pd-cache-write"
+          ],
+          "tags": [
+            "contrast",
+            "email",
+            "single_fact"
+          ],
+          "query": "I deleted a file on the laptop and it vanished from the NAS too. Isn't two-way sync supposed to be a backup?",
+          "ranked_scores": [
+            0.5676393232913284,
+            0.4535191520452938,
+            0.3969207678011427
+          ]
+        },
+        {
+          "query_id": "q-ac-sync-delete",
+          "source_type": "approved_case",
+          "relevant_chunk_ids": [
+            "ac-sync-delete"
+          ],
+          "ranked_ids": [
+            "ac-sync-delete",
+            "ac-replica-lag",
+            "ac-backup-full"
+          ],
+          "tags": [
+            "contrast",
+            "email",
+            "single_fact"
+          ],
+          "query": "Approved response after a deletion propagates through two-way synchronization to both copies?",
+          "ranked_scores": [
+            0.5120070808528226,
+            0.3721054916804697,
+            0.34115917140417673
+          ]
+        },
+        {
+          "query_id": "q-pd-sync-conflict",
+          "source_type": "product_doc",
+          "relevant_chunk_ids": [
+            "pd-sync-conflict"
+          ],
+          "ranked_ids": [
+            "pd-sync-conflict",
+            "pd-sync-delete",
+            "pd-snapshot-file"
+          ],
+          "tags": [
+            "colloquial",
+            "contrast",
+            "email",
+            "single_fact"
+          ],
+          "query": "We both worked offline. Now sync made a conflicted copy... can I bin the extra file without asking the other editor?",
+          "ranked_scores": [
+            0.4856216810510799,
+            0.4153074524970777,
+            0.3641203556095216
+          ]
+        },
+        {
+          "query_id": "q-ac-sync-conflict",
+          "source_type": "approved_case",
+          "relevant_chunk_ids": [
+            "ac-sync-conflict"
+          ],
+          "ranked_ids": [
+            "ac-sync-conflict",
+            "ac-sync-delete",
+            "ac-replica-lag"
+          ],
+          "tags": [
+            "contrast",
+            "email",
+            "single_fact"
+          ],
+          "query": "Which approved reply preserves both files after simultaneous offline edits create a conflict copy?",
+          "ranked_scores": [
+            0.4582995811752124,
+            0.3524612529332609,
+            0.33353504343286566
+          ]
+        },
+        {
+          "query_id": "q-pd-disk-sata",
+          "source_type": "product_doc",
+          "relevant_chunk_ids": [
+            "pd-disk-sata"
+          ],
+          "ranked_ids": [
+            "pd-disk-sata",
+            "pd-disk-nvme",
+            "pd-model-a210"
+          ],
+          "tags": [
+            "contrast",
+            "email",
+            "identifier",
+            "single_fact"
+          ],
+          "query": "Will a 3.5-inch SAS disk fit my A420 just because the old SATA disk was also 3.5-inch?",
+          "ranked_scores": [
+            0.5793503051069787,
+            0.377843671471277,
+            0.3239583257663948
+          ]
+        },
+        {
+          "query_id": "q-ac-disk-sata",
+          "source_type": "approved_case",
+          "relevant_chunk_ids": [
+            "ac-disk-sata"
+          ],
+          "ranked_ids": [
+            "ac-disk-sata",
+            "ac-model-a210plus",
+            "ac-model-a210"
+          ],
+          "tags": [
+            "contrast",
+            "email",
+            "identifier",
+            "single_fact"
+          ],
+          "query": "Approved answer to an A420 owner considering a same-size SAS replacement for a SATA drive?",
+          "ranked_scores": [
+            0.657246136781891,
+            0.3649918219153628,
+            0.34750059035724506
+          ]
+        },
+        {
+          "query_id": "q-pd-disk-nvme",
+          "source_type": "product_doc",
+          "relevant_chunk_ids": [
+            "pd-disk-nvme"
+          ],
+          "ranked_ids": [
+            "pd-disk-nvme",
+            "pd-disk-sata",
+            "pd-raid5-one"
+          ],
+          "tags": [
+            "contrast",
+            "email",
+            "identifier",
+            "single_fact"
+          ],
+          "query": "A SATA member failed in my A420. Can the spare NVMe stick in an M.2 slot replace it in the array?",
+          "ranked_scores": [
+            0.6271734171611327,
+            0.5050478853018077,
+            0.41597611000178725
+          ]
+        },
+        {
+          "query_id": "q-ac-disk-nvme",
+          "source_type": "approved_case",
+          "relevant_chunk_ids": [
+            "ac-disk-nvme"
+          ],
+          "ranked_ids": [
+            "ac-disk-sata",
+            "ac-disk-nvme",
+            "ac-model-a210plus"
+          ],
+          "tags": [
+            "colloquial",
+            "contrast",
+            "email",
+            "identifier",
+            "single_fact"
+          ],
+          "query": "Customer wants to replace an A420 SATA array member with a spare NVMe stick. Which reply checks the component before they buy?",
+          "ranked_scores": [
+            0.47483913412205864,
+            0.43173521983110796,
+            0.37658086013654507
+          ]
+        },
+        {
+          "query_id": "q-pd-ups-power",
+          "source_type": "product_doc",
+          "relevant_chunk_ids": [
+            "pd-ups-power"
+          ],
+          "ranked_ids": [
+            "pd-ups-link",
+            "pd-ups-power",
+            "pd-support-standard"
+          ],
+          "tags": [
+            "contrast",
+            "email",
+            "single_fact"
+          ],
+          "query": "The room lost power and UPS says on battery with six minutes left. Should I start a long scrub now?",
+          "ranked_scores": [
+            0.39997259466397733,
+            0.39548124081488634,
+            0.29664803841075243
+          ]
+        },
+        {
+          "query_id": "q-ac-ups-power",
+          "source_type": "approved_case",
+          "relevant_chunk_ids": [
+            "ac-ups-power"
+          ],
+          "ranked_ids": [
+            "ac-ups-power",
+            "ac-ups-link",
+            "ac-support-premium"
+          ],
+          "tags": [
+            "contrast",
+            "email",
+            "single_fact"
+          ],
+          "query": "Approved urgent response when the UPS is running on battery with little runtime left?",
+          "ranked_scores": [
+            0.4952842810348526,
+            0.44517252912015937,
+            0.3295636919745643
+          ]
+        },
+        {
+          "query_id": "q-pd-ups-link",
+          "source_type": "product_doc",
+          "relevant_chunk_ids": [
+            "pd-ups-link"
+          ],
+          "ranked_ids": [
+            "pd-ups-link",
+            "pd-ups-power",
+            "pd-support-standard"
+          ],
+          "tags": [
+            "contrast",
+            "email",
+            "single_fact"
+          ],
+          "query": "NAS says UPS disconnected, but mains is fine and the UPS display is normal. Is this definitely a power cut?",
+          "ranked_scores": [
+            0.5845364562449649,
+            0.5477942014512726,
+            0.4433850543245282
+          ]
+        },
+        {
+          "query_id": "q-ac-ups-link",
+          "source_type": "approved_case",
+          "relevant_chunk_ids": [
+            "ac-ups-link"
+          ],
+          "ranked_ids": [
+            "ac-ups-link",
+            "ac-ups-power",
+            "ac-support-premium"
+          ],
+          "tags": [
+            "contrast",
+            "email",
+            "single_fact"
+          ],
+          "query": "Which approved reply investigates UPS monitoring loss without declaring a confirmed mains outage?",
+          "ranked_scores": [
+            0.535060629916178,
+            0.4823802896592547,
+            0.39012271872092386
+          ]
+        },
+        {
+          "query_id": "q-pd-firmware-rebuild",
+          "source_type": "product_doc",
+          "relevant_chunk_ids": [
+            "pd-firmware-rebuild"
+          ],
+          "ranked_ids": [
+            "pd-firmware-rebuild",
+            "pd-firmware-signature",
+            "pd-replica-lag"
+          ],
+          "tags": [
+            "contrast",
+            "email",
+            "single_fact"
+          ],
+          "query": "Repair is at 43 percent. Can I install the new firmware to make the rebuild finish sooner?",
+          "ranked_scores": [
+            0.42551926936489637,
+            0.29944849361789244,
+            0.2906652452904359
+          ]
+        },
+        {
+          "query_id": "q-ac-firmware-rebuild",
+          "source_type": "approved_case",
+          "relevant_chunk_ids": [
+            "ac-firmware-rebuild"
+          ],
+          "ranked_ids": [
+            "ac-firmware-rebuild",
+            "ac-scrub-integrity",
+            "ac-model-a210plus"
+          ],
+          "tags": [
+            "contrast",
+            "email",
+            "single_fact"
+          ],
+          "query": "Approved reply that postpones an elective firmware update while an array repair is still active?",
+          "ranked_scores": [
+            0.5679633189753063,
+            0.36426566306151914,
+            0.3415782757079093
+          ]
+        },
+        {
+          "query_id": "q-pd-firmware-signature",
+          "source_type": "product_doc",
+          "relevant_chunk_ids": [
+            "pd-firmware-signature"
+          ],
+          "ranked_ids": [
+            "pd-firmware-signature",
+            "pd-raid5-one",
+            "pd-disk-sata"
+          ],
+          "tags": [
+            "contrast",
+            "email",
+            "single_fact"
+          ],
+          "query": "Update says invalid signature; no RAID work is running. Can I bypass verification for a near-identical model's file?",
+          "ranked_scores": [
+            0.5669809945223239,
+            0.41748621019026677,
+            0.3800077660073851
+          ]
+        },
+        {
+          "query_id": "q-ac-firmware-signature",
+          "source_type": "approved_case",
+          "relevant_chunk_ids": [
+            "ac-firmware-signature"
+          ],
+          "ranked_ids": [
+            "ac-firmware-signature",
+            "ac-log-redact",
+            "ac-firmware-rebuild"
+          ],
+          "tags": [
+            "contrast",
+            "email",
+            "single_fact"
+          ],
+          "query": "Which approved reply requests package provenance when firmware signature validation fails?",
+          "ranked_scores": [
+            0.4087313608083569,
+            0.3414030941243845,
+            0.3281780901135972
+          ]
+        },
+        {
+          "query_id": "q-pd-mail-port",
+          "source_type": "product_doc",
+          "relevant_chunk_ids": [
+            "pd-mail-port"
+          ],
+          "ranked_ids": [
+            "pd-mail-port",
+            "pd-mail-auth",
+            "pd-account-lock"
+          ],
+          "tags": [
+            "contrast",
+            "email",
+            "identifier",
+            "single_fact"
+          ],
+          "query": "Notification email times out before the server greeting. Is resetting the SMTP password the first step?",
+          "ranked_scores": [
+            0.6458918016010791,
+            0.387164317269061,
+            0.3454109687930467
+          ]
+        },
+        {
+          "query_id": "q-ac-mail-port",
+          "source_type": "approved_case",
+          "relevant_chunk_ids": [
+            "ac-mail-port"
+          ],
+          "ranked_ids": [
+            "ac-mail-port",
+            "ac-mail-auth",
+            "ac-iscsi-lun"
+          ],
+          "tags": [
+            "contrast",
+            "email",
+            "identifier",
+            "single_fact"
+          ],
+          "query": "Approved reply asking for connection evidence when SMTP times out before authentication begins?",
+          "ranked_scores": [
+            0.5056714821345614,
+            0.43231504305742985,
+            0.39103276361402606
+          ]
+        },
+        {
+          "query_id": "q-pd-mail-auth",
+          "source_type": "product_doc",
+          "relevant_chunk_ids": [
+            "pd-mail-auth"
+          ],
+          "ranked_ids": [
+            "pd-mail-auth",
+            "pd-mail-port",
+            "pd-firewall-service"
+          ],
+          "tags": [
+            "colloquial",
+            "contrast",
+            "email",
+            "identifier",
+            "negation",
+            "single_fact"
+          ],
+          "query": "TCP connects! Email still fails, 535 from SMTP. So is this a firewall thing or not?",
+          "ranked_scores": [
+            0.5661570837097444,
+            0.4414779063718484,
+            0.3722703833269832
+          ]
+        },
+        {
+          "query_id": "q-ac-mail-auth",
+          "source_type": "approved_case",
+          "relevant_chunk_ids": [
+            "ac-mail-auth"
+          ],
+          "ranked_ids": [
+            "ac-mail-auth",
+            "ac-mail-port",
+            "ac-log-redact"
+          ],
+          "tags": [
+            "contrast",
+            "email",
+            "identifier",
+            "single_fact"
+          ],
+          "query": "Which approved response handles SMTP 535 after a successful server connection without collecting the password?",
+          "ranked_scores": [
+            0.46749307746799074,
+            0.45784757968824386,
+            0.38642180154318734
+          ]
+        },
+        {
+          "query_id": "q-pd-encrypted-key",
+          "source_type": "product_doc",
+          "relevant_chunk_ids": [
+            "pd-encrypted-key"
+          ],
+          "ranked_ids": [
+            "pd-encrypted-key",
+            "pd-encrypted-acl",
+            "pd-account-lock"
+          ],
+          "tags": [
+            "contrast",
+            "email",
+            "single_fact"
+          ],
+          "query": "After reboot my encrypted folder is locked. I know the admin password; is that all I need to unlock the data?",
+          "ranked_scores": [
+            0.5592228978298381,
+            0.4542233124074836,
+            0.40067751692257814
+          ]
+        },
+        {
+          "query_id": "q-ac-encrypted-key",
+          "source_type": "approved_case",
+          "relevant_chunk_ids": [
+            "ac-encrypted-key"
+          ],
+          "ranked_ids": [
+            "ac-encrypted-key",
+            "ac-encrypted-acl",
+            "ac-mfa-lost"
+          ],
+          "tags": [
+            "contrast",
+            "email",
+            "single_fact"
+          ],
+          "query": "Approved reply for a locked encrypted share that asks about key availability without asking for the secret key?",
+          "ranked_scores": [
+            0.5149167001573152,
+            0.40355173934246613,
+            0.34300087959300973
+          ]
+        },
+        {
+          "query_id": "q-pd-encrypted-acl",
+          "source_type": "product_doc",
+          "relevant_chunk_ids": [
+            "pd-encrypted-acl"
+          ],
+          "ranked_ids": [
+            "pd-encrypted-acl",
+            "pd-encrypted-key",
+            "pd-account-lock"
+          ],
+          "tags": [
+            "colloquial",
+            "contrast",
+            "email",
+            "negation",
+            "single_fact",
+            "typo"
+          ],
+          "query": "Encrypted folder is already unlocked. Other people read it, I cant. Re-import the key??",
+          "ranked_scores": [
+            0.4596568644446952,
+            0.4427776379972289,
+            0.33967771368344624
+          ]
+        },
+        {
+          "query_id": "q-ac-encrypted-acl",
+          "source_type": "approved_case",
+          "relevant_chunk_ids": [
+            "ac-encrypted-acl"
+          ],
+          "ranked_ids": [
+            "ac-encrypted-acl",
+            "ac-search-permission",
+            "ac-smb-acl"
+          ],
+          "tags": [
+            "contrast",
+            "email",
+            "single_fact"
+          ],
+          "query": "Which approved reply treats one user's denial on an already unlocked encrypted folder as an access-rule issue?",
+          "ranked_scores": [
+            0.4484485816302202,
+            0.37713170216170744,
+            0.3673376632370902
+          ]
+        },
+        {
+          "query_id": "q-pd-cache-read",
+          "source_type": "product_doc",
+          "relevant_chunk_ids": [
+            "pd-cache-read"
+          ],
+          "ranked_ids": [
+            "pd-cache-read",
+            "pd-cache-write",
+            "pd-disk-nvme"
+          ],
+          "tags": [
+            "contrast",
+            "email",
+            "single_fact"
+          ],
+          "query": "This cache says read-only. Does it hold unique unwritten data like a write-back cache?",
+          "ranked_scores": [
+            0.5539438765021605,
+            0.493688240447514,
+            0.32412667305723764
+          ]
+        },
+        {
+          "query_id": "q-ac-cache-read",
+          "source_type": "approved_case",
+          "relevant_chunk_ids": [
+            "ac-cache-read"
+          ],
+          "ranked_ids": [
+            "ac-cache-read",
+            "ac-cache-write",
+            "ac-search-index"
+          ],
+          "tags": [
+            "contrast",
+            "email",
+            "single_fact"
+          ],
+          "query": "Approved response before removing a read-only cache that explicitly verifies the operating mode?",
+          "ranked_scores": [
+            0.4945074038012687,
+            0.4786270252800794,
+            0.3731354556512166
+          ]
+        },
+        {
+          "query_id": "q-pd-cache-write",
+          "source_type": "product_doc",
+          "relevant_chunk_ids": [
+            "pd-cache-write"
+          ],
+          "ranked_ids": [
+            "pd-cache-read",
+            "pd-cache-write",
+            "pd-disk-nvme"
+          ],
+          "tags": [
+            "contrast",
+            "email",
+            "single_fact"
+          ],
+          "query": "Write-back cache still shows pending writes. Can I pull its SSDs the same way as a read-only cache?",
+          "ranked_scores": [
+            0.6408547465059427,
+            0.6087276895971551,
+            0.4235463141109229
+          ]
+        },
+        {
+          "query_id": "q-ac-cache-write",
+          "source_type": "approved_case",
+          "relevant_chunk_ids": [
+            "ac-cache-write"
+          ],
+          "ranked_ids": [
+            "ac-cache-write",
+            "ac-smart-media",
+            "ac-backup-full"
+          ],
+          "tags": [
+            "colloquial",
+            "contrast",
+            "email",
+            "single_fact"
+          ],
+          "query": "Need wording that stops a customer yanking write-back SSDs while data is still waiting to reach the volume.",
+          "ranked_scores": [
+            0.5154345436636498,
+            0.4271413845386772,
+            0.40530477301494616
+          ]
+        },
+        {
+          "query_id": "q-pd-vlan-port",
+          "source_type": "product_doc",
+          "relevant_chunk_ids": [
+            "pd-vlan-port"
+          ],
+          "ranked_ids": [
+            "pd-vlan-port",
+            "pd-lan-address",
+            "pd-nfs-subnet"
+          ],
+          "tags": [
+            "contrast",
+            "email",
+            "single_fact"
+          ],
+          "query": "Changed the switch port VLAN and now every NAS service vanished. Should I edit only the web firewall rule?",
+          "ranked_scores": [
+            0.6159402839593091,
+            0.429956105487174,
+            0.3709547419506007
+          ]
+        },
+        {
+          "query_id": "q-ac-vlan-port",
+          "source_type": "approved_case",
+          "relevant_chunk_ids": [
+            "ac-vlan-port"
+          ],
+          "ranked_ids": [
+            "ac-vlan-port",
+            "ac-firewall-service",
+            "ac-lan-address"
+          ],
+          "tags": [
+            "contrast",
+            "email",
+            "single_fact"
+          ],
+          "query": "Approved reply after a switch-port VLAN change makes all NAS services unreachable?",
+          "ranked_scores": [
+            0.5335742197659588,
+            0.4642909022587709,
+            0.4352399600270369
+          ]
+        },
+        {
+          "query_id": "q-pd-firewall-service",
+          "source_type": "product_doc",
+          "relevant_chunk_ids": [
+            "pd-firewall-service"
+          ],
+          "ranked_ids": [
+            "pd-firewall-service",
+            "pd-vlan-port",
+            "pd-mail-port"
+          ],
+          "tags": [
+            "contrast",
+            "email",
+            "identifier",
+            "single_fact"
+          ],
+          "query": "SMB is fine from this subnet but the admin HTTPS port times out. Is the whole VLAN broken?",
+          "ranked_scores": [
+            0.5255526696422874,
+            0.46809881698026123,
+            0.40152388636689623
+          ]
+        },
+        {
+          "query_id": "q-ac-firewall-service",
+          "source_type": "approved_case",
+          "relevant_chunk_ids": [
+            "ac-firewall-service"
+          ],
+          "ranked_ids": [
+            "ac-firewall-service",
+            "ac-replica-lag",
+            "ac-smb-acl"
+          ],
+          "tags": [
+            "contrast",
+            "email",
+            "single_fact"
+          ],
+          "query": "Which approved reply narrows access failure to the management service while file sharing remains reachable?",
+          "ranked_scores": [
+            0.4417490613261076,
+            0.38892321036305766,
+            0.3797555172735945
+          ]
+        },
+        {
+          "query_id": "q-pd-replica-lag",
+          "source_type": "product_doc",
+          "relevant_chunk_ids": [
+            "pd-replica-lag"
+          ],
+          "ranked_ids": [
+            "pd-replica-lag",
+            "pd-support-premium",
+            "pd-support-standard"
+          ],
+          "tags": [
+            "colloquial",
+            "contrast",
+            "email",
+            "identifier",
+            "single_fact"
+          ],
+          "query": "Green replication icon, but offsite copy is 8h behind; our RPO is 1h. Are we actually meeting the target?",
+          "ranked_scores": [
+            0.3400666053740078,
+            0.33517574208589357,
+            0.3028768092158959
+          ]
+        },
+        {
+          "query_id": "q-ac-replica-lag",
+          "source_type": "approved_case",
+          "relevant_chunk_ids": [
+            "ac-replica-lag"
+          ],
+          "ranked_ids": [
+            "ac-replica-lag",
+            "ac-backup-full",
+            "ac-sync-conflict"
+          ],
+          "tags": [
+            "contrast",
+            "email",
+            "single_fact"
+          ],
+          "query": "Approved response to a successful replication job whose latest recovery point is older than the agreed objective?",
+          "ranked_scores": [
+            0.49780775921209425,
+            0.2921381736489319,
+            0.28433142924728416
+          ]
+        },
+        {
+          "query_id": "q-pd-replica-fail",
+          "source_type": "product_doc",
+          "relevant_chunk_ids": [
+            "pd-replica-fail"
+          ],
+          "ranked_ids": [
+            "pd-replica-fail",
+            "pd-replica-lag",
+            "pd-support-standard"
+          ],
+          "tags": [
+            "contrast",
+            "email",
+            "single_fact"
+          ],
+          "query": "Replication cannot contact the target at all. Will running snapshots every five minutes fix that?",
+          "ranked_scores": [
+            0.483898897408813,
+            0.4602245434216121,
+            0.37089096512401487
+          ]
+        },
+        {
+          "query_id": "q-ac-replica-fail",
+          "source_type": "approved_case",
+          "relevant_chunk_ids": [
+            "ac-replica-fail"
+          ],
+          "ranked_ids": [
+            "ac-replica-fail",
+            "ac-replica-lag",
+            "ac-support-standard"
+          ],
+          "tags": [
+            "contrast",
+            "email",
+            "single_fact"
+          ],
+          "query": "Which approved reply addresses an unreachable replication destination before changing the snapshot schedule?",
+          "ranked_scores": [
+            0.5108475970882276,
+            0.47464520481148653,
+            0.3680439044548997
+          ]
+        },
+        {
+          "query_id": "q-pd-scrub-integrity",
+          "source_type": "product_doc",
+          "relevant_chunk_ids": [
+            "pd-scrub-integrity"
+          ],
+          "ranked_ids": [
+            "pd-scrub-integrity",
+            "pd-rebalance-capacity",
+            "pd-replica-lag"
+          ],
+          "tags": [
+            "contrast",
+            "email",
+            "single_fact"
+          ],
+          "query": "Scrub found checksum mismatches. Does that just mean storage isn't evenly spread across the drives?",
+          "ranked_scores": [
+            0.588092582133709,
+            0.4588251495326239,
+            0.3928963334919013
+          ]
+        },
+        {
+          "query_id": "q-ac-scrub-integrity",
+          "source_type": "approved_case",
+          "relevant_chunk_ids": [
+            "ac-scrub-integrity"
+          ],
+          "ranked_ids": [
+            "ac-scrub-integrity",
+            "ac-rebalance-capacity",
+            "ac-smart-link"
+          ],
+          "tags": [
+            "contrast",
+            "email",
+            "single_fact"
+          ],
+          "query": "Approved reply to checksum inconsistencies from a scrub, requesting integrity evidence?",
+          "ranked_scores": [
+            0.44774765099195546,
+            0.4008860144969884,
+            0.3497725375204303
+          ]
+        },
+        {
+          "query_id": "q-pd-rebalance-capacity",
+          "source_type": "product_doc",
+          "relevant_chunk_ids": [
+            "pd-rebalance-capacity"
+          ],
+          "ranked_ids": [
+            "pd-rebalance-capacity",
+            "pd-scrub-integrity",
+            "pd-smart-link"
+          ],
+          "tags": [
+            "contrast",
+            "email",
+            "single_fact"
+          ],
+          "query": "The post-expansion balancing task finished. Does that certify all file checksums like a scrub?",
+          "ranked_scores": [
+            0.5704420344716585,
+            0.3897710154125248,
+            0.3519064051431305
+          ]
+        },
+        {
+          "query_id": "q-ac-rebalance-capacity",
+          "source_type": "approved_case",
+          "relevant_chunk_ids": [
+            "ac-rebalance-capacity"
+          ],
+          "ranked_ids": [
+            "ac-rebalance-capacity",
+            "ac-scrub-integrity",
+            "ac-replica-lag"
+          ],
+          "tags": [
+            "contrast",
+            "email",
+            "single_fact"
+          ],
+          "query": "Which approved reply separates completed capacity redistribution from proof of file integrity?",
+          "ranked_scores": [
+            0.5478216685489806,
+            0.3879406782430973,
+            0.3674210557454387
+          ]
+        },
+        {
+          "query_id": "q-pd-support-standard",
+          "source_type": "product_doc",
+          "relevant_chunk_ids": [
+            "pd-support-standard"
+          ],
+          "ranked_ids": [
+            "pd-support-premium",
+            "pd-support-standard",
+            "pd-ups-power"
+          ],
+          "tags": [
+            "contrast",
+            "email",
+            "single_fact"
+          ],
+          "query": "We have Standard support and an outage at midnight. Does the Premium round-the-clock callback promise apply?",
+          "ranked_scores": [
+            0.5557493335863215,
+            0.5452114385393216,
+            0.2587473222872748
+          ]
+        },
+        {
+          "query_id": "q-ac-support-standard",
+          "source_type": "approved_case",
+          "relevant_chunk_ids": [
+            "ac-support-standard"
+          ],
+          "ranked_ids": [
+            "ac-support-premium",
+            "ac-support-standard",
+            "ac-ups-power"
+          ],
+          "tags": [
+            "contrast",
+            "email",
+            "single_fact"
+          ],
+          "query": "Approved outage response for a Standard-plan customer that acknowledges impact without promising Premium coverage?",
+          "ranked_scores": [
+            0.46175833401409344,
+            0.4087534044284263,
+            0.35363364292319155
+          ]
+        },
+        {
+          "query_id": "q-pd-support-premium",
+          "source_type": "product_doc",
+          "relevant_chunk_ids": [
+            "pd-support-premium"
+          ],
+          "ranked_ids": [
+            "pd-support-premium",
+            "pd-support-standard",
+            "pd-ups-power"
+          ],
+          "tags": [
+            "contrast",
+            "email",
+            "single_fact"
+          ],
+          "query": "Our verified Premium contract covers a company-wide outage tonight. Which escalation queue applies?",
+          "ranked_scores": [
+            0.5821567582548843,
+            0.4530972646224837,
+            0.27130496862816766
+          ]
+        },
+        {
+          "query_id": "q-ac-support-premium",
+          "source_type": "approved_case",
+          "relevant_chunk_ids": [
+            "ac-support-premium"
+          ],
+          "ranked_ids": [
+            "ac-support-premium",
+            "ac-support-standard",
+            "ac-ups-power"
+          ],
+          "tags": [
+            "contrast",
+            "email",
+            "single_fact"
+          ],
+          "query": "Which approved reply gathers Premium contract and callback details for a service-wide night-time outage?",
+          "ranked_scores": [
+            0.5385257066478122,
+            0.41349119029875925,
+            0.34473415690830944
+          ]
+        },
+        {
+          "query_id": "q-pd-log-redact",
+          "source_type": "product_doc",
+          "relevant_chunk_ids": [
+            "pd-log-redact"
+          ],
+          "ranked_ids": [
+            "pd-log-redact",
+            "pd-support-standard",
+            "pd-support-premium"
+          ],
+          "tags": [
+            "contrast",
+            "email",
+            "single_fact"
+          ],
+          "query": "The debug bundle might contain access tokens. Should I paste the whole thing into my support email?",
+          "ranked_scores": [
+            0.5241092902261799,
+            0.28317059165480685,
+            0.27110006484617133
+          ]
+        },
+        {
+          "query_id": "q-ac-log-redact",
+          "source_type": "approved_case",
+          "relevant_chunk_ids": [
+            "ac-log-redact"
+          ],
+          "ranked_ids": [
+            "ac-log-redact",
+            "ac-support-premium",
+            "ac-scrub-integrity"
+          ],
+          "tags": [
+            "contrast",
+            "email",
+            "single_fact"
+          ],
+          "query": "Approved reply requesting a diagnostic bundle while requiring secret redaction and a support upload channel?",
+          "ranked_scores": [
+            0.6072622978860396,
+            0.32869401834669554,
+            0.31537053191275166
+          ]
+        },
+        {
+          "query_id": "q-pd-log-window",
+          "source_type": "product_doc",
+          "relevant_chunk_ids": [
+            "pd-log-window"
+          ],
+          "ranked_ids": [
+            "pd-log-window",
+            "pd-support-standard",
+            "pd-replica-lag"
+          ],
+          "tags": [
+            "contrast",
+            "email",
+            "single_fact"
+          ],
+          "query": "Fault was yesterday at 11 pm, but I exported only today's healthy logs. Is that sufficient evidence?",
+          "ranked_scores": [
+            0.4674135432957954,
+            0.34301819669106426,
+            0.32543090438068045
+          ]
+        },
+        {
+          "query_id": "q-ac-log-window",
+          "source_type": "approved_case",
+          "relevant_chunk_ids": [
+            "ac-log-window"
+          ],
+          "ranked_ids": [
+            "ac-log-window",
+            "ac-support-premium",
+            "ac-replica-lag"
+          ],
+          "tags": [
+            "contrast",
+            "email",
+            "single_fact"
+          ],
+          "query": "Which approved response requests the incident timezone and surrounding log window for an intermittent fault?",
+          "ranked_scores": [
+            0.4861629067414032,
+            0.3979646110191876,
+            0.30095666797679643
+          ]
+        },
+        {
+          "query_id": "q-pd-search-index",
+          "source_type": "product_doc",
+          "relevant_chunk_ids": [
+            "pd-search-index"
+          ],
+          "ranked_ids": [
+            "pd-search-index",
+            "pd-search-permission",
+            "pd-snapshot-file"
+          ],
+          "tags": [
+            "colloquial",
+            "contrast",
+            "email",
+            "single_fact"
+          ],
+          "query": "Search says nope, but browsing the folder opens the file fine. Restore from backup or check indexing?",
+          "ranked_scores": [
+            0.4953215766408402,
+            0.4482419769834541,
+            0.3903028352927489
+          ]
+        },
+        {
+          "query_id": "q-ac-search-index",
+          "source_type": "approved_case",
+          "relevant_chunk_ids": [
+            "ac-search-index"
+          ],
+          "ranked_ids": [
+            "ac-search-index",
+            "ac-search-permission",
+            "ac-snapshot-file"
+          ],
+          "tags": [
+            "contrast",
+            "email",
+            "single_fact"
+          ],
+          "query": "Approved reply when a file exists and opens normally but is missing from indexed search?",
+          "ranked_scores": [
+            0.5345619701607489,
+            0.4326548255735735,
+            0.388847136239384
+          ]
+        },
+        {
+          "query_id": "q-pd-search-permission",
+          "source_type": "product_doc",
+          "relevant_chunk_ids": [
+            "pd-search-permission"
+          ],
+          "ranked_ids": [
+            "pd-search-permission",
+            "pd-search-index",
+            "pd-smb-acl"
+          ],
+          "tags": [
+            "contrast",
+            "email",
+            "single_fact"
+          ],
+          "query": "My colleague finds the file; I cannot even open its folder. Would rebuilding the search index fix my results?",
+          "ranked_scores": [
+            0.4449350350371871,
+            0.4069044235004125,
+            0.34531067872311344
+          ]
+        },
+        {
+          "query_id": "q-ac-search-permission",
+          "source_type": "approved_case",
+          "relevant_chunk_ids": [
+            "ac-search-permission"
+          ],
+          "ranked_ids": [
+            "ac-search-permission",
+            "ac-search-index",
+            "ac-quota-volume"
+          ],
+          "tags": [
+            "contrast",
+            "email",
+            "single_fact"
+          ],
+          "query": "Which approved reply checks access-filtered search results when another account can find the same file?",
+          "ranked_scores": [
+            0.4588866121739772,
+            0.4044879660038159,
+            0.3893545441150902
+          ]
+        },
+        {
+          "query_id": "q-pd-g10-dual",
+          "source_type": "product_doc",
+          "relevant_chunk_ids": [
+            "pd-iscsi-auth",
+            "pd-iscsi-lun"
+          ],
+          "ranked_ids": [
+            "pd-iscsi-lun",
+            "pd-iscsi-auth",
+            "pd-raid5-one"
+          ],
+          "tags": [
+            "multi_fact",
+            "contrast",
+            "email"
+          ],
+          "query": "Two separate tickets need different guidance. First: iSCSI discovery sees the target, but CHAP login fails. Would repairing the LUN filesystem help? Second: The iSCSI session says connected but the host sees zero disks. Do I rotate the CHAP secret?",
+          "ranked_scores": [
+            0.6062131330274685,
+            0.6055811985454103,
+            0.40000875693854343
+          ]
+        },
+        {
+          "query_id": "q-ac-g10-dual",
+          "source_type": "approved_case",
+          "relevant_chunk_ids": [
+            "ac-iscsi-auth",
+            "ac-iscsi-lun"
+          ],
+          "ranked_ids": [
+            "ac-iscsi-lun",
+            "ac-iscsi-auth",
+            "ac-raid5-one"
+          ],
+          "tags": [
+            "multi_fact",
+            "contrast",
+            "email"
+          ],
+          "query": "Two separate tickets need different guidance. First: Approved response to an iSCSI CHAP login failure that requests settings without exposing secrets? Second: Which reply requests LUN mapping when a connected iSCSI initiator sees no storage device?",
+          "ranked_scores": [
+            0.5459819585945047,
+            0.5170566032516856,
+            0.3913587627781663
+          ]
+        },
+        {
+          "query_id": "q-pd-g13-dual",
+          "source_type": "product_doc",
+          "relevant_chunk_ids": [
+            "pd-ddns-stale",
+            "pd-wan-cgnat"
+          ],
+          "ranked_ids": [
+            "pd-ddns-stale",
+            "pd-wan-cgnat",
+            "pd-lan-address"
+          ],
+          "tags": [
+            "multi_fact",
+            "contrast",
+            "email"
+          ],
+          "query": "Two separate tickets need different guidance. First: From outside, today's public IP works but the DDNS name goes nowhere. Do my shares need recreating? Second: My router WAN is 100.72.4.9 and forwarding never works from outside. Will refreshing DDNS be enough?",
+          "ranked_scores": [
+            0.5166765251248024,
+            0.418534221779469,
+            0.40936401394747574
+          ]
+        },
+        {
+          "query_id": "q-ac-g13-dual",
+          "source_type": "approved_case",
+          "relevant_chunk_ids": [
+            "ac-ddns-stale",
+            "ac-wan-cgnat"
+          ],
+          "ranked_ids": [
+            "ac-wan-cgnat",
+            "ac-ddns-stale",
+            "ac-replica-lag"
+          ],
+          "tags": [
+            "multi_fact",
+            "contrast",
+            "email"
+          ],
+          "query": "Two separate tickets need different guidance. First: Approved reply when direct access to the current public IP succeeds but the DDNS name is stale? Second: Which approved reply explains an upstream carrier-NAT obstacle when local forwarding rules already exist?",
+          "ranked_scores": [
+            0.45374737316893166,
+            0.4465357093477168,
+            0.35913604025065016
+          ]
+        },
+        {
+          "query_id": "q-pd-g16-dual",
+          "source_type": "product_doc",
+          "relevant_chunk_ids": [
+            "pd-ups-power",
+            "pd-ups-link"
+          ],
+          "ranked_ids": [
+            "pd-ups-power",
+            "pd-ups-link",
+            "pd-support-standard"
+          ],
+          "tags": [
+            "multi_fact",
+            "contrast",
+            "email"
+          ],
+          "query": "Two separate tickets need different guidance. First: The room lost power and UPS says on battery with six minutes left. Should I start a long scrub now? Second: NAS says UPS disconnected, but mains is fine and the UPS display is normal. Is this definitely a power cut?",
+          "ranked_scores": [
+            0.5071371964858781,
+            0.5019912804943805,
+            0.4435344465361328
+          ]
+        },
+        {
+          "query_id": "q-ac-g16-dual",
+          "source_type": "approved_case",
+          "relevant_chunk_ids": [
+            "ac-ups-power",
+            "ac-ups-link"
+          ],
+          "ranked_ids": [
+            "ac-ups-power",
+            "ac-ups-link",
+            "ac-support-premium"
+          ],
+          "tags": [
+            "multi_fact",
+            "contrast",
+            "email"
+          ],
+          "query": "Two separate tickets need different guidance. First: Approved urgent response when the UPS is running on battery with little runtime left? Second: Which approved reply investigates UPS monitoring loss without declaring a confirmed mains outage?",
+          "ranked_scores": [
+            0.5242082452141296,
+            0.512001497852064,
+            0.4277177957550852
+          ]
+        },
+        {
+          "query_id": "q-pd-g19-dual",
+          "source_type": "product_doc",
+          "relevant_chunk_ids": [
+            "pd-encrypted-key",
+            "pd-encrypted-acl"
+          ],
+          "ranked_ids": [
+            "pd-encrypted-acl",
+            "pd-encrypted-key",
+            "pd-account-lock"
+          ],
+          "tags": [
+            "multi_fact",
+            "contrast",
+            "email"
+          ],
+          "query": "Two separate tickets need different guidance. First: After reboot my encrypted folder is locked. I know the admin password; is that all I need to unlock the data? Second: Encrypted folder is mounted and coworkers can read it; only I get denied. Should we import the key again?",
+          "ranked_scores": [
+            0.5150597242205448,
+            0.5051806576525752,
+            0.37701450455392216
+          ]
+        },
+        {
+          "query_id": "q-ac-g19-dual",
+          "source_type": "approved_case",
+          "relevant_chunk_ids": [
+            "ac-encrypted-key",
+            "ac-encrypted-acl"
+          ],
+          "ranked_ids": [
+            "ac-encrypted-key",
+            "ac-encrypted-acl",
+            "ac-smb-acl"
+          ],
+          "tags": [
+            "multi_fact",
+            "contrast",
+            "email"
+          ],
+          "query": "Two separate tickets need different guidance. First: Approved reply for a locked encrypted share that asks about key availability without asking for the secret key? Second: Which approved reply treats one user's denial on an already unlocked encrypted folder as an access-rule issue?",
+          "ranked_scores": [
+            0.44958540377916434,
+            0.4409958558524012,
+            0.4146325808635145
+          ]
+        },
+        {
+          "query_id": "q-pd-g22-dual",
+          "source_type": "product_doc",
+          "relevant_chunk_ids": [
+            "pd-replica-lag",
+            "pd-replica-fail"
+          ],
+          "ranked_ids": [
+            "pd-replica-lag",
+            "pd-replica-fail",
+            "pd-support-standard"
+          ],
+          "tags": [
+            "multi_fact",
+            "contrast",
+            "email"
+          ],
+          "query": "Two separate tickets need different guidance. First: Replication is green but the newest offsite copy is eight hours old and our target is one hour. Is green enough? Second: Replication cannot contact the target at all. Will running snapshots every five minutes fix that?",
+          "ranked_scores": [
+            0.4244513581245929,
+            0.3740842927525565,
+            0.36511199052439147
+          ]
+        },
+        {
+          "query_id": "q-ac-g22-dual",
+          "source_type": "approved_case",
+          "relevant_chunk_ids": [
+            "ac-replica-lag",
+            "ac-replica-fail"
+          ],
+          "ranked_ids": [
+            "ac-replica-lag",
+            "ac-replica-fail",
+            "ac-backup-full"
+          ],
+          "tags": [
+            "multi_fact",
+            "contrast",
+            "email"
+          ],
+          "query": "Two separate tickets need different guidance. First: Approved response to a successful replication job whose latest recovery point is older than the agreed objective? Second: Which approved reply addresses an unreachable replication destination before changing the snapshot schedule?",
+          "ranked_scores": [
+            0.5196573176798263,
+            0.41131245051364257,
+            0.3900342385922171
+          ]
+        },
+        {
+          "query_id": "q-pd-g25-dual",
+          "source_type": "product_doc",
+          "relevant_chunk_ids": [
+            "pd-log-redact",
+            "pd-log-window"
+          ],
+          "ranked_ids": [
+            "pd-log-redact",
+            "pd-log-window",
+            "pd-support-standard"
+          ],
+          "tags": [
+            "multi_fact",
+            "contrast",
+            "email"
+          ],
+          "query": "Two separate tickets need different guidance. First: The debug bundle might contain access tokens. Should I paste the whole thing into my support email? Second: Fault was yesterday at 11 pm, but I exported only today's healthy logs. Is that sufficient evidence?",
+          "ranked_scores": [
+            0.49863816021378793,
+            0.3865026870029511,
+            0.3723174504800538
+          ]
+        },
+        {
+          "query_id": "q-ac-g25-dual",
+          "source_type": "approved_case",
+          "relevant_chunk_ids": [
+            "ac-log-redact",
+            "ac-log-window"
+          ],
+          "ranked_ids": [
+            "ac-log-redact",
+            "ac-log-window",
+            "ac-support-premium"
+          ],
+          "tags": [
+            "multi_fact",
+            "contrast",
+            "email"
+          ],
+          "query": "Two separate tickets need different guidance. First: Approved reply requesting a diagnostic bundle while requiring secret redaction and a support upload channel? Second: Which approved response requests the incident timezone and surrounding log window for an intermittent fault?",
+          "ranked_scores": [
+            0.5049149525362535,
+            0.4394823594308531,
+            0.43427985755014203
+          ]
+        },
+        {
+          "query_id": "q-oos-05",
+          "source_type": "product_doc",
+          "relevant_chunk_ids": [],
+          "ranked_ids": [
+            "pd-model-a210plus",
+            "pd-model-a210",
+            "pd-wan-cgnat"
+          ],
+          "tags": [
+            "oos"
+          ],
+          "query": "What maximum ambient operating temperature in Celsius is certified for the ArcNAS A210+?",
+          "ranked_scores": [
+            0.4008867987535187,
+            0.3624769152133105,
+            0.34289433417069576
+          ]
+        },
+        {
+          "query_id": "q-oos-06",
+          "source_type": "approved_case",
+          "relevant_chunk_ids": [],
+          "ranked_ids": [
+            "ac-quota-volume",
+            "ac-mail-auth",
+            "ac-mfa-lost"
+          ],
+          "tags": [
+            "oos"
+          ],
+          "query": "Find the approved case confirming whether account invoice INV-9902 has been paid.",
+          "ranked_scores": [
+            0.3400208173251525,
+            0.3005415869599028,
+            0.2970141736208033
+          ]
+        },
+        {
+          "query_id": "q-oos-07",
+          "source_type": "product_doc",
+          "relevant_chunk_ids": [],
+          "ranked_ids": [
+            "pd-support-standard",
+            "pd-model-a210",
+            "pd-replica-lag"
+          ],
+          "tags": [
+            "oos"
+          ],
+          "query": "How many calories are in the chicken soup sold at the station cafe?",
+          "ranked_scores": [
+            0.06676153436198082,
+            0.03922370014595115,
+            0.03821458824270828
+          ]
+        },
+        {
+          "query_id": "q-oos-08",
+          "source_type": "approved_case",
+          "relevant_chunk_ids": [],
+          "ranked_ids": [
+            "ac-sync-conflict",
+            "ac-mfa-lost",
+            "ac-quota-volume"
+          ],
+          "tags": [
+            "oos"
+          ],
+          "query": "Which approved reply explains how to appeal a parking ticket in Madrid?",
+          "ranked_scores": [
+            0.29316940571233163,
+            0.26711983286466606,
+            0.2570542198536799
+          ]
+        }
+      ]
+    }
+  },
+  "combined_report": {
+    "model": "Snowflake/snowflake-arctic-embed-m-v1.5",
+    "dimensions": 768,
+    "gateway": "127.0.0.1",
+    "summary": {
+      "product_doc": {
+        "recall_at_1": 0.8166666666666667,
+        "recall_at_3": 1.0,
+        "mrr": 0.9416666666666667,
+        "scored_queries": 60.0
+      },
+      "approved_case": {
+        "recall_at_1": 0.875,
+        "recall_at_3": 1.0,
+        "mrr": 0.9666666666666667,
+        "scored_queries": 60.0
+      }
+    },
+    "identifier_hits": {
+      "passed": [
+        "q-pd-raid5-one",
+        "q-ac-raid5-one",
+        "q-pd-raid5-two",
+        "q-ac-raid5-two",
+        "q-pd-smart-link",
+        "q-pd-backup-auth",
+        "q-ac-backup-auth",
+        "q-pd-backup-full",
+        "q-ac-backup-full",
+        "q-pd-model-a210",
+        "q-ac-model-a210",
+        "q-pd-model-a210plus",
+        "q-ac-model-a210plus",
+        "q-pd-nfs-root",
+        "q-ac-nfs-root",
+        "q-ac-nfs-subnet",
+        "q-pd-iscsi-auth",
+        "q-ac-iscsi-auth",
+        "q-pd-iscsi-lun",
+        "q-ac-iscsi-lun",
+        "q-pd-wan-cgnat",
+        "q-ac-wan-cgnat",
+        "q-pd-disk-sata",
+        "q-ac-disk-sata",
+        "q-pd-disk-nvme",
+        "q-ac-disk-nvme",
+        "q-pd-mail-port",
+        "q-ac-mail-port",
+        "q-pd-mail-auth",
+        "q-ac-mail-auth",
+        "q-pd-firewall-service",
+        "q-pd-replica-lag"
+      ],
+      "failed": []
+    },
+    "passed": true,
+    "evaluated_at": "2026-09-15T08:16:06.882363+00:00",
+    "rows": [
+      {
+        "query_id": "q-pd-raid5-one",
+        "source_type": "product_doc",
+        "relevant_chunk_ids": [
+          "pd-raid5-one"
+        ],
+        "ranked_ids": [
+          "pd-raid5-one",
+          "pd-raid5-two",
+          "pd-lan-address"
+        ],
+        "tags": [
+          "contrast",
+          "email",
+          "identifier",
+          "single_fact"
+        ],
+        "query": "RAID 5 is limping along after just one disk died. Do I swap that disk or start a fresh pool?",
+        "ranked_scores": [
+          0.5723013109929921,
+          0.49334488480598454,
+          0.34263815086149596
+        ]
+      },
+      {
+        "query_id": "q-ac-raid5-one",
+        "source_type": "approved_case",
+        "relevant_chunk_ids": [
+          "ac-raid5-one"
+        ],
+        "ranked_ids": [
+          "ac-raid5-one",
+          "ac-raid5-two",
+          "ac-disk-sata"
+        ],
+        "tags": [
+          "contrast",
+          "email",
+          "identifier",
+          "single_fact"
+        ],
+        "query": "Need an approved reply for a RAID5 customer with one dead disk: what must we confirm before replacement?",
+        "ranked_scores": [
+          0.5389389773578167,
+          0.4197677350036251,
+          0.39616740743866863
+        ]
+      },
+      {
+        "query_id": "q-pd-raid5-two",
+        "source_type": "product_doc",
+        "relevant_chunk_ids": [
+          "pd-raid5-two"
+        ],
+        "ranked_ids": [
+          "pd-raid5-two",
+          "pd-raid5-one",
+          "pd-firmware-rebuild"
+        ],
+        "tags": [
+          "contrast",
+          "email",
+          "identifier",
+          "single_fact"
+        ],
+        "query": "Two drives are missing from my RAID5, not one. Should I follow the usual replacement-and-repair instructions?",
+        "ranked_scores": [
+          0.5476229616271229,
+          0.5431101949182398,
+          0.37136939941168756
+        ]
+      },
+      {
+        "query_id": "q-ac-raid5-two",
+        "source_type": "approved_case",
+        "relevant_chunk_ids": [
+          "ac-raid5-two"
+        ],
+        "ranked_ids": [
+          "ac-raid5-two",
+          "ac-raid5-one",
+          "ac-sync-delete"
+        ],
+        "tags": [
+          "contrast",
+          "email",
+          "identifier",
+          "single_fact"
+        ],
+        "query": "What approved wording handles two RAID5 members disappearing and routes the case for recovery rather than a routine rebuild?",
+        "ranked_scores": [
+          0.48745719663523013,
+          0.45872241949829196,
+          0.36172243158689965
+        ]
+      },
+      {
+        "query_id": "q-pd-smart-media",
+        "source_type": "product_doc",
+        "relevant_chunk_ids": [
+          "pd-smart-media"
+        ],
+        "ranked_ids": [
+          "pd-smart-media",
+          "pd-smart-link",
+          "pd-ups-link"
+        ],
+        "tags": [
+          "contrast",
+          "email",
+          "single_fact"
+        ],
+        "query": "The short SMART test passed but pending sectors went from 2 to 48. Is the warning gone?",
+        "ranked_scores": [
+          0.4228035131780742,
+          0.2521063088788092,
+          0.24746995043867714
+        ]
+      },
+      {
+        "query_id": "q-ac-smart-media",
+        "source_type": "approved_case",
+        "relevant_chunk_ids": [
+          "ac-smart-media"
+        ],
+        "ranked_ids": [
+          "ac-smart-media",
+          "ac-quota-volume",
+          "ac-smart-link"
+        ],
+        "tags": [
+          "colloquial",
+          "contrast",
+          "email",
+          "single_fact"
+        ],
+        "query": "Need the safe customer reply: quick test passed, yet pending sectors keep climbing. What should we ask them to send?",
+        "ranked_scores": [
+          0.4717138001525256,
+          0.38093130599156827,
+          0.369149574018993
+        ]
+      },
+      {
+        "query_id": "q-pd-smart-link",
+        "source_type": "product_doc",
+        "relevant_chunk_ids": [
+          "pd-smart-link"
+        ],
+        "ranked_ids": [
+          "pd-smart-link",
+          "pd-smart-media",
+          "pd-cache-write"
+        ],
+        "tags": [
+          "contrast",
+          "email",
+          "identifier",
+          "single_fact"
+        ],
+        "query": "Only UDMA CRC keeps going up; reallocated and pending stay zero. Does that prove the disk surface is bad?",
+        "ranked_scores": [
+          0.44990866430519044,
+          0.4249861859518378,
+          0.330494821108846
+        ]
+      },
+      {
+        "query_id": "q-ac-smart-link",
+        "source_type": "approved_case",
+        "relevant_chunk_ids": [
+          "ac-smart-link"
+        ],
+        "ranked_ids": [
+          "ac-smart-link",
+          "ac-smart-media",
+          "ac-raid5-one"
+        ],
+        "tags": [
+          "contrast",
+          "email",
+          "single_fact"
+        ],
+        "query": "Which reply requests bay and counter history for interface errors without prematurely calling the disk media defective?",
+        "ranked_scores": [
+          0.5093690087530577,
+          0.39713612005583854,
+          0.38570154281999947
+        ]
+      },
+      {
+        "query_id": "q-pd-smb-acl",
+        "source_type": "product_doc",
+        "relevant_chunk_ids": [
+          "pd-smb-acl"
+        ],
+        "ranked_ids": [
+          "pd-smb-acl",
+          "pd-smb-credential",
+          "pd-encrypted-acl"
+        ],
+        "tags": [
+          "colloquial",
+          "contrast",
+          "email",
+          "single_fact",
+          "typo"
+        ],
+        "query": "Hi team, web login is OK. Only my Windows user gets acccess denied on the finance share; coworkers are fine. Where do we start?",
+        "ranked_scores": [
+          0.475594387289161,
+          0.4037908760498077,
+          0.3903707333367676
+        ]
+      },
+      {
+        "query_id": "q-ac-smb-acl",
+        "source_type": "approved_case",
+        "relevant_chunk_ids": [
+          "ac-smb-acl"
+        ],
+        "ranked_ids": [
+          "ac-smb-acl",
+          "ac-encrypted-key",
+          "ac-mail-auth"
+        ],
+        "tags": [
+          "contrast",
+          "email",
+          "single_fact"
+        ],
+        "query": "Approved first response when one Windows account is denied a share but can sign into the web console?",
+        "ranked_scores": [
+          0.5074471025922603,
+          0.3678154319432304,
+          0.3520146980200608
+        ]
+      },
+      {
+        "query_id": "q-pd-smb-credential",
+        "source_type": "product_doc",
+        "relevant_chunk_ids": [
+          "pd-smb-credential"
+        ],
+        "ranked_ids": [
+          "pd-smb-credential",
+          "pd-smb-acl",
+          "pd-encrypted-acl"
+        ],
+        "tags": [
+          "contrast",
+          "email",
+          "single_fact"
+        ],
+        "query": "Windows refuses a second username on the same NAS and says multiple connections are not allowed. Is this an ACL issue?",
+        "ranked_scores": [
+          0.6321420231649042,
+          0.42812592467064825,
+          0.41923001491091716
+        ]
+      },
+      {
+        "query_id": "q-ac-smb-credential",
+        "source_type": "approved_case",
+        "relevant_chunk_ids": [
+          "ac-smb-credential"
+        ],
+        "ranked_ids": [
+          "ac-smb-credential",
+          "ac-smb-acl",
+          "ac-firewall-service"
+        ],
+        "tags": [
+          "contrast",
+          "email",
+          "single_fact"
+        ],
+        "query": "Need approved wording for Windows refusing a different NAS username because another connection already exists.",
+        "ranked_scores": [
+          0.5528930987636256,
+          0.42399905510146735,
+          0.40025016519902773
+        ]
+      },
+      {
+        "query_id": "q-pd-lan-address",
+        "source_type": "product_doc",
+        "relevant_chunk_ids": [
+          "pd-lan-address"
+        ],
+        "ranked_ids": [
+          "pd-lan-address",
+          "pd-vlan-port",
+          "pd-support-standard"
+        ],
+        "tags": [
+          "contrast",
+          "email",
+          "single_fact"
+        ],
+        "query": "Changed routers yesterday; the old NAS bookmark times out. Should I initialize the disks to get it back on the LAN?",
+        "ranked_scores": [
+          0.5291562300214167,
+          0.4331759582502719,
+          0.39746414051982426
+        ]
+      },
+      {
+        "query_id": "q-ac-lan-address",
+        "source_type": "approved_case",
+        "relevant_chunk_ids": [
+          "ac-lan-address"
+        ],
+        "ranked_ids": [
+          "ac-lan-address",
+          "ac-vlan-port",
+          "ac-firewall-service"
+        ],
+        "tags": [
+          "contrast",
+          "email",
+          "single_fact"
+        ],
+        "query": "Which approved reply asks for network evidence after a router swap makes the old NAS address unreachable?",
+        "ranked_scores": [
+          0.5147238656119708,
+          0.4318148748038814,
+          0.41627030197426584
+        ]
+      },
+      {
+        "query_id": "q-pd-lan-dns",
+        "source_type": "product_doc",
+        "relevant_chunk_ids": [
+          "pd-lan-dns"
+        ],
+        "ranked_ids": [
+          "pd-lan-address",
+          "pd-lan-dns",
+          "pd-ddns-stale"
+        ],
+        "tags": [
+          "colloquial",
+          "contrast",
+          "email",
+          "single_fact",
+          "typo"
+        ],
+        "query": "IPs fine, names dead. 192.0.2.20 opens the box but nas-office wont. Is the LAN cable the problem?",
+        "ranked_scores": [
+          0.4698716888900507,
+          0.4664706821445117,
+          0.4165030901414529
+        ]
+      },
+      {
+        "query_id": "q-ac-lan-dns",
+        "source_type": "approved_case",
+        "relevant_chunk_ids": [
+          "ac-lan-dns"
+        ],
+        "ranked_ids": [
+          "ac-lan-dns",
+          "ac-lan-address",
+          "ac-support-standard"
+        ],
+        "tags": [
+          "contrast",
+          "email",
+          "single_fact"
+        ],
+        "query": "How should we reply when the numerical NAS address works but its saved name fails?",
+        "ranked_scores": [
+          0.45398911854576446,
+          0.42183642413320654,
+          0.38812459194076765
+        ]
+      },
+      {
+        "query_id": "q-pd-snapshot-file",
+        "source_type": "product_doc",
+        "relevant_chunk_ids": [
+          "pd-snapshot-file"
+        ],
+        "ranked_ids": [
+          "pd-snapshot-file",
+          "pd-replica-lag",
+          "pd-snapshot-space"
+        ],
+        "tags": [
+          "contrast",
+          "email",
+          "single_fact"
+        ],
+        "query": "I deleted one spreadsheet an hour ago; don't undo everyone else's work. Which recovery scope fits?",
+        "ranked_scores": [
+          0.4336421921965362,
+          0.36336061010108855,
+          0.3333912952400687
+        ]
+      },
+      {
+        "query_id": "q-ac-snapshot-file",
+        "source_type": "approved_case",
+        "relevant_chunk_ids": [
+          "ac-snapshot-file"
+        ],
+        "ranked_ids": [
+          "ac-snapshot-file",
+          "ac-search-index",
+          "ac-quota-user"
+        ],
+        "tags": [
+          "contrast",
+          "email",
+          "single_fact"
+        ],
+        "query": "Approved reply for recovering one deleted document while preserving other users' newer files?",
+        "ranked_scores": [
+          0.476533058998889,
+          0.44482396608648633,
+          0.3895370954709992
+        ]
+      },
+      {
+        "query_id": "q-pd-snapshot-space",
+        "source_type": "product_doc",
+        "relevant_chunk_ids": [
+          "pd-snapshot-space"
+        ],
+        "ranked_ids": [
+          "pd-snapshot-space",
+          "pd-snapshot-file",
+          "pd-sync-delete"
+        ],
+        "tags": [
+          "contrast",
+          "email",
+          "single_fact"
+        ],
+        "query": "Erased a huge folder but free space barely moved. Could old snapshots still be holding it?",
+        "ranked_scores": [
+          0.45843391853227805,
+          0.4065162583564614,
+          0.32723151725938615
+        ]
+      },
+      {
+        "query_id": "q-ac-snapshot-space",
+        "source_type": "approved_case",
+        "relevant_chunk_ids": [
+          "ac-snapshot-space"
+        ],
+        "ranked_ids": [
+          "ac-snapshot-space",
+          "ac-backup-full",
+          "ac-snapshot-file"
+        ],
+        "tags": [
+          "contrast",
+          "email",
+          "single_fact"
+        ],
+        "query": "Which approved response explains low free space after deletion and asks for retention evidence rather than restoring files?",
+        "ranked_scores": [
+          0.47047672314780314,
+          0.44745110528857024,
+          0.4035354835389022
+        ]
+      },
+      {
+        "query_id": "q-pd-backup-auth",
+        "source_type": "product_doc",
+        "relevant_chunk_ids": [
+          "pd-backup-auth"
+        ],
+        "ranked_ids": [
+          "pd-backup-auth",
+          "pd-backup-full",
+          "pd-encrypted-key"
+        ],
+        "tags": [
+          "contrast",
+          "email",
+          "identifier",
+          "single_fact"
+        ],
+        "query": "BK-401 appeared right after the backup account password rotated. Do I need to clear destination space?",
+        "ranked_scores": [
+          0.5775142205673663,
+          0.5174063916114056,
+          0.38858790707198104
+        ]
+      },
+      {
+        "query_id": "q-ac-backup-auth",
+        "source_type": "approved_case",
+        "relevant_chunk_ids": [
+          "ac-backup-auth"
+        ],
+        "ranked_ids": [
+          "ac-backup-auth",
+          "ac-mail-auth",
+          "ac-backup-full"
+        ],
+        "tags": [
+          "contrast",
+          "email",
+          "identifier",
+          "single_fact"
+        ],
+        "query": "What approved reply handles BK-401 after a credential rotation without asking the customer to email a password?",
+        "ranked_scores": [
+          0.5438808080569992,
+          0.42303498672804496,
+          0.36804881073855933
+        ]
+      },
+      {
+        "query_id": "q-pd-backup-full",
+        "source_type": "product_doc",
+        "relevant_chunk_ids": [
+          "pd-backup-full"
+        ],
+        "ranked_ids": [
+          "pd-backup-full",
+          "pd-backup-auth",
+          "pd-encrypted-key"
+        ],
+        "tags": [
+          "contrast",
+          "email",
+          "identifier",
+          "single_fact"
+        ],
+        "query": "The nightly job says BK-507, while sign-in to the target still works. Should I reset its password?",
+        "ranked_scores": [
+          0.4029095917279553,
+          0.375903238899163,
+          0.3547439131892479
+        ]
+      },
+      {
+        "query_id": "q-ac-backup-full",
+        "source_type": "approved_case",
+        "relevant_chunk_ids": [
+          "ac-backup-full"
+        ],
+        "ranked_ids": [
+          "ac-backup-full",
+          "ac-snapshot-space",
+          "ac-quota-user"
+        ],
+        "tags": [
+          "contrast",
+          "email",
+          "identifier",
+          "single_fact"
+        ],
+        "query": "Approved response to BK-507 when the destination login works but the backup cannot allocate space?",
+        "ranked_scores": [
+          0.5146026003888693,
+          0.42213489326285963,
+          0.3980779525808537
+        ]
+      },
+      {
+        "query_id": "q-pd-model-a210",
+        "source_type": "product_doc",
+        "relevant_chunk_ids": [
+          "pd-model-a210"
+        ],
+        "ranked_ids": [
+          "pd-model-a210plus",
+          "pd-model-a210",
+          "pd-disk-sata"
+        ],
+        "tags": [
+          "colloquial",
+          "contrast",
+          "email",
+          "identifier",
+          "negation",
+          "single_fact"
+        ],
+        "query": "Pls check the sticker: A210 WITHOUT the plus. Can I use the extra-memory kit sold for A210+?",
+        "ranked_scores": [
+          0.538328569361179,
+          0.5109474796668625,
+          0.27167675451309725
+        ]
+      },
+      {
+        "query_id": "q-ac-model-a210",
+        "source_type": "approved_case",
+        "relevant_chunk_ids": [
+          "ac-model-a210"
+        ],
+        "ranked_ids": [
+          "ac-model-a210",
+          "ac-model-a210plus",
+          "ac-disk-sata"
+        ],
+        "tags": [
+          "contrast",
+          "email",
+          "identifier",
+          "single_fact"
+        ],
+        "query": "Which approved answer explains why an A210 owner should not receive the A210+ memory upgrade procedure?",
+        "ranked_scores": [
+          0.5898592839395105,
+          0.47512554418654346,
+          0.34686087256817616
+        ]
+      },
+      {
+        "query_id": "q-pd-model-a210plus",
+        "source_type": "product_doc",
+        "relevant_chunk_ids": [
+          "pd-model-a210plus"
+        ],
+        "ranked_ids": [
+          "pd-model-a210plus",
+          "pd-model-a210",
+          "pd-disk-nvme"
+        ],
+        "tags": [
+          "contrast",
+          "email",
+          "identifier",
+          "single_fact"
+        ],
+        "query": "Mine is definitely A210+. What do you need to check before I add a memory module?",
+        "ranked_scores": [
+          0.5710737789210791,
+          0.49245286268334637,
+          0.3779049743078065
+        ]
+      },
+      {
+        "query_id": "q-ac-model-a210plus",
+        "source_type": "approved_case",
+        "relevant_chunk_ids": [
+          "ac-model-a210plus"
+        ],
+        "ranked_ids": [
+          "ac-model-a210plus",
+          "ac-model-a210",
+          "ac-disk-sata"
+        ],
+        "tags": [
+          "contrast",
+          "email",
+          "identifier",
+          "single_fact"
+        ],
+        "query": "Approved reply for an A210+ user who wants to install extra RAM and has a module part number?",
+        "ranked_scores": [
+          0.6589330549733179,
+          0.6226223373083695,
+          0.43928035310345603
+        ]
+      },
+      {
+        "query_id": "q-pd-mfa-lost",
+        "source_type": "product_doc",
+        "relevant_chunk_ids": [
+          "pd-mfa-lost"
+        ],
+        "ranked_ids": [
+          "pd-mfa-lost",
+          "pd-account-lock",
+          "pd-encrypted-acl"
+        ],
+        "tags": [
+          "contrast",
+          "email",
+          "single_fact"
+        ],
+        "query": "Password is fine, but my authenticator phone was stolen. Does changing the password get me past the code screen?",
+        "ranked_scores": [
+          0.4752123743249917,
+          0.40894206438035346,
+          0.28874072538010054
+        ]
+      },
+      {
+        "query_id": "q-ac-mfa-lost",
+        "source_type": "approved_case",
+        "relevant_chunk_ids": [
+          "ac-mfa-lost"
+        ],
+        "ranked_ids": [
+          "ac-mfa-lost",
+          "ac-backup-full",
+          "ac-log-redact"
+        ],
+        "tags": [
+          "contrast",
+          "email",
+          "single_fact"
+        ],
+        "query": "Need approved wording for a lost authenticator phone, with a known password, without collecting secret recovery codes.",
+        "ranked_scores": [
+          0.4982522737354327,
+          0.35689094950543665,
+          0.3489715520592169
+        ]
+      },
+      {
+        "query_id": "q-pd-account-lock",
+        "source_type": "product_doc",
+        "relevant_chunk_ids": [
+          "pd-account-lock"
+        ],
+        "ranked_ids": [
+          "pd-account-lock",
+          "pd-mfa-lost",
+          "pd-encrypted-acl"
+        ],
+        "tags": [
+          "contrast",
+          "email",
+          "single_fact"
+        ],
+        "query": "It says locked after too many wrong passwords. I still have my authenticator. Should MFA be disabled?",
+        "ranked_scores": [
+          0.5978108783352629,
+          0.4770882381278301,
+          0.35657096661932275
+        ]
+      },
+      {
+        "query_id": "q-ac-account-lock",
+        "source_type": "approved_case",
+        "relevant_chunk_ids": [
+          "ac-account-lock"
+        ],
+        "ranked_ids": [
+          "ac-account-lock",
+          "ac-mfa-lost",
+          "ac-replica-lag"
+        ],
+        "tags": [
+          "contrast",
+          "email",
+          "single_fact"
+        ],
+        "query": "Which approved reply handles a password-attempt lockout while leaving the customer's working second factor enabled?",
+        "ranked_scores": [
+          0.4701806095570588,
+          0.38098634868231396,
+          0.33765512187780816
+        ]
+      },
+      {
+        "query_id": "q-pd-g01-dual",
+        "source_type": "product_doc",
+        "relevant_chunk_ids": [
+          "pd-raid5-one",
+          "pd-raid5-two"
+        ],
+        "ranked_ids": [
+          "pd-raid5-one",
+          "pd-raid5-two",
+          "pd-firmware-rebuild"
+        ],
+        "tags": [
+          "multi_fact",
+          "contrast",
+          "email"
+        ],
+        "query": "Two separate tickets need different guidance. First: RAID 5 is limping along after just one disk died. Do I swap that disk or start a fresh pool? Second: Two drives are missing from my RAID5, not one. Should I follow the usual replacement-and-repair instructions?",
+        "ranked_scores": [
+          0.573438964593041,
+          0.5243295517206276,
+          0.3777167459277565
+        ]
+      },
+      {
+        "query_id": "q-ac-g01-dual",
+        "source_type": "approved_case",
+        "relevant_chunk_ids": [
+          "ac-raid5-one",
+          "ac-raid5-two"
+        ],
+        "ranked_ids": [
+          "ac-raid5-one",
+          "ac-raid5-two",
+          "ac-replica-lag"
+        ],
+        "tags": [
+          "multi_fact",
+          "contrast",
+          "email"
+        ],
+        "query": "Two separate tickets need different guidance. First: Need an approved reply for a RAID5 customer with one dead disk: what must we confirm before replacement? Second: What approved wording handles two RAID5 members disappearing and routes the case for recovery rather than a routine rebuild?",
+        "ranked_scores": [
+          0.5168290201748447,
+          0.46529401291175393,
+          0.4175299287796753
+        ]
+      },
+      {
+        "query_id": "q-pd-g05-dual",
+        "source_type": "product_doc",
+        "relevant_chunk_ids": [
+          "pd-snapshot-file",
+          "pd-snapshot-space"
+        ],
+        "ranked_ids": [
+          "pd-snapshot-file",
+          "pd-snapshot-space",
+          "pd-replica-lag"
+        ],
+        "tags": [
+          "multi_fact",
+          "contrast",
+          "email"
+        ],
+        "query": "Two separate tickets need different guidance. First: I deleted one spreadsheet an hour ago; don't undo everyone else's work. Which recovery scope fits? Second: Erased a huge folder but free space barely moved. Could old snapshots still be holding it?",
+        "ranked_scores": [
+          0.48499672433510677,
+          0.46714056793763326,
+          0.4207659902023474
+        ]
+      },
+      {
+        "query_id": "q-ac-g05-dual",
+        "source_type": "approved_case",
+        "relevant_chunk_ids": [
+          "ac-snapshot-file",
+          "ac-snapshot-space"
+        ],
+        "ranked_ids": [
+          "ac-backup-full",
+          "ac-snapshot-space",
+          "ac-snapshot-file"
+        ],
+        "tags": [
+          "multi_fact",
+          "contrast",
+          "email"
+        ],
+        "query": "Two separate tickets need different guidance. First: Approved reply for recovering one deleted document while preserving other users' newer files? Second: Which approved response explains low free space after deletion and asks for retention evidence rather than restoring files?",
+        "ranked_scores": [
+          0.4734830737177649,
+          0.4729602639565185,
+          0.438567229223788
+        ]
+      },
+      {
+        "query_id": "q-oos-01",
+        "source_type": "product_doc",
+        "relevant_chunk_ids": [],
+        "ranked_ids": [
+          "pd-disk-nvme",
+          "pd-disk-sata",
+          "pd-model-a210"
+        ],
+        "tags": [
+          "oos"
+        ],
+        "query": "What is the list price in euros of the ArcNAS A420 replacement motherboard?",
+        "ranked_scores": [
+          0.4313391179493075,
+          0.4189559197257143,
+          0.38715243719640596
+        ]
+      },
+      {
+        "query_id": "q-oos-02",
+        "source_type": "approved_case",
+        "relevant_chunk_ids": [],
+        "ranked_ids": [
+          "ac-replica-lag",
+          "ac-firmware-rebuild",
+          "ac-raid5-one"
+        ],
+        "tags": [
+          "oos"
+        ],
+        "query": "Find the approved response stating the exact shipping date for replacement order RMA-77891.",
+        "ranked_scores": [
+          0.32464976359321085,
+          0.31747373345490126,
+          0.30184170982139247
+        ]
+      },
+      {
+        "query_id": "q-oos-03",
+        "source_type": "product_doc",
+        "relevant_chunk_ids": [],
+        "ranked_ids": [
+          "pd-backup-full",
+          "pd-support-standard",
+          "pd-wan-cgnat"
+        ],
+        "tags": [
+          "oos"
+        ],
+        "query": "What is the baggage allowance for my flight from Paris to Tokyo next Tuesday?",
+        "ranked_scores": [
+          0.13501622520362527,
+          0.11895894016590593,
+          0.1183062437899994
+        ]
+      },
+      {
+        "query_id": "q-oos-04",
+        "source_type": "approved_case",
+        "relevant_chunk_ids": [],
+        "ranked_ids": [
+          "ac-sync-conflict",
+          "ac-mfa-lost",
+          "ac-replica-lag"
+        ],
+        "tags": [
+          "oos"
+        ],
+        "query": "Find an approved reply explaining a denied claim for dental insurance.",
+        "ranked_scores": [
+          0.29855692872317563,
+          0.29289454992024516,
+          0.2926907682089002
+        ]
+      },
+      {
+        "query_id": "q-pd-nfs-root",
+        "source_type": "product_doc",
+        "relevant_chunk_ids": [
+          "pd-nfs-root"
+        ],
+        "ranked_ids": [
+          "pd-nfs-root",
+          "pd-nfs-subnet",
+          "pd-encrypted-acl"
+        ],
+        "tags": [
+          "contrast",
+          "email",
+          "identifier",
+          "single_fact"
+        ],
+        "query": "NFS mounts fine and users write fine, but sudo touch gets permission denied. Is the client subnet blocked?",
+        "ranked_scores": [
+          0.510786371182179,
+          0.4978041918563006,
+          0.3939031879512621
+        ]
+      },
+      {
+        "query_id": "q-ac-nfs-root",
+        "source_type": "approved_case",
+        "relevant_chunk_ids": [
+          "ac-nfs-root"
+        ],
+        "ranked_ids": [
+          "ac-nfs-root",
+          "ac-nfs-subnet",
+          "ac-firewall-service"
+        ],
+        "tags": [
+          "contrast",
+          "email",
+          "identifier",
+          "single_fact"
+        ],
+        "query": "Approved response when only client root cannot write to an otherwise working NFS export?",
+        "ranked_scores": [
+          0.5546550322589726,
+          0.49502741928948235,
+          0.42602710446788683
+        ]
+      },
+      {
+        "query_id": "q-pd-nfs-subnet",
+        "source_type": "product_doc",
+        "relevant_chunk_ids": [
+          "pd-nfs-subnet"
+        ],
+        "ranked_ids": [
+          "pd-nfs-subnet",
+          "pd-nfs-root",
+          "pd-vlan-port"
+        ],
+        "tags": [
+          "contrast",
+          "email",
+          "single_fact"
+        ],
+        "query": "Moved Linux clients to a different VLAN; now mount is denied before any files open. Should I change root squash?",
+        "ranked_scores": [
+          0.5405251192646208,
+          0.5279866674822908,
+          0.4530471646446059
+        ]
+      },
+      {
+        "query_id": "q-ac-nfs-subnet",
+        "source_type": "approved_case",
+        "relevant_chunk_ids": [
+          "ac-nfs-subnet"
+        ],
+        "ranked_ids": [
+          "ac-nfs-subnet",
+          "ac-vlan-port",
+          "ac-lan-address"
+        ],
+        "tags": [
+          "colloquial",
+          "contrast",
+          "email",
+          "identifier",
+          "single_fact"
+        ],
+        "query": "Looking for the customer response: after a VLAN move, NFS cannot even mount. Ask about networks or root mapping?",
+        "ranked_scores": [
+          0.5906305049953722,
+          0.46488699683939305,
+          0.44773939162708554
+        ]
+      },
+      {
+        "query_id": "q-pd-iscsi-auth",
+        "source_type": "product_doc",
+        "relevant_chunk_ids": [
+          "pd-iscsi-auth"
+        ],
+        "ranked_ids": [
+          "pd-iscsi-auth",
+          "pd-iscsi-lun",
+          "pd-raid5-one"
+        ],
+        "tags": [
+          "contrast",
+          "email",
+          "identifier",
+          "single_fact"
+        ],
+        "query": "iSCSI discovery sees the target, but CHAP login fails. Would repairing the LUN filesystem help?",
+        "ranked_scores": [
+          0.6944440534017884,
+          0.6178651627819031,
+          0.3851854365673697
+        ]
+      },
+      {
+        "query_id": "q-ac-iscsi-auth",
+        "source_type": "approved_case",
+        "relevant_chunk_ids": [
+          "ac-iscsi-auth"
+        ],
+        "ranked_ids": [
+          "ac-iscsi-auth",
+          "ac-iscsi-lun",
+          "ac-log-redact"
+        ],
+        "tags": [
+          "contrast",
+          "email",
+          "identifier",
+          "single_fact"
+        ],
+        "query": "Approved response to an iSCSI CHAP login failure that requests settings without exposing secrets?",
+        "ranked_scores": [
+          0.4828731487229584,
+          0.4570126232911812,
+          0.3865444723527881
+        ]
+      },
+      {
+        "query_id": "q-pd-iscsi-lun",
+        "source_type": "product_doc",
+        "relevant_chunk_ids": [
+          "pd-iscsi-lun"
+        ],
+        "ranked_ids": [
+          "pd-iscsi-lun",
+          "pd-iscsi-auth",
+          "pd-encrypted-key"
+        ],
+        "tags": [
+          "colloquial",
+          "contrast",
+          "email",
+          "identifier",
+          "negation",
+          "single_fact",
+          "typo"
+        ],
+        "query": "iscsi is CONNECTED, no disks in the host tho. Do we really need a new CHAP password?",
+        "ranked_scores": [
+          0.5677779866472508,
+          0.5298097650732192,
+          0.45974992441798135
+        ]
+      },
+      {
+        "query_id": "q-ac-iscsi-lun",
+        "source_type": "approved_case",
+        "relevant_chunk_ids": [
+          "ac-iscsi-lun"
+        ],
+        "ranked_ids": [
+          "ac-iscsi-lun",
+          "ac-iscsi-auth",
+          "ac-disk-sata"
+        ],
+        "tags": [
+          "contrast",
+          "email",
+          "identifier",
+          "single_fact"
+        ],
+        "query": "Which reply requests LUN mapping when a connected iSCSI initiator sees no storage device?",
+        "ranked_scores": [
+          0.579367875237457,
+          0.44792840450915405,
+          0.3719770957301888
+        ]
+      },
+      {
+        "query_id": "q-pd-quota-user",
+        "source_type": "product_doc",
+        "relevant_chunk_ids": [
+          "pd-quota-user"
+        ],
+        "ranked_ids": [
+          "pd-quota-volume",
+          "pd-quota-user",
+          "pd-backup-full"
+        ],
+        "tags": [
+          "colloquial",
+          "contrast",
+          "email",
+          "single_fact",
+          "typo"
+        ],
+        "query": "Guys, I cant save but everyone else can, theres 2 TB left. My user gets quota exceeded. Buy disks?",
+        "ranked_scores": [
+          0.4371231986544961,
+          0.42373015569229244,
+          0.3283175685722136
+        ]
+      },
+      {
+        "query_id": "q-ac-quota-user",
+        "source_type": "approved_case",
+        "relevant_chunk_ids": [
+          "ac-quota-user"
+        ],
+        "ranked_ids": [
+          "ac-quota-user",
+          "ac-quota-volume",
+          "ac-backup-full"
+        ],
+        "tags": [
+          "contrast",
+          "email",
+          "single_fact"
+        ],
+        "query": "Approved reply for one user's quota error on a volume that still has plenty of space?",
+        "ranked_scores": [
+          0.4396547617640224,
+          0.40617023311370937,
+          0.39298580688206625
+        ]
+      },
+      {
+        "query_id": "q-pd-quota-volume",
+        "source_type": "product_doc",
+        "relevant_chunk_ids": [
+          "pd-quota-volume"
+        ],
+        "ranked_ids": [
+          "pd-quota-volume",
+          "pd-quota-user",
+          "pd-smart-media"
+        ],
+        "tags": [
+          "contrast",
+          "email",
+          "single_fact"
+        ],
+        "query": "Nobody can save and the volume shows 100 percent used. Will raising my personal quota solve it?",
+        "ranked_scores": [
+          0.4049045946280596,
+          0.3080778148015806,
+          0.2825463081738795
+        ]
+      },
+      {
+        "query_id": "q-ac-quota-volume",
+        "source_type": "approved_case",
+        "relevant_chunk_ids": [
+          "ac-quota-volume"
+        ],
+        "ranked_ids": [
+          "ac-quota-volume",
+          "ac-quota-user",
+          "ac-backup-full"
+        ],
+        "tags": [
+          "contrast",
+          "email",
+          "single_fact"
+        ],
+        "query": "Which approved response handles all users losing write access because the volume itself is full?",
+        "ranked_scores": [
+          0.43141055900051845,
+          0.3848403844316957,
+          0.37648286714816515
+        ]
+      },
+      {
+        "query_id": "q-pd-tls-name",
+        "source_type": "product_doc",
+        "relevant_chunk_ids": [
+          "pd-tls-name"
+        ],
+        "ranked_ids": [
+          "pd-tls-name",
+          "pd-tls-expired",
+          "pd-lan-dns"
+        ],
+        "tags": [
+          "colloquial",
+          "contrast",
+          "email",
+          "negation",
+          "single_fact",
+          "typo"
+        ],
+        "query": "Cert isnt expired (next year!), browser just says WRONG NAME when I use the IP. What is mismatched?",
+        "ranked_scores": [
+          0.5796914319740296,
+          0.47561259265713846,
+          0.37371508076697696
+        ]
+      },
+      {
+        "query_id": "q-ac-tls-name",
+        "source_type": "approved_case",
+        "relevant_chunk_ids": [
+          "ac-tls-name"
+        ],
+        "ranked_ids": [
+          "ac-tls-expired",
+          "ac-tls-name",
+          "ac-sync-conflict"
+        ],
+        "tags": [
+          "contrast",
+          "email",
+          "single_fact"
+        ],
+        "query": "Approved reply for a certificate name mismatch even though the expiry date is in the future?",
+        "ranked_scores": [
+          0.48471012659049334,
+          0.3998819962630398,
+          0.31550551648186015
+        ]
+      },
+      {
+        "query_id": "q-pd-tls-expired",
+        "source_type": "product_doc",
+        "relevant_chunk_ids": [
+          "pd-tls-expired"
+        ],
+        "ranked_ids": [
+          "pd-tls-name",
+          "pd-tls-expired",
+          "pd-mail-port"
+        ],
+        "tags": [
+          "contrast",
+          "email",
+          "single_fact"
+        ],
+        "query": "The URL matches the certificate, but it expired yesterday. Can fixing DNS remove the warning?",
+        "ranked_scores": [
+          0.5647664957727986,
+          0.5236920633022929,
+          0.33561064874633784
+        ]
+      },
+      {
+        "query_id": "q-ac-tls-expired",
+        "source_type": "approved_case",
+        "relevant_chunk_ids": [
+          "ac-tls-expired"
+        ],
+        "ranked_ids": [
+          "ac-tls-expired",
+          "ac-tls-name",
+          "ac-lan-dns"
+        ],
+        "tags": [
+          "contrast",
+          "email",
+          "single_fact"
+        ],
+        "query": "Which approved response checks certificate renewal and service assignment for an expired certificate with the correct name?",
+        "ranked_scores": [
+          0.4558320461565833,
+          0.34502224991174507,
+          0.2819562803657717
+        ]
+      },
+      {
+        "query_id": "q-pd-ddns-stale",
+        "source_type": "product_doc",
+        "relevant_chunk_ids": [
+          "pd-ddns-stale"
+        ],
+        "ranked_ids": [
+          "pd-ddns-stale",
+          "pd-lan-dns",
+          "pd-tls-expired"
+        ],
+        "tags": [
+          "contrast",
+          "email",
+          "single_fact"
+        ],
+        "query": "From outside, today's public IP works but the DDNS name goes nowhere. Do my shares need recreating?",
+        "ranked_scores": [
+          0.4947442090963571,
+          0.41369750793714705,
+          0.3584594322874274
+        ]
+      },
+      {
+        "query_id": "q-ac-ddns-stale",
+        "source_type": "approved_case",
+        "relevant_chunk_ids": [
+          "ac-ddns-stale"
+        ],
+        "ranked_ids": [
+          "ac-ddns-stale",
+          "ac-lan-dns",
+          "ac-replica-lag"
+        ],
+        "tags": [
+          "contrast",
+          "email",
+          "single_fact"
+        ],
+        "query": "Approved reply when direct access to the current public IP succeeds but the DDNS name is stale?",
+        "ranked_scores": [
+          0.49815503662513294,
+          0.386428388892854,
+          0.34387423075431683
+        ]
+      },
+      {
+        "query_id": "q-pd-wan-cgnat",
+        "source_type": "product_doc",
+        "relevant_chunk_ids": [
+          "pd-wan-cgnat"
+        ],
+        "ranked_ids": [
+          "pd-wan-cgnat",
+          "pd-ddns-stale",
+          "pd-lan-address"
+        ],
+        "tags": [
+          "contrast",
+          "email",
+          "identifier",
+          "single_fact"
+        ],
+        "query": "My router WAN is 100.72.4.9 and forwarding never works from outside. Will refreshing DDNS be enough?",
+        "ranked_scores": [
+          0.46862981947344157,
+          0.4585158590261055,
+          0.39207452601018644
+        ]
+      },
+      {
+        "query_id": "q-ac-wan-cgnat",
+        "source_type": "approved_case",
+        "relevant_chunk_ids": [
+          "ac-wan-cgnat"
+        ],
+        "ranked_ids": [
+          "ac-wan-cgnat",
+          "ac-ddns-stale",
+          "ac-lan-address"
+        ],
+        "tags": [
+          "colloquial",
+          "contrast",
+          "email",
+          "identifier",
+          "single_fact"
+        ],
+        "query": "Need wording for a customer whose WAN is 100.72.4.9; port forwards are there but offsite access never works. What do we explain?",
+        "ranked_scores": [
+          0.4301518634545415,
+          0.3631417846252918,
+          0.3436836780970651
+        ]
+      },
+      {
+        "query_id": "q-pd-sync-delete",
+        "source_type": "product_doc",
+        "relevant_chunk_ids": [
+          "pd-sync-delete"
+        ],
+        "ranked_ids": [
+          "pd-sync-delete",
+          "pd-snapshot-file",
+          "pd-cache-write"
+        ],
+        "tags": [
+          "contrast",
+          "email",
+          "single_fact"
+        ],
+        "query": "I deleted a file on the laptop and it vanished from the NAS too. Isn't two-way sync supposed to be a backup?",
+        "ranked_scores": [
+          0.5676393232913284,
+          0.4535191520452938,
+          0.3969207678011427
+        ]
+      },
+      {
+        "query_id": "q-ac-sync-delete",
+        "source_type": "approved_case",
+        "relevant_chunk_ids": [
+          "ac-sync-delete"
+        ],
+        "ranked_ids": [
+          "ac-sync-delete",
+          "ac-replica-lag",
+          "ac-backup-full"
+        ],
+        "tags": [
+          "contrast",
+          "email",
+          "single_fact"
+        ],
+        "query": "Approved response after a deletion propagates through two-way synchronization to both copies?",
+        "ranked_scores": [
+          0.5120070808528226,
+          0.3721054916804697,
+          0.34115917140417673
+        ]
+      },
+      {
+        "query_id": "q-pd-sync-conflict",
+        "source_type": "product_doc",
+        "relevant_chunk_ids": [
+          "pd-sync-conflict"
+        ],
+        "ranked_ids": [
+          "pd-sync-conflict",
+          "pd-sync-delete",
+          "pd-snapshot-file"
+        ],
+        "tags": [
+          "colloquial",
+          "contrast",
+          "email",
+          "single_fact"
+        ],
+        "query": "We both worked offline. Now sync made a conflicted copy... can I bin the extra file without asking the other editor?",
+        "ranked_scores": [
+          0.4856216810510799,
+          0.4153074524970777,
+          0.3641203556095216
+        ]
+      },
+      {
+        "query_id": "q-ac-sync-conflict",
+        "source_type": "approved_case",
+        "relevant_chunk_ids": [
+          "ac-sync-conflict"
+        ],
+        "ranked_ids": [
+          "ac-sync-conflict",
+          "ac-sync-delete",
+          "ac-replica-lag"
+        ],
+        "tags": [
+          "contrast",
+          "email",
+          "single_fact"
+        ],
+        "query": "Which approved reply preserves both files after simultaneous offline edits create a conflict copy?",
+        "ranked_scores": [
+          0.4582995811752124,
+          0.3524612529332609,
+          0.33353504343286566
+        ]
+      },
+      {
+        "query_id": "q-pd-disk-sata",
+        "source_type": "product_doc",
+        "relevant_chunk_ids": [
+          "pd-disk-sata"
+        ],
+        "ranked_ids": [
+          "pd-disk-sata",
+          "pd-disk-nvme",
+          "pd-model-a210"
+        ],
+        "tags": [
+          "contrast",
+          "email",
+          "identifier",
+          "single_fact"
+        ],
+        "query": "Will a 3.5-inch SAS disk fit my A420 just because the old SATA disk was also 3.5-inch?",
+        "ranked_scores": [
+          0.5793503051069787,
+          0.377843671471277,
+          0.3239583257663948
+        ]
+      },
+      {
+        "query_id": "q-ac-disk-sata",
+        "source_type": "approved_case",
+        "relevant_chunk_ids": [
+          "ac-disk-sata"
+        ],
+        "ranked_ids": [
+          "ac-disk-sata",
+          "ac-model-a210plus",
+          "ac-model-a210"
+        ],
+        "tags": [
+          "contrast",
+          "email",
+          "identifier",
+          "single_fact"
+        ],
+        "query": "Approved answer to an A420 owner considering a same-size SAS replacement for a SATA drive?",
+        "ranked_scores": [
+          0.657246136781891,
+          0.3649918219153628,
+          0.34750059035724506
+        ]
+      },
+      {
+        "query_id": "q-pd-disk-nvme",
+        "source_type": "product_doc",
+        "relevant_chunk_ids": [
+          "pd-disk-nvme"
+        ],
+        "ranked_ids": [
+          "pd-disk-nvme",
+          "pd-disk-sata",
+          "pd-raid5-one"
+        ],
+        "tags": [
+          "contrast",
+          "email",
+          "identifier",
+          "single_fact"
+        ],
+        "query": "A SATA member failed in my A420. Can the spare NVMe stick in an M.2 slot replace it in the array?",
+        "ranked_scores": [
+          0.6271734171611327,
+          0.5050478853018077,
+          0.41597611000178725
+        ]
+      },
+      {
+        "query_id": "q-ac-disk-nvme",
+        "source_type": "approved_case",
+        "relevant_chunk_ids": [
+          "ac-disk-nvme"
+        ],
+        "ranked_ids": [
+          "ac-disk-sata",
+          "ac-disk-nvme",
+          "ac-model-a210plus"
+        ],
+        "tags": [
+          "colloquial",
+          "contrast",
+          "email",
+          "identifier",
+          "single_fact"
+        ],
+        "query": "Customer wants to replace an A420 SATA array member with a spare NVMe stick. Which reply checks the component before they buy?",
+        "ranked_scores": [
+          0.47483913412205864,
+          0.43173521983110796,
+          0.37658086013654507
+        ]
+      },
+      {
+        "query_id": "q-pd-ups-power",
+        "source_type": "product_doc",
+        "relevant_chunk_ids": [
+          "pd-ups-power"
+        ],
+        "ranked_ids": [
+          "pd-ups-link",
+          "pd-ups-power",
+          "pd-support-standard"
+        ],
+        "tags": [
+          "contrast",
+          "email",
+          "single_fact"
+        ],
+        "query": "The room lost power and UPS says on battery with six minutes left. Should I start a long scrub now?",
+        "ranked_scores": [
+          0.39997259466397733,
+          0.39548124081488634,
+          0.29664803841075243
+        ]
+      },
+      {
+        "query_id": "q-ac-ups-power",
+        "source_type": "approved_case",
+        "relevant_chunk_ids": [
+          "ac-ups-power"
+        ],
+        "ranked_ids": [
+          "ac-ups-power",
+          "ac-ups-link",
+          "ac-support-premium"
+        ],
+        "tags": [
+          "contrast",
+          "email",
+          "single_fact"
+        ],
+        "query": "Approved urgent response when the UPS is running on battery with little runtime left?",
+        "ranked_scores": [
+          0.4952842810348526,
+          0.44517252912015937,
+          0.3295636919745643
+        ]
+      },
+      {
+        "query_id": "q-pd-ups-link",
+        "source_type": "product_doc",
+        "relevant_chunk_ids": [
+          "pd-ups-link"
+        ],
+        "ranked_ids": [
+          "pd-ups-link",
+          "pd-ups-power",
+          "pd-support-standard"
+        ],
+        "tags": [
+          "contrast",
+          "email",
+          "single_fact"
+        ],
+        "query": "NAS says UPS disconnected, but mains is fine and the UPS display is normal. Is this definitely a power cut?",
+        "ranked_scores": [
+          0.5845364562449649,
+          0.5477942014512726,
+          0.4433850543245282
+        ]
+      },
+      {
+        "query_id": "q-ac-ups-link",
+        "source_type": "approved_case",
+        "relevant_chunk_ids": [
+          "ac-ups-link"
+        ],
+        "ranked_ids": [
+          "ac-ups-link",
+          "ac-ups-power",
+          "ac-support-premium"
+        ],
+        "tags": [
+          "contrast",
+          "email",
+          "single_fact"
+        ],
+        "query": "Which approved reply investigates UPS monitoring loss without declaring a confirmed mains outage?",
+        "ranked_scores": [
+          0.535060629916178,
+          0.4823802896592547,
+          0.39012271872092386
+        ]
+      },
+      {
+        "query_id": "q-pd-firmware-rebuild",
+        "source_type": "product_doc",
+        "relevant_chunk_ids": [
+          "pd-firmware-rebuild"
+        ],
+        "ranked_ids": [
+          "pd-firmware-rebuild",
+          "pd-firmware-signature",
+          "pd-replica-lag"
+        ],
+        "tags": [
+          "contrast",
+          "email",
+          "single_fact"
+        ],
+        "query": "Repair is at 43 percent. Can I install the new firmware to make the rebuild finish sooner?",
+        "ranked_scores": [
+          0.42551926936489637,
+          0.29944849361789244,
+          0.2906652452904359
+        ]
+      },
+      {
+        "query_id": "q-ac-firmware-rebuild",
+        "source_type": "approved_case",
+        "relevant_chunk_ids": [
+          "ac-firmware-rebuild"
+        ],
+        "ranked_ids": [
+          "ac-firmware-rebuild",
+          "ac-scrub-integrity",
+          "ac-model-a210plus"
+        ],
+        "tags": [
+          "contrast",
+          "email",
+          "single_fact"
+        ],
+        "query": "Approved reply that postpones an elective firmware update while an array repair is still active?",
+        "ranked_scores": [
+          0.5679633189753063,
+          0.36426566306151914,
+          0.3415782757079093
+        ]
+      },
+      {
+        "query_id": "q-pd-firmware-signature",
+        "source_type": "product_doc",
+        "relevant_chunk_ids": [
+          "pd-firmware-signature"
+        ],
+        "ranked_ids": [
+          "pd-firmware-signature",
+          "pd-raid5-one",
+          "pd-disk-sata"
+        ],
+        "tags": [
+          "contrast",
+          "email",
+          "single_fact"
+        ],
+        "query": "Update says invalid signature; no RAID work is running. Can I bypass verification for a near-identical model's file?",
+        "ranked_scores": [
+          0.5669809945223239,
+          0.41748621019026677,
+          0.3800077660073851
+        ]
+      },
+      {
+        "query_id": "q-ac-firmware-signature",
+        "source_type": "approved_case",
+        "relevant_chunk_ids": [
+          "ac-firmware-signature"
+        ],
+        "ranked_ids": [
+          "ac-firmware-signature",
+          "ac-log-redact",
+          "ac-firmware-rebuild"
+        ],
+        "tags": [
+          "contrast",
+          "email",
+          "single_fact"
+        ],
+        "query": "Which approved reply requests package provenance when firmware signature validation fails?",
+        "ranked_scores": [
+          0.4087313608083569,
+          0.3414030941243845,
+          0.3281780901135972
+        ]
+      },
+      {
+        "query_id": "q-pd-mail-port",
+        "source_type": "product_doc",
+        "relevant_chunk_ids": [
+          "pd-mail-port"
+        ],
+        "ranked_ids": [
+          "pd-mail-port",
+          "pd-mail-auth",
+          "pd-account-lock"
+        ],
+        "tags": [
+          "contrast",
+          "email",
+          "identifier",
+          "single_fact"
+        ],
+        "query": "Notification email times out before the server greeting. Is resetting the SMTP password the first step?",
+        "ranked_scores": [
+          0.6458918016010791,
+          0.387164317269061,
+          0.3454109687930467
+        ]
+      },
+      {
+        "query_id": "q-ac-mail-port",
+        "source_type": "approved_case",
+        "relevant_chunk_ids": [
+          "ac-mail-port"
+        ],
+        "ranked_ids": [
+          "ac-mail-port",
+          "ac-mail-auth",
+          "ac-iscsi-lun"
+        ],
+        "tags": [
+          "contrast",
+          "email",
+          "identifier",
+          "single_fact"
+        ],
+        "query": "Approved reply asking for connection evidence when SMTP times out before authentication begins?",
+        "ranked_scores": [
+          0.5056714821345614,
+          0.43231504305742985,
+          0.39103276361402606
+        ]
+      },
+      {
+        "query_id": "q-pd-mail-auth",
+        "source_type": "product_doc",
+        "relevant_chunk_ids": [
+          "pd-mail-auth"
+        ],
+        "ranked_ids": [
+          "pd-mail-auth",
+          "pd-mail-port",
+          "pd-firewall-service"
+        ],
+        "tags": [
+          "colloquial",
+          "contrast",
+          "email",
+          "identifier",
+          "negation",
+          "single_fact"
+        ],
+        "query": "TCP connects! Email still fails, 535 from SMTP. So is this a firewall thing or not?",
+        "ranked_scores": [
+          0.5661570837097444,
+          0.4414779063718484,
+          0.3722703833269832
+        ]
+      },
+      {
+        "query_id": "q-ac-mail-auth",
+        "source_type": "approved_case",
+        "relevant_chunk_ids": [
+          "ac-mail-auth"
+        ],
+        "ranked_ids": [
+          "ac-mail-auth",
+          "ac-mail-port",
+          "ac-log-redact"
+        ],
+        "tags": [
+          "contrast",
+          "email",
+          "identifier",
+          "single_fact"
+        ],
+        "query": "Which approved response handles SMTP 535 after a successful server connection without collecting the password?",
+        "ranked_scores": [
+          0.46749307746799074,
+          0.45784757968824386,
+          0.38642180154318734
+        ]
+      },
+      {
+        "query_id": "q-pd-encrypted-key",
+        "source_type": "product_doc",
+        "relevant_chunk_ids": [
+          "pd-encrypted-key"
+        ],
+        "ranked_ids": [
+          "pd-encrypted-key",
+          "pd-encrypted-acl",
+          "pd-account-lock"
+        ],
+        "tags": [
+          "contrast",
+          "email",
+          "single_fact"
+        ],
+        "query": "After reboot my encrypted folder is locked. I know the admin password; is that all I need to unlock the data?",
+        "ranked_scores": [
+          0.5592228978298381,
+          0.4542233124074836,
+          0.40067751692257814
+        ]
+      },
+      {
+        "query_id": "q-ac-encrypted-key",
+        "source_type": "approved_case",
+        "relevant_chunk_ids": [
+          "ac-encrypted-key"
+        ],
+        "ranked_ids": [
+          "ac-encrypted-key",
+          "ac-encrypted-acl",
+          "ac-mfa-lost"
+        ],
+        "tags": [
+          "contrast",
+          "email",
+          "single_fact"
+        ],
+        "query": "Approved reply for a locked encrypted share that asks about key availability without asking for the secret key?",
+        "ranked_scores": [
+          0.5149167001573152,
+          0.40355173934246613,
+          0.34300087959300973
+        ]
+      },
+      {
+        "query_id": "q-pd-encrypted-acl",
+        "source_type": "product_doc",
+        "relevant_chunk_ids": [
+          "pd-encrypted-acl"
+        ],
+        "ranked_ids": [
+          "pd-encrypted-acl",
+          "pd-encrypted-key",
+          "pd-account-lock"
+        ],
+        "tags": [
+          "colloquial",
+          "contrast",
+          "email",
+          "negation",
+          "single_fact",
+          "typo"
+        ],
+        "query": "Encrypted folder is already unlocked. Other people read it, I cant. Re-import the key??",
+        "ranked_scores": [
+          0.4596568644446952,
+          0.4427776379972289,
+          0.33967771368344624
+        ]
+      },
+      {
+        "query_id": "q-ac-encrypted-acl",
+        "source_type": "approved_case",
+        "relevant_chunk_ids": [
+          "ac-encrypted-acl"
+        ],
+        "ranked_ids": [
+          "ac-encrypted-acl",
+          "ac-search-permission",
+          "ac-smb-acl"
+        ],
+        "tags": [
+          "contrast",
+          "email",
+          "single_fact"
+        ],
+        "query": "Which approved reply treats one user's denial on an already unlocked encrypted folder as an access-rule issue?",
+        "ranked_scores": [
+          0.4484485816302202,
+          0.37713170216170744,
+          0.3673376632370902
+        ]
+      },
+      {
+        "query_id": "q-pd-cache-read",
+        "source_type": "product_doc",
+        "relevant_chunk_ids": [
+          "pd-cache-read"
+        ],
+        "ranked_ids": [
+          "pd-cache-read",
+          "pd-cache-write",
+          "pd-disk-nvme"
+        ],
+        "tags": [
+          "contrast",
+          "email",
+          "single_fact"
+        ],
+        "query": "This cache says read-only. Does it hold unique unwritten data like a write-back cache?",
+        "ranked_scores": [
+          0.5539438765021605,
+          0.493688240447514,
+          0.32412667305723764
+        ]
+      },
+      {
+        "query_id": "q-ac-cache-read",
+        "source_type": "approved_case",
+        "relevant_chunk_ids": [
+          "ac-cache-read"
+        ],
+        "ranked_ids": [
+          "ac-cache-read",
+          "ac-cache-write",
+          "ac-search-index"
+        ],
+        "tags": [
+          "contrast",
+          "email",
+          "single_fact"
+        ],
+        "query": "Approved response before removing a read-only cache that explicitly verifies the operating mode?",
+        "ranked_scores": [
+          0.4945074038012687,
+          0.4786270252800794,
+          0.3731354556512166
+        ]
+      },
+      {
+        "query_id": "q-pd-cache-write",
+        "source_type": "product_doc",
+        "relevant_chunk_ids": [
+          "pd-cache-write"
+        ],
+        "ranked_ids": [
+          "pd-cache-read",
+          "pd-cache-write",
+          "pd-disk-nvme"
+        ],
+        "tags": [
+          "contrast",
+          "email",
+          "single_fact"
+        ],
+        "query": "Write-back cache still shows pending writes. Can I pull its SSDs the same way as a read-only cache?",
+        "ranked_scores": [
+          0.6408547465059427,
+          0.6087276895971551,
+          0.4235463141109229
+        ]
+      },
+      {
+        "query_id": "q-ac-cache-write",
+        "source_type": "approved_case",
+        "relevant_chunk_ids": [
+          "ac-cache-write"
+        ],
+        "ranked_ids": [
+          "ac-cache-write",
+          "ac-smart-media",
+          "ac-backup-full"
+        ],
+        "tags": [
+          "colloquial",
+          "contrast",
+          "email",
+          "single_fact"
+        ],
+        "query": "Need wording that stops a customer yanking write-back SSDs while data is still waiting to reach the volume.",
+        "ranked_scores": [
+          0.5154345436636498,
+          0.4271413845386772,
+          0.40530477301494616
+        ]
+      },
+      {
+        "query_id": "q-pd-vlan-port",
+        "source_type": "product_doc",
+        "relevant_chunk_ids": [
+          "pd-vlan-port"
+        ],
+        "ranked_ids": [
+          "pd-vlan-port",
+          "pd-lan-address",
+          "pd-nfs-subnet"
+        ],
+        "tags": [
+          "contrast",
+          "email",
+          "single_fact"
+        ],
+        "query": "Changed the switch port VLAN and now every NAS service vanished. Should I edit only the web firewall rule?",
+        "ranked_scores": [
+          0.6159402839593091,
+          0.429956105487174,
+          0.3709547419506007
+        ]
+      },
+      {
+        "query_id": "q-ac-vlan-port",
+        "source_type": "approved_case",
+        "relevant_chunk_ids": [
+          "ac-vlan-port"
+        ],
+        "ranked_ids": [
+          "ac-vlan-port",
+          "ac-firewall-service",
+          "ac-lan-address"
+        ],
+        "tags": [
+          "contrast",
+          "email",
+          "single_fact"
+        ],
+        "query": "Approved reply after a switch-port VLAN change makes all NAS services unreachable?",
+        "ranked_scores": [
+          0.5335742197659588,
+          0.4642909022587709,
+          0.4352399600270369
+        ]
+      },
+      {
+        "query_id": "q-pd-firewall-service",
+        "source_type": "product_doc",
+        "relevant_chunk_ids": [
+          "pd-firewall-service"
+        ],
+        "ranked_ids": [
+          "pd-firewall-service",
+          "pd-vlan-port",
+          "pd-mail-port"
+        ],
+        "tags": [
+          "contrast",
+          "email",
+          "identifier",
+          "single_fact"
+        ],
+        "query": "SMB is fine from this subnet but the admin HTTPS port times out. Is the whole VLAN broken?",
+        "ranked_scores": [
+          0.5255526696422874,
+          0.46809881698026123,
+          0.40152388636689623
+        ]
+      },
+      {
+        "query_id": "q-ac-firewall-service",
+        "source_type": "approved_case",
+        "relevant_chunk_ids": [
+          "ac-firewall-service"
+        ],
+        "ranked_ids": [
+          "ac-firewall-service",
+          "ac-replica-lag",
+          "ac-smb-acl"
+        ],
+        "tags": [
+          "contrast",
+          "email",
+          "single_fact"
+        ],
+        "query": "Which approved reply narrows access failure to the management service while file sharing remains reachable?",
+        "ranked_scores": [
+          0.4417490613261076,
+          0.38892321036305766,
+          0.3797555172735945
+        ]
+      },
+      {
+        "query_id": "q-pd-replica-lag",
+        "source_type": "product_doc",
+        "relevant_chunk_ids": [
+          "pd-replica-lag"
+        ],
+        "ranked_ids": [
+          "pd-replica-lag",
+          "pd-support-premium",
+          "pd-support-standard"
+        ],
+        "tags": [
+          "colloquial",
+          "contrast",
+          "email",
+          "identifier",
+          "single_fact"
+        ],
+        "query": "Green replication icon, but offsite copy is 8h behind; our RPO is 1h. Are we actually meeting the target?",
+        "ranked_scores": [
+          0.3400666053740078,
+          0.33517574208589357,
+          0.3028768092158959
+        ]
+      },
+      {
+        "query_id": "q-ac-replica-lag",
+        "source_type": "approved_case",
+        "relevant_chunk_ids": [
+          "ac-replica-lag"
+        ],
+        "ranked_ids": [
+          "ac-replica-lag",
+          "ac-backup-full",
+          "ac-sync-conflict"
+        ],
+        "tags": [
+          "contrast",
+          "email",
+          "single_fact"
+        ],
+        "query": "Approved response to a successful replication job whose latest recovery point is older than the agreed objective?",
+        "ranked_scores": [
+          0.49780775921209425,
+          0.2921381736489319,
+          0.28433142924728416
+        ]
+      },
+      {
+        "query_id": "q-pd-replica-fail",
+        "source_type": "product_doc",
+        "relevant_chunk_ids": [
+          "pd-replica-fail"
+        ],
+        "ranked_ids": [
+          "pd-replica-fail",
+          "pd-replica-lag",
+          "pd-support-standard"
+        ],
+        "tags": [
+          "contrast",
+          "email",
+          "single_fact"
+        ],
+        "query": "Replication cannot contact the target at all. Will running snapshots every five minutes fix that?",
+        "ranked_scores": [
+          0.483898897408813,
+          0.4602245434216121,
+          0.37089096512401487
+        ]
+      },
+      {
+        "query_id": "q-ac-replica-fail",
+        "source_type": "approved_case",
+        "relevant_chunk_ids": [
+          "ac-replica-fail"
+        ],
+        "ranked_ids": [
+          "ac-replica-fail",
+          "ac-replica-lag",
+          "ac-support-standard"
+        ],
+        "tags": [
+          "contrast",
+          "email",
+          "single_fact"
+        ],
+        "query": "Which approved reply addresses an unreachable replication destination before changing the snapshot schedule?",
+        "ranked_scores": [
+          0.5108475970882276,
+          0.47464520481148653,
+          0.3680439044548997
+        ]
+      },
+      {
+        "query_id": "q-pd-scrub-integrity",
+        "source_type": "product_doc",
+        "relevant_chunk_ids": [
+          "pd-scrub-integrity"
+        ],
+        "ranked_ids": [
+          "pd-scrub-integrity",
+          "pd-rebalance-capacity",
+          "pd-replica-lag"
+        ],
+        "tags": [
+          "contrast",
+          "email",
+          "single_fact"
+        ],
+        "query": "Scrub found checksum mismatches. Does that just mean storage isn't evenly spread across the drives?",
+        "ranked_scores": [
+          0.588092582133709,
+          0.4588251495326239,
+          0.3928963334919013
+        ]
+      },
+      {
+        "query_id": "q-ac-scrub-integrity",
+        "source_type": "approved_case",
+        "relevant_chunk_ids": [
+          "ac-scrub-integrity"
+        ],
+        "ranked_ids": [
+          "ac-scrub-integrity",
+          "ac-rebalance-capacity",
+          "ac-smart-link"
+        ],
+        "tags": [
+          "contrast",
+          "email",
+          "single_fact"
+        ],
+        "query": "Approved reply to checksum inconsistencies from a scrub, requesting integrity evidence?",
+        "ranked_scores": [
+          0.44774765099195546,
+          0.4008860144969884,
+          0.3497725375204303
+        ]
+      },
+      {
+        "query_id": "q-pd-rebalance-capacity",
+        "source_type": "product_doc",
+        "relevant_chunk_ids": [
+          "pd-rebalance-capacity"
+        ],
+        "ranked_ids": [
+          "pd-rebalance-capacity",
+          "pd-scrub-integrity",
+          "pd-smart-link"
+        ],
+        "tags": [
+          "contrast",
+          "email",
+          "single_fact"
+        ],
+        "query": "The post-expansion balancing task finished. Does that certify all file checksums like a scrub?",
+        "ranked_scores": [
+          0.5704420344716585,
+          0.3897710154125248,
+          0.3519064051431305
+        ]
+      },
+      {
+        "query_id": "q-ac-rebalance-capacity",
+        "source_type": "approved_case",
+        "relevant_chunk_ids": [
+          "ac-rebalance-capacity"
+        ],
+        "ranked_ids": [
+          "ac-rebalance-capacity",
+          "ac-scrub-integrity",
+          "ac-replica-lag"
+        ],
+        "tags": [
+          "contrast",
+          "email",
+          "single_fact"
+        ],
+        "query": "Which approved reply separates completed capacity redistribution from proof of file integrity?",
+        "ranked_scores": [
+          0.5478216685489806,
+          0.3879406782430973,
+          0.3674210557454387
+        ]
+      },
+      {
+        "query_id": "q-pd-support-standard",
+        "source_type": "product_doc",
+        "relevant_chunk_ids": [
+          "pd-support-standard"
+        ],
+        "ranked_ids": [
+          "pd-support-premium",
+          "pd-support-standard",
+          "pd-ups-power"
+        ],
+        "tags": [
+          "contrast",
+          "email",
+          "single_fact"
+        ],
+        "query": "We have Standard support and an outage at midnight. Does the Premium round-the-clock callback promise apply?",
+        "ranked_scores": [
+          0.5557493335863215,
+          0.5452114385393216,
+          0.2587473222872748
+        ]
+      },
+      {
+        "query_id": "q-ac-support-standard",
+        "source_type": "approved_case",
+        "relevant_chunk_ids": [
+          "ac-support-standard"
+        ],
+        "ranked_ids": [
+          "ac-support-premium",
+          "ac-support-standard",
+          "ac-ups-power"
+        ],
+        "tags": [
+          "contrast",
+          "email",
+          "single_fact"
+        ],
+        "query": "Approved outage response for a Standard-plan customer that acknowledges impact without promising Premium coverage?",
+        "ranked_scores": [
+          0.46175833401409344,
+          0.4087534044284263,
+          0.35363364292319155
+        ]
+      },
+      {
+        "query_id": "q-pd-support-premium",
+        "source_type": "product_doc",
+        "relevant_chunk_ids": [
+          "pd-support-premium"
+        ],
+        "ranked_ids": [
+          "pd-support-premium",
+          "pd-support-standard",
+          "pd-ups-power"
+        ],
+        "tags": [
+          "contrast",
+          "email",
+          "single_fact"
+        ],
+        "query": "Our verified Premium contract covers a company-wide outage tonight. Which escalation queue applies?",
+        "ranked_scores": [
+          0.5821567582548843,
+          0.4530972646224837,
+          0.27130496862816766
+        ]
+      },
+      {
+        "query_id": "q-ac-support-premium",
+        "source_type": "approved_case",
+        "relevant_chunk_ids": [
+          "ac-support-premium"
+        ],
+        "ranked_ids": [
+          "ac-support-premium",
+          "ac-support-standard",
+          "ac-ups-power"
+        ],
+        "tags": [
+          "contrast",
+          "email",
+          "single_fact"
+        ],
+        "query": "Which approved reply gathers Premium contract and callback details for a service-wide night-time outage?",
+        "ranked_scores": [
+          0.5385257066478122,
+          0.41349119029875925,
+          0.34473415690830944
+        ]
+      },
+      {
+        "query_id": "q-pd-log-redact",
+        "source_type": "product_doc",
+        "relevant_chunk_ids": [
+          "pd-log-redact"
+        ],
+        "ranked_ids": [
+          "pd-log-redact",
+          "pd-support-standard",
+          "pd-support-premium"
+        ],
+        "tags": [
+          "contrast",
+          "email",
+          "single_fact"
+        ],
+        "query": "The debug bundle might contain access tokens. Should I paste the whole thing into my support email?",
+        "ranked_scores": [
+          0.5241092902261799,
+          0.28317059165480685,
+          0.27110006484617133
+        ]
+      },
+      {
+        "query_id": "q-ac-log-redact",
+        "source_type": "approved_case",
+        "relevant_chunk_ids": [
+          "ac-log-redact"
+        ],
+        "ranked_ids": [
+          "ac-log-redact",
+          "ac-support-premium",
+          "ac-scrub-integrity"
+        ],
+        "tags": [
+          "contrast",
+          "email",
+          "single_fact"
+        ],
+        "query": "Approved reply requesting a diagnostic bundle while requiring secret redaction and a support upload channel?",
+        "ranked_scores": [
+          0.6072622978860396,
+          0.32869401834669554,
+          0.31537053191275166
+        ]
+      },
+      {
+        "query_id": "q-pd-log-window",
+        "source_type": "product_doc",
+        "relevant_chunk_ids": [
+          "pd-log-window"
+        ],
+        "ranked_ids": [
+          "pd-log-window",
+          "pd-support-standard",
+          "pd-replica-lag"
+        ],
+        "tags": [
+          "contrast",
+          "email",
+          "single_fact"
+        ],
+        "query": "Fault was yesterday at 11 pm, but I exported only today's healthy logs. Is that sufficient evidence?",
+        "ranked_scores": [
+          0.4674135432957954,
+          0.34301819669106426,
+          0.32543090438068045
+        ]
+      },
+      {
+        "query_id": "q-ac-log-window",
+        "source_type": "approved_case",
+        "relevant_chunk_ids": [
+          "ac-log-window"
+        ],
+        "ranked_ids": [
+          "ac-log-window",
+          "ac-support-premium",
+          "ac-replica-lag"
+        ],
+        "tags": [
+          "contrast",
+          "email",
+          "single_fact"
+        ],
+        "query": "Which approved response requests the incident timezone and surrounding log window for an intermittent fault?",
+        "ranked_scores": [
+          0.4861629067414032,
+          0.3979646110191876,
+          0.30095666797679643
+        ]
+      },
+      {
+        "query_id": "q-pd-search-index",
+        "source_type": "product_doc",
+        "relevant_chunk_ids": [
+          "pd-search-index"
+        ],
+        "ranked_ids": [
+          "pd-search-index",
+          "pd-search-permission",
+          "pd-snapshot-file"
+        ],
+        "tags": [
+          "colloquial",
+          "contrast",
+          "email",
+          "single_fact"
+        ],
+        "query": "Search says nope, but browsing the folder opens the file fine. Restore from backup or check indexing?",
+        "ranked_scores": [
+          0.4953215766408402,
+          0.4482419769834541,
+          0.3903028352927489
+        ]
+      },
+      {
+        "query_id": "q-ac-search-index",
+        "source_type": "approved_case",
+        "relevant_chunk_ids": [
+          "ac-search-index"
+        ],
+        "ranked_ids": [
+          "ac-search-index",
+          "ac-search-permission",
+          "ac-snapshot-file"
+        ],
+        "tags": [
+          "contrast",
+          "email",
+          "single_fact"
+        ],
+        "query": "Approved reply when a file exists and opens normally but is missing from indexed search?",
+        "ranked_scores": [
+          0.5345619701607489,
+          0.4326548255735735,
+          0.388847136239384
+        ]
+      },
+      {
+        "query_id": "q-pd-search-permission",
+        "source_type": "product_doc",
+        "relevant_chunk_ids": [
+          "pd-search-permission"
+        ],
+        "ranked_ids": [
+          "pd-search-permission",
+          "pd-search-index",
+          "pd-smb-acl"
+        ],
+        "tags": [
+          "contrast",
+          "email",
+          "single_fact"
+        ],
+        "query": "My colleague finds the file; I cannot even open its folder. Would rebuilding the search index fix my results?",
+        "ranked_scores": [
+          0.4449350350371871,
+          0.4069044235004125,
+          0.34531067872311344
+        ]
+      },
+      {
+        "query_id": "q-ac-search-permission",
+        "source_type": "approved_case",
+        "relevant_chunk_ids": [
+          "ac-search-permission"
+        ],
+        "ranked_ids": [
+          "ac-search-permission",
+          "ac-search-index",
+          "ac-quota-volume"
+        ],
+        "tags": [
+          "contrast",
+          "email",
+          "single_fact"
+        ],
+        "query": "Which approved reply checks access-filtered search results when another account can find the same file?",
+        "ranked_scores": [
+          0.4588866121739772,
+          0.4044879660038159,
+          0.3893545441150902
+        ]
+      },
+      {
+        "query_id": "q-pd-g10-dual",
+        "source_type": "product_doc",
+        "relevant_chunk_ids": [
+          "pd-iscsi-auth",
+          "pd-iscsi-lun"
+        ],
+        "ranked_ids": [
+          "pd-iscsi-lun",
+          "pd-iscsi-auth",
+          "pd-raid5-one"
+        ],
+        "tags": [
+          "multi_fact",
+          "contrast",
+          "email"
+        ],
+        "query": "Two separate tickets need different guidance. First: iSCSI discovery sees the target, but CHAP login fails. Would repairing the LUN filesystem help? Second: The iSCSI session says connected but the host sees zero disks. Do I rotate the CHAP secret?",
+        "ranked_scores": [
+          0.6062131330274685,
+          0.6055811985454103,
+          0.40000875693854343
+        ]
+      },
+      {
+        "query_id": "q-ac-g10-dual",
+        "source_type": "approved_case",
+        "relevant_chunk_ids": [
+          "ac-iscsi-auth",
+          "ac-iscsi-lun"
+        ],
+        "ranked_ids": [
+          "ac-iscsi-lun",
+          "ac-iscsi-auth",
+          "ac-raid5-one"
+        ],
+        "tags": [
+          "multi_fact",
+          "contrast",
+          "email"
+        ],
+        "query": "Two separate tickets need different guidance. First: Approved response to an iSCSI CHAP login failure that requests settings without exposing secrets? Second: Which reply requests LUN mapping when a connected iSCSI initiator sees no storage device?",
+        "ranked_scores": [
+          0.5459819585945047,
+          0.5170566032516856,
+          0.3913587627781663
+        ]
+      },
+      {
+        "query_id": "q-pd-g13-dual",
+        "source_type": "product_doc",
+        "relevant_chunk_ids": [
+          "pd-ddns-stale",
+          "pd-wan-cgnat"
+        ],
+        "ranked_ids": [
+          "pd-ddns-stale",
+          "pd-wan-cgnat",
+          "pd-lan-address"
+        ],
+        "tags": [
+          "multi_fact",
+          "contrast",
+          "email"
+        ],
+        "query": "Two separate tickets need different guidance. First: From outside, today's public IP works but the DDNS name goes nowhere. Do my shares need recreating? Second: My router WAN is 100.72.4.9 and forwarding never works from outside. Will refreshing DDNS be enough?",
+        "ranked_scores": [
+          0.5166765251248024,
+          0.418534221779469,
+          0.40936401394747574
+        ]
+      },
+      {
+        "query_id": "q-ac-g13-dual",
+        "source_type": "approved_case",
+        "relevant_chunk_ids": [
+          "ac-ddns-stale",
+          "ac-wan-cgnat"
+        ],
+        "ranked_ids": [
+          "ac-wan-cgnat",
+          "ac-ddns-stale",
+          "ac-replica-lag"
+        ],
+        "tags": [
+          "multi_fact",
+          "contrast",
+          "email"
+        ],
+        "query": "Two separate tickets need different guidance. First: Approved reply when direct access to the current public IP succeeds but the DDNS name is stale? Second: Which approved reply explains an upstream carrier-NAT obstacle when local forwarding rules already exist?",
+        "ranked_scores": [
+          0.45374737316893166,
+          0.4465357093477168,
+          0.35913604025065016
+        ]
+      },
+      {
+        "query_id": "q-pd-g16-dual",
+        "source_type": "product_doc",
+        "relevant_chunk_ids": [
+          "pd-ups-power",
+          "pd-ups-link"
+        ],
+        "ranked_ids": [
+          "pd-ups-power",
+          "pd-ups-link",
+          "pd-support-standard"
+        ],
+        "tags": [
+          "multi_fact",
+          "contrast",
+          "email"
+        ],
+        "query": "Two separate tickets need different guidance. First: The room lost power and UPS says on battery with six minutes left. Should I start a long scrub now? Second: NAS says UPS disconnected, but mains is fine and the UPS display is normal. Is this definitely a power cut?",
+        "ranked_scores": [
+          0.5071371964858781,
+          0.5019912804943805,
+          0.4435344465361328
+        ]
+      },
+      {
+        "query_id": "q-ac-g16-dual",
+        "source_type": "approved_case",
+        "relevant_chunk_ids": [
+          "ac-ups-power",
+          "ac-ups-link"
+        ],
+        "ranked_ids": [
+          "ac-ups-power",
+          "ac-ups-link",
+          "ac-support-premium"
+        ],
+        "tags": [
+          "multi_fact",
+          "contrast",
+          "email"
+        ],
+        "query": "Two separate tickets need different guidance. First: Approved urgent response when the UPS is running on battery with little runtime left? Second: Which approved reply investigates UPS monitoring loss without declaring a confirmed mains outage?",
+        "ranked_scores": [
+          0.5242082452141296,
+          0.512001497852064,
+          0.4277177957550852
+        ]
+      },
+      {
+        "query_id": "q-pd-g19-dual",
+        "source_type": "product_doc",
+        "relevant_chunk_ids": [
+          "pd-encrypted-key",
+          "pd-encrypted-acl"
+        ],
+        "ranked_ids": [
+          "pd-encrypted-acl",
+          "pd-encrypted-key",
+          "pd-account-lock"
+        ],
+        "tags": [
+          "multi_fact",
+          "contrast",
+          "email"
+        ],
+        "query": "Two separate tickets need different guidance. First: After reboot my encrypted folder is locked. I know the admin password; is that all I need to unlock the data? Second: Encrypted folder is mounted and coworkers can read it; only I get denied. Should we import the key again?",
+        "ranked_scores": [
+          0.5150597242205448,
+          0.5051806576525752,
+          0.37701450455392216
+        ]
+      },
+      {
+        "query_id": "q-ac-g19-dual",
+        "source_type": "approved_case",
+        "relevant_chunk_ids": [
+          "ac-encrypted-key",
+          "ac-encrypted-acl"
+        ],
+        "ranked_ids": [
+          "ac-encrypted-key",
+          "ac-encrypted-acl",
+          "ac-smb-acl"
+        ],
+        "tags": [
+          "multi_fact",
+          "contrast",
+          "email"
+        ],
+        "query": "Two separate tickets need different guidance. First: Approved reply for a locked encrypted share that asks about key availability without asking for the secret key? Second: Which approved reply treats one user's denial on an already unlocked encrypted folder as an access-rule issue?",
+        "ranked_scores": [
+          0.44958540377916434,
+          0.4409958558524012,
+          0.4146325808635145
+        ]
+      },
+      {
+        "query_id": "q-pd-g22-dual",
+        "source_type": "product_doc",
+        "relevant_chunk_ids": [
+          "pd-replica-lag",
+          "pd-replica-fail"
+        ],
+        "ranked_ids": [
+          "pd-replica-lag",
+          "pd-replica-fail",
+          "pd-support-standard"
+        ],
+        "tags": [
+          "multi_fact",
+          "contrast",
+          "email"
+        ],
+        "query": "Two separate tickets need different guidance. First: Replication is green but the newest offsite copy is eight hours old and our target is one hour. Is green enough? Second: Replication cannot contact the target at all. Will running snapshots every five minutes fix that?",
+        "ranked_scores": [
+          0.4244513581245929,
+          0.3740842927525565,
+          0.36511199052439147
+        ]
+      },
+      {
+        "query_id": "q-ac-g22-dual",
+        "source_type": "approved_case",
+        "relevant_chunk_ids": [
+          "ac-replica-lag",
+          "ac-replica-fail"
+        ],
+        "ranked_ids": [
+          "ac-replica-lag",
+          "ac-replica-fail",
+          "ac-backup-full"
+        ],
+        "tags": [
+          "multi_fact",
+          "contrast",
+          "email"
+        ],
+        "query": "Two separate tickets need different guidance. First: Approved response to a successful replication job whose latest recovery point is older than the agreed objective? Second: Which approved reply addresses an unreachable replication destination before changing the snapshot schedule?",
+        "ranked_scores": [
+          0.5196573176798263,
+          0.41131245051364257,
+          0.3900342385922171
+        ]
+      },
+      {
+        "query_id": "q-pd-g25-dual",
+        "source_type": "product_doc",
+        "relevant_chunk_ids": [
+          "pd-log-redact",
+          "pd-log-window"
+        ],
+        "ranked_ids": [
+          "pd-log-redact",
+          "pd-log-window",
+          "pd-support-standard"
+        ],
+        "tags": [
+          "multi_fact",
+          "contrast",
+          "email"
+        ],
+        "query": "Two separate tickets need different guidance. First: The debug bundle might contain access tokens. Should I paste the whole thing into my support email? Second: Fault was yesterday at 11 pm, but I exported only today's healthy logs. Is that sufficient evidence?",
+        "ranked_scores": [
+          0.49863816021378793,
+          0.3865026870029511,
+          0.3723174504800538
+        ]
+      },
+      {
+        "query_id": "q-ac-g25-dual",
+        "source_type": "approved_case",
+        "relevant_chunk_ids": [
+          "ac-log-redact",
+          "ac-log-window"
+        ],
+        "ranked_ids": [
+          "ac-log-redact",
+          "ac-log-window",
+          "ac-support-premium"
+        ],
+        "tags": [
+          "multi_fact",
+          "contrast",
+          "email"
+        ],
+        "query": "Two separate tickets need different guidance. First: Approved reply requesting a diagnostic bundle while requiring secret redaction and a support upload channel? Second: Which approved response requests the incident timezone and surrounding log window for an intermittent fault?",
+        "ranked_scores": [
+          0.5049149525362535,
+          0.4394823594308531,
+          0.43427985755014203
+        ]
+      },
+      {
+        "query_id": "q-oos-05",
+        "source_type": "product_doc",
+        "relevant_chunk_ids": [],
+        "ranked_ids": [
+          "pd-model-a210plus",
+          "pd-model-a210",
+          "pd-wan-cgnat"
+        ],
+        "tags": [
+          "oos"
+        ],
+        "query": "What maximum ambient operating temperature in Celsius is certified for the ArcNAS A210+?",
+        "ranked_scores": [
+          0.4008867987535187,
+          0.3624769152133105,
+          0.34289433417069576
+        ]
+      },
+      {
+        "query_id": "q-oos-06",
+        "source_type": "approved_case",
+        "relevant_chunk_ids": [],
+        "ranked_ids": [
+          "ac-quota-volume",
+          "ac-mail-auth",
+          "ac-mfa-lost"
+        ],
+        "tags": [
+          "oos"
+        ],
+        "query": "Find the approved case confirming whether account invoice INV-9902 has been paid.",
+        "ranked_scores": [
+          0.3400208173251525,
+          0.3005415869599028,
+          0.2970141736208033
+        ]
+      },
+      {
+        "query_id": "q-oos-07",
+        "source_type": "product_doc",
+        "relevant_chunk_ids": [],
+        "ranked_ids": [
+          "pd-support-standard",
+          "pd-model-a210",
+          "pd-replica-lag"
+        ],
+        "tags": [
+          "oos"
+        ],
+        "query": "How many calories are in the chicken soup sold at the station cafe?",
+        "ranked_scores": [
+          0.06676153436198082,
+          0.03922370014595115,
+          0.03821458824270828
+        ]
+      },
+      {
+        "query_id": "q-oos-08",
+        "source_type": "approved_case",
+        "relevant_chunk_ids": [],
+        "ranked_ids": [
+          "ac-sync-conflict",
+          "ac-mfa-lost",
+          "ac-quota-volume"
+        ],
+        "tags": [
+          "oos"
+        ],
+        "query": "Which approved reply explains how to appeal a parking ticket in Madrid?",
+        "ranked_scores": [
+          0.29316940571233163,
+          0.26711983286466606,
+          0.2570542198536799
+        ]
+      }
+    ]
+  }
+}

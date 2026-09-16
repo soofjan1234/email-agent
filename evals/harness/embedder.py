@@ -36,6 +36,14 @@ class HttpEmbedder:
         if self._owns_client:
             self._client.close()
 
+    def embed_documents(self, texts: list[str]) -> list[np.ndarray]:
+        """编码文档；旧网关模型保持原始输入行为。"""
+        return self.embed(texts)
+
+    def embed_queries(self, texts: list[str]) -> list[np.ndarray]:
+        """编码查询；本地适配器可覆盖角色专用输入处理。"""
+        return self.embed(texts)
+
     def embed(self, texts: list[str]) -> list[np.ndarray]:
         """按输入顺序返回固定维度向量。"""
 

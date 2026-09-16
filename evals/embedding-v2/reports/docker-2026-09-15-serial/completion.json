@@ -1,0 +1,6 @@
+{
+  "failures": [],
+  "stop_exit_code": 0,
+  "state": "{\"Status\":\"exited\",\"Running\":false,\"Paused\":false,\"Restarting\":false,\"OOMKilled\":false,\"Dead\":false,\"Pid\":0,\"ExitCode\":0,\"Error\":\"\",\"StartedAt\":\"2026-09-15T08:33:15.776981209Z\",\"FinishedAt\":\"2026-09-15T08:39:47.811596629Z\"}",
+  "finished_at": "2026-09-15T08:39:48.741767+00:00"
+}

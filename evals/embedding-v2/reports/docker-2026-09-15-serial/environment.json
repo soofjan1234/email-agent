@@ -1,0 +1,17 @@
+{
+  "observed_at": "2026-09-15T16:31:31.6530162+08:00",
+  "cpu": [
+    {
+      "Name": "11th Gen Intel(R) Core(TM) i7-11700F @ 2.50GHz",
+      "NumberOfCores": 8,
+      "NumberOfLogicalProcessors": 16
+    }
+  ],
+  "docker_engine": "16 CPUs / 26802499584 bytes / linux",
+  "container_limits": "4 CPUs / 8 GiB",
+  "http_inputs_per_request": 1,
+  "service_concurrency": 1,
+  "device": "CPU",
+  "dtype": "float32",
+  "resource_method": "docker stats samples during warm-up and evaluation, not exact peak"
+}

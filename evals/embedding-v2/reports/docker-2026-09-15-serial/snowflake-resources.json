@@ -1,0 +1,74 @@
+[
+  {
+    "at": "2026-09-15T08:29:56.125446+00:00",
+    "exit_code": 0,
+    "raw": "{\"BlockIO\":\"0B / 0B\",\"CPUPerc\":\"396.64%\",\"Container\":\"email-embedding-eval-embedding-1\",\"ID\":\"e629426d6829\",\"MemPerc\":\"9.79%\",\"MemUsage\":\"802.2MiB / 8GiB\",\"Name\":\"email-embedding-eval-embedding-1\",\"NetIO\":\"813kB / 969kB\",\"PIDs\":\"13\"}",
+    "error": ""
+  },
+  {
+    "at": "2026-09-15T08:29:58.867365+00:00",
+    "exit_code": 0,
+    "raw": "{\"BlockIO\":\"0B / 0B\",\"CPUPerc\":\"397.32%\",\"Container\":\"email-embedding-eval-embedding-1\",\"ID\":\"e629426d6829\",\"MemPerc\":\"9.79%\",\"MemUsage\":\"802.2MiB / 8GiB\",\"Name\":\"email-embedding-eval-embedding-1\",\"NetIO\":\"852kB / 1.55MB\",\"PIDs\":\"13\"}",
+    "error": ""
+  },
+  {
+    "at": "2026-09-15T08:30:01.610119+00:00",
+    "exit_code": 0,
+    "raw": "{\"BlockIO\":\"0B / 0B\",\"CPUPerc\":\"390.41%\",\"Container\":\"email-embedding-eval-embedding-1\",\"ID\":\"e629426d6829\",\"MemPerc\":\"9.80%\",\"MemUsage\":\"803.1MiB / 8GiB\",\"Name\":\"email-embedding-eval-embedding-1\",\"NetIO\":\"891kB / 2.16MB\",\"PIDs\":\"13\"}",
+    "error": ""
+  },
+  {
+    "at": "2026-09-15T08:30:04.625484+00:00",
+    "exit_code": 0,
+    "raw": "{\"BlockIO\":\"0B / 0B\",\"CPUPerc\":\"395.44%\",\"Container\":\"email-embedding-eval-embedding-1\",\"ID\":\"e629426d6829\",\"MemPerc\":\"9.80%\",\"MemUsage\":\"803.1MiB / 8GiB\",\"Name\":\"email-embedding-eval-embedding-1\",\"NetIO\":\"940kB / 2.97MB\",\"PIDs\":\"13\"}",
+    "error": ""
+  },
+  {
+    "at": "2026-09-15T08:30:07.323709+00:00",
+    "exit_code": 0,
+    "raw": "{\"BlockIO\":\"0B / 0B\",\"CPUPerc\":\"395.23%\",\"Container\":\"email-embedding-eval-embedding-1\",\"ID\":\"e629426d6829\",\"MemPerc\":\"9.80%\",\"MemUsage\":\"802.9MiB / 8GiB\",\"Name\":\"email-embedding-eval-embedding-1\",\"NetIO\":\"977kB / 3.5MB\",\"PIDs\":\"13\"}",
+    "error": ""
+  },
+  {
+    "at": "2026-09-15T08:30:10.032653+00:00",
+    "exit_code": 0,
+    "raw": "{\"BlockIO\":\"0B / 0B\",\"CPUPerc\":\"394.86%\",\"Container\":\"email-embedding-eval-embedding-1\",\"ID\":\"e629426d6829\",\"MemPerc\":\"9.80%\",\"MemUsage\":\"802.9MiB / 8GiB\",\"Name\":\"email-embedding-eval-embedding-1\",\"NetIO\":\"1.02MB / 4.09MB\",\"PIDs\":\"13\"}",
+    "error": ""
+  },
+  {
+    "at": "2026-09-15T08:30:13.347405+00:00",
+    "exit_code": 0,
+    "raw": "{\"BlockIO\":\"0B / 0B\",\"CPUPerc\":\"394.68%\",\"Container\":\"email-embedding-eval-embedding-1\",\"ID\":\"e629426d6829\",\"MemPerc\":\"9.80%\",\"MemUsage\":\"803.1MiB / 8GiB\",\"Name\":\"email-embedding-eval-embedding-1\",\"NetIO\":\"1.07MB / 4.91MB\",\"PIDs\":\"13\"}",
+    "error": ""
+  },
+  {
+    "at": "2026-09-15T08:30:16.065295+00:00",
+    "exit_code": 0,
+    "raw": "{\"BlockIO\":\"0B / 0B\",\"CPUPerc\":\"380.95%\",\"Container\":\"email-embedding-eval-embedding-1\",\"ID\":\"e629426d6829\",\"MemPerc\":\"9.80%\",\"MemUsage\":\"803.1MiB / 8GiB\",\"Name\":\"email-embedding-eval-embedding-1\",\"NetIO\":\"1.11MB / 5.55MB\",\"PIDs\":\"13\"}",
+    "error": ""
+  },
+  {
+    "at": "2026-09-15T08:30:18.826477+00:00",
+    "exit_code": 0,
+    "raw": "{\"BlockIO\":\"0B / 0B\",\"CPUPerc\":\"395.53%\",\"Container\":\"email-embedding-eval-embedding-1\",\"ID\":\"e629426d6829\",\"MemPerc\":\"9.80%\",\"MemUsage\":\"803.1MiB / 8GiB\",\"Name\":\"email-embedding-eval-embedding-1\",\"NetIO\":\"1.15MB / 6.12MB\",\"PIDs\":\"13\"}",
+    "error": ""
+  },
+  {
+    "at": "2026-09-15T08:30:21.548464+00:00",
+    "exit_code": 0,
+    "raw": "{\"BlockIO\":\"0B / 0B\",\"CPUPerc\":\"399.07%\",\"Container\":\"email-embedding-eval-embedding-1\",\"ID\":\"e629426d6829\",\"MemPerc\":\"9.80%\",\"MemUsage\":\"802.9MiB / 8GiB\",\"Name\":\"email-embedding-eval-embedding-1\",\"NetIO\":\"1.19MB / 6.73MB\",\"PIDs\":\"13\"}",
+    "error": ""
+  },
+  {
+    "at": "2026-09-15T08:30:24.563246+00:00",
+    "exit_code": 0,
+    "raw": "{\"BlockIO\":\"0B / 0B\",\"CPUPerc\":\"395.68%\",\"Container\":\"email-embedding-eval-embedding-1\",\"ID\":\"e629426d6829\",\"MemPerc\":\"9.81%\",\"MemUsage\":\"803.3MiB / 8GiB\",\"Name\":\"email-embedding-eval-embedding-1\",\"NetIO\":\"1.23MB / 7.47MB\",\"PIDs\":\"13\"}",
+    "error": ""
+  },
+  {
+    "at": "2026-09-15T08:30:27.254204+00:00",
+    "exit_code": 0,
+    "raw": "{\"BlockIO\":\"0B / 0B\",\"CPUPerc\":\"111.30%\",\"Container\":\"email-embedding-eval-embedding-1\",\"ID\":\"e629426d6829\",\"MemPerc\":\"9.81%\",\"MemUsage\":\"803.2MiB / 8GiB\",\"Name\":\"email-embedding-eval-embedding-1\",\"NetIO\":\"1.26MB / 7.95MB\",\"PIDs\":\"13\"}",
+    "error": ""
+  }
+]

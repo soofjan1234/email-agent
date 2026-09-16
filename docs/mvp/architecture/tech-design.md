@@ -22,7 +22,7 @@
 | 结果融合 | 倒数排名融合（RRF） | MVP 默认基线，效果对比与调参放到第二版 |
 | 重排模型 | MVP 不使用 | 检索评测不达标时再引入 |
 | 大语言模型 | `gpt-4o-mini`，JSON Schema 模式 | 已按英文 JSON / 引用 / 安全 truth test 冻结 |
-| Embedding 模型 | `text-embedding-3-small`，1536 维，索引 `embedding-v1` | 当前先用已冻结模型推进；其他 Embedding 待有可用 key 后补测 |
+| Embedding 模型 | Docker 部署开放模型；当前英文 CPU 优先候选为 Snowflake Arctic M v1.5（768 维） | 四模型本地扩展集三轮对比已完成，生产模型尚未冻结；原 API key 网关选型已废弃 |
 | Python 测试 | pytest + pytest-asyncio | 已确定 |
 | 前端测试 | Vitest + Vue Test Utils | 已确定 |
 | 端到端测试 | Playwright，仅覆盖关键审核闭环 | 已确定 |
@@ -113,20 +113,22 @@ PostgreSQL 同时承载：
 - `Embedder.embed(texts)`：批量返回固定维度向量；
 - `Generator.generate(messages, response_schema)`：按指定 JSON Schema 返回 Agent 结果。
 
-基础设施层通过 OpenAI-compatible HTTP 协议实现适配器，使用 `httpx.AsyncClient` 连接模型网关。模型地址、模型名、超时和凭据通过环境配置注入，业务层不依赖具体 SDK 类型。
+基础设施层通过 HTTP 适配器隔离模型运行方式。生成式 LLM 继续使用 OpenAI-compatible 网关；Embedding 使用 Docker 中的开放模型服务，模型专用输入处理由适配器负责，需显式区分查询和文档。上面的 `embed(texts)` 是原接口，评测适配器已扩展为 `embed_queries(texts)` 和 `embed_documents(texts)`。地址、模型、超时及服务需要的可选访问凭据通过配置注入，业务层不依赖具体 SDK。A3 业务适配器复用 TEI 身份与向量校验，通过 `/info` 确认模型、revision 和输入上限，通过 `/tokenize` 对文档前缀及特殊 token 完整计数，单输入调用 `/embed` 并显式设置 `truncate=false`。本地 TEI 不接收生成式网关凭据。
 
 ### 7.2 模型选择规则
 
-在获得实际模型网关和凭据前，不在设计中虚构具体模型名称。实施计划的第一个检索 truth test 应使用相同 NAS 样例比较可用 Embedding 模型，并根据以下指标冻结模型：
+Embedding 不再按 API key 或网关渠道筛选。按 [Docker 开放模型对比设计](../designs/2026-09-13-embedding-truth-test-design.md) 在相同环境和英文数据集上比较候选，并根据以下指标冻结模型：
 
 - 产品文档与历史案例的 Recall@K；
 - NAS 型号、错误码和英文技术标识查询表现；
 - 向量维度与数据库占用；
 - 单批嵌入延迟、费用和稳定性。
 
+本地已完成 Qwen3 0.6B、Nomic v1.5、Snowflake Arctic M v1.5 和 BGE-M3 的扩展集三轮对比，当前英文短文本、CPU 单输入串行部署优先选择 Snowflake 作为后续候选。选择依据是 Top-3 依据完整覆盖、请求延迟和采样内存的综合表现；它并非所有排名指标都最优。数据为未经独立人工复核的合成集，具体指标、统一部署条件及 Qwen 批次缺陷规避见[完整结果报告](../../../evals/embedding-v2/RESULTS.md)。
+
 大语言模型至少验证：严格 JSON 输出成功率、引用约束、知识不足时拒绝确定性回答、高风险操作拦截和英文回复质量。
 
-当前先使用已冻结的 `text-embedding-3-small`（1536 / `embedding-v1`）继续实施。BGE 等其他 Embedding 等网关有可用渠道或新 key 后再用同一英文评测集补测，不阻塞后续阻断性验证。补测后若改选模型或维度，创建新的知识索引版本，完成全量重嵌入后再切换，不能在同一向量列中混用不同模型或维度。
+原 `text-embedding-3-small`（1536 / `embedding-v1`）冻结文件保留为历史证据，不再作为新部署的建库依据。已获得[本地扩展集比较结果](../../../evals/embedding-v2/RESULTS.md)，生产模型尚未冻结；完成独立标注复核与目标环境验证后再创建新冻结记录和索引版本；已有数据须全量重嵌入后切换，不同模型或输入配置不能在同一向量列混用。
 
 ## 8. Python 数据层
 
@@ -210,14 +212,11 @@ MVP 将开源 LangGraph 嵌入 FastAPI 项目，不假定 Checkpointer 会主动
 
 ## 10. 历史邮件配对
 
-配对以邮件协议关系为主，不使用模型直接决定最终关系：
+MVP 只处理协议头可确定的一对一历史收件与人工回复，不使用模型决定配对关系。完整关联识别与复杂关系排除规则统一见[总体设计 9.1](../design.md#91-历史邮件配对与案例生产)。
 
-1. 使用 `In-Reply-To`、`References` 和 `Message-ID` 建立确定配对。
-2. 缺少协议头时，使用规范化主题、通信双方、时间窗口和回复引用原文生成候选。
-3. 一个回复匹配多个收件或低于阈值时进入人工确认。
-4. 模型只能辅助提取问题与适用条件，不能绕过人工确认发布案例。
+全量扫描完成前不生成配对候选，避免把尚未扫描到的其他回复遗漏。一对多、多对一、多对多及不确定关系保留原文和暂不支持原因，第二版再处理；人工审核不能绕过本版范围。模型只能辅助提取问题与适用条件，案例发布仍需人工复核。
 
-配对阈值使用一批已知关系的历史邮件测量 Precision 和 Recall 后确定。知识生产更重视 Precision，宁可增加人工确认，也不能把错误回复绑定到原邮件。
+第二版再验证模糊配对的 Precision、Recall 和阈值。已有专项评测中的歧义拦截仅是历史验证证据，不代表启动初始化与完整关系判定已实现。
 
 ## 11. 模拟邮箱
 
@@ -236,7 +235,7 @@ data/mock-mailbox/
 选择 `.eml` 是为了保留 `Message-ID`、`In-Reply-To`、`References`、主题、时间和通信双方，确保模拟环境可以验证第二版真实邮箱所需的配对行为。
 
 - `incremental` 根据持久化同步游标扫描新增邮件；
-- `historical_backfill` 按指定时间范围扫描收件和已发送邮件；
+- `historical_backfill` 在首次启动时自动全量扫描固定初始化边界内的收件和已发送邮件；启动恢复、并发限制及增量衔接遵循总体设计 6.2、6.3；
 - 外部邮件标识和内容哈希共同防止重复；
 - 测试夹具不存放真实客户数据；
 - `data/` 保持在 `.gitignore`，可公开的脱敏样例存放在专门的测试夹具目录。
@@ -247,7 +246,7 @@ data/mock-mailbox/
 
 - 邮件列表与处理状态；
 - 邮件详情、引用依据和可编辑回复草稿；
-- 最新邮件同步与历史回溯任务进度；
+- 最新邮件同步与自动历史初始化任务进度（无历史范围选择）；
 - 历史邮件配对确认；
 - 候选案例审核、发布和归档；
 - 产品文档导入与状态查看；
@@ -291,9 +290,11 @@ SQLite 不能替代 PostgreSQL 集成测试，因为它无法证明 pgvector、G
 - `api`：FastAPI；
 - `worker`：与 API 使用同一镜像、不同启动命令；
 - `web`：Vue 构建结果与静态服务；
-- `postgres`：启用 pgvector 的 PostgreSQL。
+- `postgres`：启用 pgvector 的备用数据库服务，通过 `bundled-db` profile 显式启动。
 
-模型网关作为外部依赖，不打包进 MVP Compose。数据库迁移使用单独的一次性命令执行，不由多个 API/worker 实例并发迁移。
+2026-09-16 用户指定优先复用本机 PostgreSQL，业务库与测试库独立创建。应用容器通过 Docker Desktop 的 `host.docker.internal` 连接本机数据库，原生调试使用 `localhost`；本地配置与启动命令见[运行说明](../../../deploy/mvp/README.md)。
+
+生成式 LLM 网关仍作为外部依赖。Embedding 使用独立的 Docker/Compose 部署配置进行开放模型评测，实验配置及四模型接入验证已实现，选定模型后再确定生产部署。数据库迁移使用单独的一次性命令执行，不由多个 API/worker 实例并发迁移。
 
 配置原则：
 
@@ -310,7 +311,7 @@ SQLite 不能替代 PostgreSQL 集成测试，因为它无法证明 pgvector、G
 
 ### 15.1 第一版阻断性验证
 
-1. 使用小规模固定英文 NAS 查询集比较可用 Embedding 模型，确认基本 Recall@K 后冻结模型和向量维度。当前先用已通过的 `text-embedding-3-small` / 1536 推进；其他 Embedding 待有可用 key 后补测。Embedding 变化会触发全量重嵌入，因此换模型必须新建索引版本。中文召回不作为第一版冻结条件。
+1. Docker 四模型已完成固定英文 NAS 扩展集的三轮本地对比，可按 Snowflake 优先候选推进 MVP。生产模型和维度待独立标注复核与目标环境验证后冻结；目标环境确定后优先验证该候选，表现不达标时再比较其他模型。历史 small 结果仅作参考，新模型冻结前不据旧记录确定新部署的向量列。Embedding 变化会触发全量重嵌入，因此换模型必须新建索引版本。中文召回不作为第一版冻结条件。
 2. 验证大语言模型能够返回合法 JSON，引用本次真实检索片段，并在知识不足或高风险时遵守降级和危险操作拦截规则。
 3. 对英文关键词规范化做最小冒烟验证，确保 NAS 型号、错误码、协议和命令不会被破坏；第一版不比较多个分词方案。
 4. 使用确定性协议头关系的 `.eml` 样例验证历史邮件配对；模糊配对效果调优不阻塞第一版。
@@ -330,4 +331,4 @@ SQLite 不能替代 PostgreSQL 集成测试，因为它无法证明 pgvector、G
 
 第一版只能冻结已经完成阻断性验证的模型、维度和安全边界。RRF 参数、召回数量等效果参数先使用保守默认值，不把未经比较的结果表述为最优。
 
-总体业务流程见[总体设计](design.md)，数据实体见[数据库设计](database-design.md)，HTTP 契约见[接口设计](api-design.md)。
+总体业务流程见[总体设计](../design.md)，数据实体见[数据库设计](database-design.md)，HTTP 契约见[接口设计](api-design.md)。
