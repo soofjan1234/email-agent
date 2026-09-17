@@ -90,4 +90,23 @@ $env:PYTHONPATH = (Resolve-Path ./src).Path
 
 该脚本验证长产品文档、长案例、末尾保留、脱敏、768 维向量及重复导入；输出仅包含安全计数和模型身份。无需模型的确定性回归仍使用 `python -m pytest -q`。
 
+## 双路检索验证
+
+A4 没有独立 HTTP 查询入口；它是后续邮件 Graph 使用的 `RetrievalService`。每次查询使用当前模型的查询角色生成向量，按 `product_doc` 和 `approved_case` 分别执行 PostgreSQL `english` 全文检索、pgvector 精确余弦检索和固定 `RRF=60` 融合。每类最多返回 3 条，返回片段及文档 ID、来源版本、两路名次和适用元数据；候选存在不表示已具备可靠依据。
+
+首次升级会把 `knowledge_chunks.search_vector` 生成为数据库派生列，并创建 GIN 索引：
+
+```powershell
+.venv/Scripts/alembic.exe upgrade head
+```
+
+真实模型检索验证同样只使用独立测试库：
+
+```powershell
+$env:PYTHONPATH = (Resolve-Path ./src).Path
+.venv/Scripts/python.exe tests/helpers/retrieval_live.py
+```
+
+它会建立唯一的产品和案例样本，验证 Snowflake 查询嵌入、型号/DSM 精确过滤、双来源候选和“不把候选当作充分依据”的返回边界。Docker 使用同一脚本：`docker compose --env-file .env -f deploy/mvp/compose.yaml run --rm api python tests/helpers/retrieval_live.py`。
+
 重新解析依赖仅在有意升级时执行：`uv pip compile pyproject.toml --extra dev --python-version 3.12 --output-file requirements.lock`，随后重新验证两个运行环境。LangGraph 与 PostgreSQL Checkpointer 已锁定依赖；恢复和业务调度仍由 B1 实现及验证。

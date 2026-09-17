@@ -50,7 +50,7 @@ async def test_api_and_worker_start_with_migrated_database(database):
     await run_once(database.settings)
     async with database.session() as session:
         assert await session.scalar(text("SELECT extversion FROM pg_extension WHERE extname='vector'"))
-        assert await session.scalar(text('SELECT version_num FROM alembic_version')) == '0003_knowledge'
+        assert await session.scalar(text('SELECT version_num FROM alembic_version')) == '0004_retrieval'
 
 
 async def test_root_commands_start_real_processes(database, tmp_path):

@@ -10,8 +10,8 @@ from config import Settings
 from models import EmbeddingIndex, KnowledgeChunk
 
 
-# A3 的知识版本与审核结构必须已由独立迁移创建，运行进程不自动升级数据库。
-SCHEMA_REVISION = '0003_knowledge'
+# A4 的知识索引结构必须已由独立迁移创建，运行进程不自动升级数据库。
+SCHEMA_REVISION = '0004_retrieval'
 
 
 @event.listens_for(Session, 'before_flush')

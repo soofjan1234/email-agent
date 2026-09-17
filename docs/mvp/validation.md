@@ -209,3 +209,27 @@ PostgreSQL 检索、LangGraph Checkpointer、审核恢复、有限循环和业�
 所有本轮样本保存在独立测试库；业务库仅升级迁移及修正空索引身份。A3 的通过不代表 A4 双路检索、B 阶段邮件 Graph 或 C 阶段页面完成。可复现命令及目录配置见[运行说明](../../deploy/mvp/README.md)。
 
 最终检查：业务库迁移为 `0003_knowledge`，正确 Snowflake 身份已持久化，`knowledge_chunks`、`emails`、`mail_sync_jobs`、`case_candidates` 均为 0。`git diff --check`、新增源码语法/空白和本轮文档相对链接检查通过。临时模型服务已停止，没有启动长期 API/worker；本机 PostgreSQL 和三个项目数据库保留。代码未提交或推送。
+
+## 2026-09-17 A4 双路知识召回
+
+已实现 `RetrievalService`：对 `product_doc` 和 `approved_case` 分别运行 PostgreSQL `english` 全文检索、pgvector 精确余弦检索，再以固定 `RRF=60` 融合。同一来源的两个通道按片段 ID 去重，每类最多返回 3 条、总计最多 6 条。结果包含片段/文档 ID、来源类型与版本、内容、适用元数据、融合分数和关键词/向量名次，供后续 Graph 引用校验。
+
+`0004_retrieval` 为 `knowledge_chunks` 加入数据库生成列 `search_vector = to_tsvector('english', content)`，并建立 `knowledge_chunk_search_gin`。全文检索读取该生成列，不在请求时重算文本向量；向量检索同时限制 active 文档和当前 `index_version`。模型编码在读取事务外执行，服务身份或向量维度异常统一返回固定 503，不能降级成只有关键词检索。
+
+检索规范化复用文本专项的受保护标识规则。识别到 `DS...+` 与 `DSM x.y` 才分别精确过滤 `product_model`、`os_version`；未识别时两个过滤值为空，不从相近文档猜测。自然语言规范化词以 OR 组成全文候选，避免查询补充词缺失造成整条 AND 查询无结果；排序仍由既定 RRF 基线决定。RRF 只产生候选，返回固定 `evidence_assessed=false`、`has_reliable_evidence=false`，不把 Top-3 或相似度视为依据充分。
+
+| 验证 | 实际结果 |
+| --- | --- |
+| 初始 A4 测试 | 因缺少 `services.retrieval` 失败，再实现 |
+| A4 集成、规范化和离线检索回归 | 10 项通过，2.28 秒；真实 PostgreSQL 检查全文、向量、RRF、来源、版本、过滤和 GIN 索引 |
+| Windows `.venv/Scripts/python.exe -m pytest -q` | 124 项通过，25.12 秒 |
+| `alembic upgrade head` | 业务库升级为 `0004_retrieval`；既有知识内容未改写 |
+| Compose `config --quiet` 与 `build api` | 均通过，镜像已包含 A4 源码和迁移 |
+| Compose `run --rm api alembic upgrade head` 与 `python -m pytest -q` | 均通过；容器全量 124 项通过，36.76 秒 |
+| 原生与容器 `python tests/helpers/retrieval_live.py` | 均通过真实 Snowflake、独立 PostgreSQL 与双路召回验证 |
+
+集成夹具建立每次唯一的产品/案例语料：4 条相关产品片段、不同型号/DSM 的干扰片段、归档版本和案例片段。验证每类最多 3 条、来源隔离、显式型号/版本过滤、未知标识不加过滤、仅案例命中、归档版本不可见、无答案仍可返回候选但不宣称可靠依据、模型身份/维度失败明确报错。测试库保留历史样本，因此夹具使用唯一受保护型号和唯一英文标识，避免旧样本影响断言。
+
+真实 Snowflake 服务实际核验模型 `Snowflake/snowflake-arctic-embed-m-v1.5`、revision `e58a8f756156a1293d763f17e3aae643474e9b8a`、输入上限 512。原生和容器各创建唯一产品、案例样本；结果均为产品 1 条、案例 1 条，显式型号/版本过滤命中，RRF 参数为 60。此为功能连通性验证，不是 Recall@K、MRR、P95、真实邮件语料或生产负载结论。
+
+业务库最终处于 `0004_retrieval`，且 `knowledge_chunks`、`emails`、`mail_sync_jobs`、`case_candidates` 均为 0；所有样本仅写入独立测试库。临时 Snowflake 服务已停止，未启动长期 API/worker；本机 PostgreSQL 与项目数据库保留。A4 不包含 HTTP 查询入口、LangGraph 调用、依据评估、回复生成或人工审核页面，这些属于 B、C 阶段。代码未提交或推送。

@@ -67,7 +67,7 @@ docker compose --env-file .env -f deploy/mvp/compose.yaml run --rm api python -m
 
 **依赖**：A3。
 
-**文件**：创建 `src/services/retrieval.py`、`tests/integration/test_retrieval.py`；修改 `src/repositories/knowledge.py`；复用 `evals/harness/normalize.py` 的已验证标识保护规则。
+**文件**：创建 `src/services/retrieval.py`、`tests/integration/test_retrieval.py`、`tests/helpers/retrieval_live.py`、`migrations/versions/0004_retrieval.py`；修改 `src/repositories/knowledge.py`、`src/models.py`；复用 `evals/harness/normalize.py` 的已验证标识保护规则。
 
 **先写失败测试**：先建立产品与案例各自的相关/干扰片段，验证每类最多三条、来源隔离、去重和仅 active 可见；没有 PostgreSQL 检索实现时失败。包含型号、错误码、无答案和仅案例命中。
 

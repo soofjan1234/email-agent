@@ -3,8 +3,8 @@ import uuid
 from datetime import datetime
 
 from pgvector.sqlalchemy import Vector
-from sqlalchemy import CheckConstraint, DateTime, ForeignKey, Index, Integer, LargeBinary, String, Text, UniqueConstraint, func, text
-from sqlalchemy.dialects.postgresql import JSONB, UUID
+from sqlalchemy import CheckConstraint, Computed, DateTime, ForeignKey, Index, Integer, LargeBinary, String, Text, UniqueConstraint, func, text
+from sqlalchemy.dialects.postgresql import JSONB, TSVECTOR, UUID
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 
@@ -83,6 +83,9 @@ class KnowledgeChunk(Record, Base):
     section_path: Mapped[list] = mapped_column(JSONB, default=list, server_default='[]')
     source_metadata: Mapped[dict] = mapped_column(JSONB, default=dict, server_default='{}')
     token_count: Mapped[int | None] = mapped_column(Integer)
+    # PostgreSQL 生成列与 GIN 索引服务英文全文召回；应用不直接写入该派生值。
+    search_vector: Mapped[str] = mapped_column(TSVECTOR,
+        Computed("to_tsvector('english', content)", persisted=True))
 
 
 class Review(Record, Base):

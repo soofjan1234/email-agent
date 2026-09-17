@@ -59,6 +59,8 @@ A3 的 `0003_knowledge` 增量迁移增加：文档 `content_hash`、`index_vers
 
 发布按来源取得 PostgreSQL 事务锁，完成所有嵌入后一次事务写入文档与片段、归档旧版本。任何写入或提交失败整体回滚；无半成品 active 版本。旧片段不删除，`active_chunks_statement()` 只选择有效文档的片段，为 A4 提供基础查询。
 
+A4 的 `0004_retrieval` 迁移为 `knowledge_chunks.search_vector` 增加 PostgreSQL 生成列：`to_tsvector('english', content)`，并创建 `knowledge_chunk_search_gin` GIN 索引。应用不写该派生列；片段入库或更新时由数据库生成。全文和向量通道都限制 `knowledge_documents.status = active`、当前 `index_version` 与来源类型，显式识别到的 `DS...+`、`DSM x.y` 再作为精确元数据过滤。
+
 ### 3.4 `reviews`
 
 - `id`、`email_id`、`graph_thread_id`、`checkpoint_id`；
