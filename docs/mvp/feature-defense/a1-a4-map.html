@@ -1,0 +1,433 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>A1–A4 功能防御复盘</title>
+  <style>
+    :root { color-scheme: light dark; --bg:#f5f7fb; --panel:#fff; --ink:#172033; --muted:#5f6b7c; --line:#d9e0eb; --blue:#2457d6; --amber:#9b5d00; --red:#a43a3a; --green:#14734b; }
+    * { box-sizing:border-box; } body { margin:0; background:var(--bg); color:var(--ink); font:14px/1.55 system-ui,"Microsoft YaHei",sans-serif; }
+    header { padding:24px max(20px,calc((100vw - 1540px)/2)); background:linear-gradient(115deg,#17295d,#2457d6); color:#fff; }
+    h1 { margin:0 0 6px; font-size:26px; } h2 { font-size:16px; margin:0 0 12px; } h3 { font-size:15px; margin:0; } p { margin:6px 0; }
+    main { max-width:1540px; margin:20px auto; padding:0 20px 28px; } .workspace { display:grid; grid-template-columns:minmax(0,1.3fr) minmax(460px,.9fr); gap:18px; align-items:start; } .defense-board { min-width:0; } .note { color:var(--muted); } .stamp { font-size:13px; opacity:.9; }
+    .panel { background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:18px; box-shadow:0 2px 10px #14204b0d; }
+    .map { margin-bottom:16px; } .map-toolbar { display:flex; align-items:start; justify-content:space-between; gap:16px; } .map-toolbar > div { min-width:0; } .toggle { flex:0 0 auto; border:1px solid var(--blue); border-radius:8px; padding:7px 10px; background:var(--panel); color:var(--blue); font:inherit; font-weight:700; cursor:pointer; } .toggle:hover { background:#eaf0ff; }
+    .flow { display:grid; grid-template-columns:repeat(12,minmax(110px,1fr)); gap:10px; overflow:auto; padding:4px; } .flow.compact { display:flex; grid-template-columns:none; align-items:stretch; min-height:72px; } .flow.compact .node { flex:0 0 126px; min-height:64px; padding:9px 10px; } .flow.compact .responsibility { display:none; } .flow.compact .step { margin-bottom:4px; } .flow.compact .node strong { font-size:13px; line-height:1.3; }
+    .node { appearance:none; min-height:116px; text-align:left; padding:12px; background:var(--panel); border:1px solid var(--line); border-radius:10px; color:var(--ink); cursor:pointer; outline-offset:3px; }
+    .node:hover { border-color:var(--blue); } .node[aria-pressed="true"] { border:2px solid var(--blue); background:#eaf0ff; box-shadow:0 0 0 3px #2457d625; }
+    .step { display:block; color:var(--blue); font-weight:700; font-size:12px; margin-bottom:7px; } .responsibility { display:block; color:var(--muted); font-size:12px; margin-top:7px; }
+    .a1 { grid-column:span 3; } .a2 { grid-column:span 3; } .a3 { grid-column:span 3; } .a4 { grid-column:span 3; } .code-panel { position:sticky; top:16px; max-height:calc(100vh - 32px); overflow:auto; background:#10182b; color:#e9efff; border-radius:14px; padding:18px; } .code-panel h3 { color:#fff; } .code-note { color:#cbd6f2; font-size:13px; } .code-section { margin-top:16px; } .code-section h4 { color:#b7c9ff; font-size:13px; margin:0 0 7px; } pre { max-height:340px; margin:0; padding:14px; overflow:auto; border-radius:8px; background:#08101f; color:#dbe7ff; font:13px/1.6 ui-monospace,Consolas,monospace; } .code-empty { color:#cbd6f2; border:1px dashed #7485ae; border-radius:7px; padding:10px; margin-top:10px; }
+    .lower { display:grid; grid-template-columns:1fr 1.25fr; gap:16px; } .exception { border-left:4px solid var(--amber); padding:9px 10px; margin:8px 0; background:#fffaf0; border-radius:5px; }
+    .exception strong { display:block; }
+    .defense-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; } .defense-card { min-width:0; padding:12px; border:1px solid var(--line); border-radius:9px; background:#fbfcff; } .defense-card h4 { margin:0 0 7px; font-size:13px; color:var(--blue); } .defense-card p { margin:5px 0; } .scenario-list { list-style:none; padding:0; margin:0; } .scenario { margin:0 0 9px; padding:9px; border:1px solid var(--line); border-radius:7px; background:#fff; } .scenario:last-child { margin-bottom:0; } .scenario p { color:var(--muted); font-size:12px; } .scenario-proven { border-left:4px solid var(--green); } .scenario-partial { border-left:4px solid var(--amber); background:#fffaf0; } .scenario-pending,.scenario-needs-confirmation { border-left:4px solid var(--red); background:#fff5f5; } .status { display:block; margin-bottom:4px; font-size:12px; } .status-proven { color:var(--green); } .status-partial { color:var(--amber); } .status-pending,.status-needs-confirmation { color:var(--red); } .risk { border-left:4px solid var(--red); background:#fff5f5; } .risk h4 { color:var(--red); } .ok { color:var(--green); } code { font-family:ui-monospace,Consolas,monospace; font-size:12px; overflow-wrap:anywhere; }
+    ul { padding-left:20px; margin:7px 0; } .evidence { margin-top:12px; } .evidence summary { color:var(--blue); cursor:pointer; font-weight:700; } .test { margin:10px 0; padding:10px; border:1px solid var(--line); border-radius:8px; } .test h3 { color:var(--blue); } .empty { padding:12px; border:1px dashed var(--amber); color:var(--amber); } .exception-empty { padding:12px; border:1px dashed var(--line); border-radius:8px; color:var(--muted); }
+    footer { margin-top:14px; color:var(--muted); font-size:12px; } @media (max-width:980px) { .defense-grid { grid-template-columns:1fr; } } @media (max-width:780px) { main { padding:0 12px 20px; } header { padding:20px 12px; } .map-toolbar { align-items:center; } .flow:not(.compact) { grid-template-columns:1fr; overflow:visible; } .node,.a1,.a2,.a3,.a4 { grid-column:auto; min-height:auto; } }
+    .brief-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; margin:14px 0; } .brief-card { min-width:0; padding:12px; border:1px solid var(--line); border-radius:9px; background:#fbfcff; } .brief-card h4 { margin:0 0 7px; font-size:13px; color:var(--blue); } .brief-card p { margin:0; } .brief-card.terms { background:#f6f8ff; } .brief-card.misconception { border-left:4px solid var(--amber); background:#fffaf0; } .brief-card.misconception h4 { color:var(--amber); } .term-list { list-style:none; margin:0; padding:0; } .term-list li + li { margin-top:7px; } .term-list b { color:var(--ink); }
+    @media (max-width:780px) { .brief-grid { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+<header>
+  <h1>A1–A4 功能防御复盘</h1>
+  <div>应用与数据库底座 → 历史初始化 → 人审知识发布 → 双路知识召回</div>
+  <div class="stamp">说明依据：提交 <code>9237945</code>（A1–A3）、<code>7d4c2be</code>（A4）、当前源码及 2026-09-17 验证记录。本轮 Windows 全量 <b>126 passed, 27.56s</b>，Compose 配置校验通过；页面上传尚未实现。</div>
+</header>
+<main>
+  <section class="panel map" aria-labelledby="map-title">
+    <div class="map-toolbar">
+      <div>
+        <h2 id="map-title">主流程（点击任一节点查看防御复盘）</h2>
+        <p class="note">默认是紧凑导航；展开后显示完整职责。覆盖判断来自既有验证记录与代码审阅：它说明当时已证明的边界，不代表本次编辑重新测试。</p>
+      </div>
+      <button id="toggle-flow" class="toggle" type="button" aria-expanded="false">展开流程</button>
+    </div>
+        <div id="flow" class="flow compact" role="list"></div>
+  </section>
+  <section class="panel" aria-labelledby="detail-title" aria-live="polite">
+    <h2 id="detail-title">节点防御复盘</h2>
+    <div id="detail"></div>
+  </section>
+  <footer>异常、拒绝与恢复已融入对应节点的防御说明。未充分证明的部分会明确标出；本页不把候选检索、真实客户邮件或生产负载说成已验证，也不把本次文案更新当作新的验证结论。</footer>
+</main>
+<script>
+const tests = {
+  b1:{n:'test_mail_roundtrip_and_duplicate_rejected',f:'tests/integration/test_bootstrap.py',l:21,s:'邮件与审计落库；重复 client_request_id 被数据库拒绝。'},
+  b2:{n:'test_api_and_worker_start_with_migrated_database',f:'tests/integration/test_bootstrap.py',l:42,s:'API/worker 只在 vector 扩展、0004 迁移和身份就绪后启动。'},
+  b3:{n:'test_root_commands_start_real_processes',f:'tests/integration/test_bootstrap.py',l:56,s:'真实 worker 与 uvicorn 子进程可健康启动。'},
+  c1:{n:'test_business_database_never_used_as_test_database [4 URLs]',f:'tests/unit/test_config.py',l:11,s:'业务库、非 *_test 库及 SQLite 不能伪装为测试库。'},
+  c2:{n:'test_configured_model_reuses_identity_role_and_length_checks',f:'tests/unit/test_config.py',l:23,s:'查询/文档前缀分离，显式 truncate=false，超长不静默截断。'},
+  m1:{n:'test_wrong_configuration_rejected [6 identity fields]',f:'tests/integration/test_model_identity.py',l:11,s:'模型、revision、维度、模板、索引任一不符，写会话拒绝。'},
+  m2:{n:'test_invalid_vector_rejected_before_commit [3 vectors]',f:'tests/integration/test_model_identity.py',l:29,s:'错误维度、零和 NaN 向量在提交前回滚。'},
+  m3:{n:'test_valid_vector_persists',f:'tests/integration/test_model_identity.py',l:44,s:'768 维有效向量可在真实 pgvector 列往返。'},
+  h1:{n:'test_history_snapshot_and_candidates',f:'tests/integration/test_history_init.py',l:30,s:'7 文件去重为 6 邮件，只得 1 候选；不写 Email/知识表。'},
+  h2:{n:'test_snapshot_survives_source_changes_and_new_mail',f:'tests/integration/test_history_init.py',l:59,s:'快照后文件变动和新增邮件不影响历史任务。'},
+  h3:{n:'test_empty_mailbox_succeeds',f:'tests/integration/test_history_init.py',l:78,s:'空 inbox/sent 是完整成功且可幂等重启。'},
+  h4:{n:'test_api_initialization_guard_and_job_visibility',f:'tests/integration/test_history_init.py',l:88,s:'初始化未完成时增量入口 409；请求重放复用任务。'},
+  h5:{n:'test_process_crash_rolls_back_uncommitted_mail_and_resumes',f:'tests/integration/test_history_init.py',l:129,s:'子进程硬退出后未提交页不前移游标，新进程恢复。'},
+  h6:{n:'test_two_processes_only_initialize_mailbox_once',f:'tests/integration/test_history_init.py',l:149,s:'两个 worker 最终只留下一个任务、快照和候选。'},
+  h7:{n:'test_other_process_cannot_work_while_mailbox_locked',f:'tests/integration/test_history_init.py',l:164,s:'邮箱锁占用时其他 worker 跳过。'},
+  h8:{n:'test_source_failure_is_queryable_and_retryable',f:'tests/integration/test_history_init.py',l:174,s:'源目录失效记录 failed/retryable；恢复后续跑成功。'},
+  h9:{n:'test_duplicate_message_id_with_different_content_is_not_deduplicated',f:'tests/integration/test_history_init.py',l:193,s:'同 ID 不同原文保留并隔离整个会话。'},
+  h10:{n:'test_disconnected_worker_does_not_reconnect_to_mark_job_failed',f:'tests/integration/test_history_init.py',l:208,s:'锁连接失效的旧 worker 不回写失败，新执行者可接管。'},
+  h11:{n:'test_error_after_successful_commit_does_not_revert_success',f:'tests/integration/test_history_init.py',l:229,s:'提交后的异常不覆盖已成功事实。'},
+  mb1:{n:'test_mime_plain_body_excludes_attachments',f:'tests/unit/test_mailbox.py',l:7,s:'选纯文本正文，排除 HTML 与附件。'},
+  mb2:{n:'test_invalid_protocol_headers_are_preserved_as_unusable',f:'tests/unit/test_mailbox.py',l:20,s:'无效头标记不可用并清除 NUL。'},
+  mb3:{n:'test_snapshot_contains_original_bytes_and_stable_file_order',f:'tests/unit/test_mailbox.py',l:27,s:'快照排序稳定并保留捕获时原始字节。'},
+  p1:{n:'test_only_complete_one_to_one_is_a_pair',f:'tests/unit/test_pairing.py',l:21,s:'仅一入一出且协议头直接关联才成对。'},
+  p2:{n:'test_complex_or_uncertain_component_never_becomes_pair [7 cases]',f:'tests/unit/test_pairing.py',l:28,s:'复杂、缺失、重复 ID、未知祖先污染整个连通分量。'},
+  p3:{n:'test_no_headers_and_empty_mailbox',f:'tests/unit/test_pairing.py',l:51,s:'无关系邮件为 unmatched；空集合正常。'},
+  k1:{n:'test_case_review_publish_retry_archive',f:'tests/integration/test_knowledge_publish.py',l:71,s:'确认+审核后发布；重试复用版本；归档不删片段。'},
+  k2:{n:'test_failed_update_keeps_previous_version_and_retry',f:'tests/integration/test_knowledge_publish.py',l:138,s:'部分嵌入失败不泄露新版本，旧版本仍 active。'},
+  k3:{n:'test_import_rejects_untrusted_paths [6 paths]',f:'tests/integration/test_knowledge_publish.py',l:168,s:'路径穿越、绝对/Windows 路径、ADS、非 Markdown 均拒绝。'},
+  k4:{n:'test_import_rejects_outside_link',f:'tests/integration/test_knowledge_publish.py',l:176,s:'可信根外的符号链接不能导入。'},
+  k5:{n:'test_concurrent_import_publishes_once',f:'tests/integration/test_knowledge_publish.py',l:191,s:'同来源并发导入只发布一次、只嵌入一次。'},
+  k6:{n:'test_api_state_guards_and_safe_errors',f:'tests/integration/test_knowledge_publish.py',l:202,s:'未确认/过期审核及非法路径拒绝；API 不回显受控原文。'},
+  k7:{n:'test_revised_case_publishes_new_version_and_old_reference_survives',f:'tests/integration/test_knowledge_publish.py',l:224,s:'修订失败保留旧有效版本；成功后版本递增并归档旧版。'},
+  k8:{n:'test_reject_cannot_leave_unreviewed_published_case_active',f:'tests/integration/test_knowledge_publish.py',l:251,s:'已发布案例不能经配对拒绝变成失管有效知识。'},
+  k9:{n:'test_blank_fact_sources_never_count_as_review [3 inputs]',f:'tests/integration/test_knowledge_publish.py',l:265,s:'空白事实来源不能绕过审核门槛。'},
+  k10:{n:'test_commit_failure_rolls_back_written_chunks',f:'tests/integration/test_knowledge_publish.py',l:277,s:'写入片段后提交失败也完全回滚，重试从 v1 开始。'},
+  k11:{n:'test_product_import_keeps_blockquote_and_redacts_before_embedding',f:'tests/integration/test_knowledge_publish.py',l:304,s:'引用段落保留；敏感信息不进入嵌入而受控原文仍保留。'},
+  k12:{n:'test_api_embedding_failure_is_safe_and_retry_works',f:'tests/integration/test_knowledge_publish.py',l:331,s:'上游失败 503 且不泄露详情；重试可完成。'},
+  k13:{n:'test_metadata_revision_reuses_same_text_embeddings',f:'tests/integration/test_knowledge_publish.py',l:349,s:'仅元数据变化新版本，但复用同文本向量。'},
+  k14:{n:'test_active_query_excludes_candidate_and_archived',f:'tests/integration/test_knowledge_publish.py',l:362,s:'只 active 文档可查，归档不物理删除片段。'},
+  k15:{n:'test_local_path_import_is_disabled_without_explicit_setting',f:'tests/integration/test_knowledge_publish.py',l:318,s:'未显式开启开关时，HTTP 本地路径导入固定返回 403。'},
+  k16:{n:'test_archive_rejects_stale_published_document_snapshot',f:'tests/integration/test_knowledge_publish.py',l:101,s:'缺少/非法快照拒绝；发布前旧页面归档返回 409，当前快照才可归档。'},
+  ch1:{n:'test_sections_and_paragraphs_keep_source',f:'tests/unit/test_chunking.py',l:7,s:'章节来源与短段内容被保留且不超预算。'},
+  ch2:{n:'test_long_paragraph_keeps_every_character',f:'tests/unit/test_chunking.py',l:16,s:'超长无空格段不静默丢失尾部。'},
+  ch3:{n:'test_code_fence_heading_is_not_section',f:'tests/unit/test_chunking.py',l:25,s:'代码围栏中的 # 不被识别为章节。'},
+  ch4:{n:'test_unrepresentable_context_fails_explicitly',f:'tests/unit/test_chunking.py',l:32,s:'标题上下文超预算时显式失败。'},
+  e1:{n:'test_real_token_budget_includes_prefix_and_special_tokens',f:'tests/unit/test_knowledge_embedding.py',l:17,s:'/tokenize 与 /embed 使用同文本、前缀及 special tokens。'},
+  e2:{n:'test_bad_model_identity_or_limit_is_rejected [3 infos]',f:'tests/unit/test_knowledge_embedding.py',l:42,s:'错误模型、revision 或缺输入上限均拒绝。'},
+  e3:{n:'test_over_limit_never_calls_embed',f:'tests/unit/test_knowledge_embedding.py',l:54,s:'超限在客户端失败，绝不调用 embed。'},
+  r1:{n:'test_dual_retrieval_isolates_sources_filters_explicit_identifiers_and_limits',f:'tests/integration/test_retrieval.py',l:53,s:'真实 PostgreSQL：两源隔离、显式型号/版本过滤、每源最多 3 条、RRF=60。'},
+  r2:{n:'test_unknown_identifiers_do_not_filter_and_case_only_hit_is_preserved',f:'tests/integration/test_retrieval.py',l:96,s:'未识别标识不猜测过滤；仅案例命中仍保留。'},
+  r3:{n:'test_no_answer_returns_candidates_without_claiming_reliable_evidence',f:'tests/integration/test_retrieval.py',l:110,s:'无答案查询可有候选，但明确不称可靠证据。'},
+  r4:{n:'test_embedding_identity_or_vector_shape_failure_is_explicit',f:'tests/integration/test_retrieval.py',l:120,s:'身份或查询向量失败返回 503，不降级为关键词。'},
+  r5:{n:'test_full_text_generated_column_uses_gin_index',f:'tests/integration/test_retrieval.py',l:131,s:'确认 generated tsvector 的 GIN 索引；异常向量同样被拒绝。'}
+};
+const testGuides = {
+  b1:{how:'先在真实 PostgreSQL 里写入一封邮件和一条审计记录；随后用同一个 client_request_id 再写一次。',proves:'第一次确实能保存邮件和审计关联；第二次会被数据库唯一约束拒绝，不会产生重复邮件。'},
+  b2:{how:'启动 FastAPI 的生命周期，访问 health；再用同一配置执行一次 worker。',proves:'API 和 worker 都会先检查数据库就绪条件，且数据库迁移与 vector 扩展存在时才能正常工作。'},
+  b3:{how:'不用 pytest 的进程内调用，而是在仓库根目录真实启动 worker 子进程和 uvicorn 子进程，再请求 health。',proves:'实际启动命令、模块导入路径和健康检查可以跑通，不只是测试框架里的模拟启动。'},
+  c1:{how:'分别把业务库地址、非 *_test 库地址和 SQLite 地址传给测试库校验函数。',proves:'换用户名、主机名或端口也不能把业务库伪装成测试库，避免测试误写业务数据。'},
+  c2:{how:'用受控 HTTP 服务记录嵌入请求，分别发送查询、文档和超长文本。',proves:'查询与文档使用各自前缀；请求明确禁止截断；超长输入会失败而不会悄悄删字。'},
+  m1:{how:'分别把模型名、revision、维度、查询前缀、文档前缀、索引版本中的一个改错，再尝试就绪检查和开启写事务。',proves:'任一身份信息变化都会阻止写入；不是只要向量维度相同就允许混用。'},
+  m2:{how:'依次尝试写入长度不对、全零和包含 NaN 的向量，然后查询对应文档。',proves:'坏向量会在提交前失败，事务回滚后数据库里没有残留文档或片段。'},
+  m3:{how:'写入一个正确的 768 维非零向量，提交后重新读取该片段。',proves:'合法向量可以被 pgvector 列保存并完整读取，说明保护不会误伤正常写入。'},
+  h1:{how:'把 7 个公开 .eml 夹具按每页 1 个执行历史初始化，并再次运行同一任务。',proves:'重复文件只保存一次；复杂会话不变候选；只生成一条待审核候选，也不会把历史邮件写成新邮件或知识。'},
+  h2:{how:'先完成快照和一页扫描，再修改已经快照的文件并新增一封邮件，随后继续任务。',proves:'任务继续使用首次快照中的原始内容；后来的新文件不会混入这次历史初始化。'},
+  h3:{how:'提供一个存在但为空的 inbox/sent 邮箱，执行初始化并查看任务状态。',proves:'空邮箱被当作一次正常完成，而不是错误或无限重试；重启也不会重复造任务。'},
+  h4:{how:'启动 API 后先查询历史任务；在任务未完成时调用增量入口，并分别提交非法历史模式和分页参数。',proves:'初始化期间增量入口被拦住；非法请求返回 400；完成后同一请求 ID 可重放为同一任务。'},
+  h5:{how:'让真实子进程在第二页“写完但未提交游标”时强制退出，再由新子进程接着运行。',proves:'数据库只保留已提交的第一页；恢复后会补齐剩余邮件，不会跳过或重复未提交那一页。'},
+  h6:{how:'同时启动两个真实 worker，并在快照阶段人为延迟以制造竞争。',proves:'最终只有一个任务、一份快照和一份候选；两个进程不会并行初始化同一个邮箱。'},
+  h7:{how:'测试先主动持有邮箱锁，再启动另一个 worker。',proves:'后来的 worker 会安全跳过，既不写任务进度，也不造成重复处理。'},
+  h8:{how:'先删除 sent 目录使读取失败，检查任务记录；再恢复目录后重跑。',proves:'失败会被保存为可查询、可重试的任务，而不会被误判为空邮箱成功；恢复后同一任务能完成。'},
+  h9:{how:'复制一封邮件并修改正文，使两封邮件 Message-ID 相同但内容不同。',proves:'系统不会按 Message-ID 静默丢掉其中一封，而是保留两条原文并把关联会话标为不可信。'},
+  h10:{how:'在第一页提交后让当前 worker 的锁连接失效并抛错，随后启动新的正常 worker。',proves:'失联的旧 worker 不会重连后把任务错误标成 failed；新 worker 可以安全从已提交进度接手。'},
+  h11:{how:'让候选生成的最终事务已经提交后，再人为抛出异常。',proves:'后续异常不能反过来覆盖数据库中已经提交的 succeeded 状态。'},
+  mb1:{how:'构造同时含纯文本、HTML 和附件的 MIME 邮件，再解析正文。',proves:'只提取客户可读的纯文本正文，HTML 和附件内容不会误混进候选。'},
+  mb2:{how:'传入包含非法 Message-ID、垃圾 References 和 NUL 字符的原始邮件。',proves:'系统把它标为无效头而不是猜测修复；NUL 也会被清掉，避免数据库字符串问题。'},
+  mb3:{how:'连续两次捕获同一目录，再改动原文件并查看第一次快照对象。',proves:'文件顺序和哈希稳定；第一次快照持有的是当时原始字节，不会被后来的磁盘改动影响。'},
+  p1:{how:'构造一封 inbox 邮件和一封 sent 邮件，后者的 In-Reply-To 指向前者。',proves:'只有这种完整、直接的一入一出关系才会被识别为可以生成候选的一对。'},
+  p2:{how:'用参数化场景分别构造多回复、多收件、跨批次多跳、未知祖先、重复 ID 和缺失 ID。',proves:'任一不确定因素都会污染整个会话分量；系统不会从复杂会话里挑一段看似合理的局部关系。'},
+  p3:{how:'分别传入空邮件集合，以及互不引用的一封收件和一封发件。',proves:'空集合能正常处理；没有关系的邮件会被明确标为 unmatched，不会靠主题猜测配对。'},
+  k1:{how:'创建候选后依次尝试直接发布、确认配对、审核、发布、重复发布和归档。',proves:'必须先确认再审核才能发布；重复发布不重复嵌入；归档后文档不可用但片段仍保留作历史引用。'},
+  k2:{how:'先导入 v1 文档；修改内容后让嵌入器在中途失败；最后恢复嵌入器再重试。',proves:'失败时旧版本一直保持 active，既没有半成品新版本也没有漏片段；重试才产生 v2。'},
+  k3:{how:'依次提交 ../、绝对路径、Windows 盘符、反斜杠穿越、ADS 和 .env 等路径。',proves:'产品导入只能读取可信目录下的 Markdown，不会被 HTTP 请求带到任意本地文件。'},
+  k4:{how:'在可信目录创建一个指向目录外 Markdown 的符号链接，再尝试导入它。',proves:'即使入口路径看似在可信目录，最终解析到外部的文件仍会被拒绝。'},
+  k5:{how:'同时发起两次同一路径、相同内容的导入，并记录嵌入器调用次数。',proves:'来源锁让两次调用拿到同一个已发布版本，文本只嵌入一次。'},
+  k6:{how:'经 API 尝试未确认审核、重复旧版本审核、非法路径、非法分页和不存在候选。',proves:'状态门槛和输入校验在 API 层可见；错误响应不会泄露原始邮件或 raw_review。'},
+  k7:{how:'发布一个案例后修改回复并重新审核；先让新发布失败，再恢复后发布。',proves:'新版本准备失败时旧回答仍 active；成功后才归档旧版本，历史原文也没有被新内容覆盖。'},
+  k8:{how:'先发布案例，再创建一次新的审核版本，随后尝试把最初配对拒绝。',proves:'系统拒绝这种操作，避免已发布知识仍有效、但候选却被拒绝而失去管理入口。'},
+  k9:{how:'分别把事实来源传为空列表、空字符串和只含空格，再审核候选。',proves:'这些“看起来有字段、实际没内容”的输入都不能绕过人工事实来源门槛。'},
+  k10:{how:'在片段已经写入后，用数据库提交钩子故意让提交失败，再查询文档和重试。',proves:'即使失败发生在最晚阶段，文档和片段也会一起回滚；重试不会留下重复版本。'},
+  k11:{how:'导入含产品引用段落、邮箱和序列号的 Markdown，并检查送给嵌入器的文本和受控原文。',proves:'安全提示引用不会被错误删除；敏感值不会送进模型，但审计受控原文仍可保留。'},
+  k12:{how:'通过 API 导入文档时让嵌入器先失败，再恢复它并提交相同请求。',proves:'第一次只返回安全的 503，不暴露上游错误；第二次可以正常完成 v1 发布。'},
+  k13:{how:'先以 NAS-X 导入同一篇文档，再仅把适用型号改为 NAS-Y 后再次导入。',proves:'元数据变化会产生新文档版本，但相同正文不需要重新调用嵌入模型。'},
+  k14:{how:'发布案例后用 active 查询读取片段，再归档该案例并重复查询。',proves:'发布前候选不可查，发布后可查，归档后不可查；归档不是物理删除。'},
+  k15:{how:'在未设置本地导入开关的应用中，提交一个受控目录内的有效 Markdown 路径。',proves:'路由在读取路径和调用模型前固定返回 local_import_disabled，生产默认不能通过 HTTP 选择服务器文件。'},
+  k16:{how:'A 在发布前保存 revision 和空文档 ID；B 随后发布文档 X；A 通过 API 带空快照归档，再提交 X 的当前快照。',proves:'缺少或非法快照被 400 拒绝；旧快照返回 409 且 X 保持 active；匹配 X 时才完成归档。'},
+  ch1:{how:'输入带两级标题和多个短段落的 Markdown，用受控 token 计数切分。',proves:'每片保留正确章节路径、正文没有消失，并且没有超过输入预算。'},
+  ch2:{how:'输入一段没有空格的超长中文字符串，末尾额外加上 TAIL 标记。',proves:'即使无法按单词切分，所有字符及末尾 TAIL 都会被保留，而不是被截断。'},
+  ch3:{how:'在 Markdown 代码围栏里写一行以 # 开头的 shell 注释。',proves:'代码内容不会被误当成新的文档标题，避免错误的章节元数据。'},
+  ch4:{how:'构造一个标题本身就超过 token 预算的文档。',proves:'系统明确报错，而不是为了继续切分而丢掉无法容纳的来源上下文。'},
+  e1:{how:'用受控 HTTP 服务记录 /info、/tokenize、/embed 三次请求及其 JSON。',proves:'token 计数与嵌入使用完全相同的文本、文档前缀和特殊 token，预算计算不会偏小。'},
+  e2:{how:'让 /info 分别返回错误模型名、错误 revision 和缺少输入上限的响应。',proves:'没有可靠身份或 token 上限就不能继续嵌入，避免在未知模型上猜预算。'},
+  e3:{how:'让 tokenizer 返回超过上限的 token 数，并把任何 /embed 调用都视为测试失败。',proves:'超限文本在客户端被拦住，模型服务没有机会按默认策略截断内容。'},
+  r1:{how:'在真实 PostgreSQL 写入相关产品片段、错误型号/版本片段、归档片段和案例片段，再查询含明确 DS/DSM 的问题。',proves:'产品与案例各自召回；错误型号、错误版本和归档内容被过滤；每类最多 3 条，结果保留 RRF 名次。'},
+  r2:{how:'先用没有可识别型号/版本的查询，再只让 approved_case 含有强相关内容。',proves:'系统不会凭空猜过滤条件；只有案例命中的结果也能保留，不会被产品文档挤掉。'},
+  r3:{how:'只写入与“修咖啡机”无关的 SMB 片段，再执行该问题的检索。',proves:'即便向量仍返回相似候选，结果也明确标记为未评估、没有可靠证据。'},
+  r4:{how:'分别让查询嵌入器的身份校验失败，或返回长度错误的向量。',proves:'两种模型边界失败都会返回 retrieval_embedding_failed；系统不会偷偷退化成只做关键词检索。'},
+  r5:{how:'查询数据库的索引定义，确认 search_vector 使用 GIN；再让查询向量长度错误。',proves:'全文检索依赖迁移建立的索引，而不是请求时现算；异常向量仍会被拦截。'}
+};
+const nodes = [
+ {id:'a1-entry',group:'a1',step:'A1 · 1',title:'API/worker 入口与就绪',what:'lifespan 先校验数据库，再登记历史任务；请求携带关联 ID。',pre:'数据库已迁移且向量扩展、嵌入身份可用。',success:'健康检查返回 ok；API 不扫描文件，worker 才处理历史任务。',refs:['src/main.py:16–63','src/worker.py:13–46'],tests:['b2','b3'],risks:['未定位到 API 高并发、进程异常退出后的连接池耗尽测试。']},
+ {id:'a1-db',group:'a1',step:'A1 · 2',title:'事务、身份与向量写入边界',what:'每个会话先比对数据库嵌入身份；提交前检查索引、维度、有限值和非零向量。',pre:'配置使用 PostgreSQL psycopg URL；迁移初始化唯一 embedding index。',success:'非法写入完整回滚；有效向量可持久化。',refs:['src/config.py:43–70','src/db.py:17–63','migrations/versions/0001_business.py:176–179'],tests:['b1','c1','c2','m1','m2','m3'],risks:['未定位到真实模型升级/重嵌入迁移的演练；配置身份正确不等于真实模型质量。']},
+ {id:'a2-register',group:'a2',step:'A2 · 3',title:'幂等登记与邮箱互斥',what:'API/worker 只登记历史任务；worker 取得 PostgreSQL 邮箱锁后才继续执行。',pre:'同一 mailbox_id 使用同一个稳定标识。',success:'重复启动复用任务；并发执行者跳过而不重复初始化。',refs:['src/services/mail_sync.py:29–48','src/repositories/mail.py:1–77','migrations/versions/0002_history.py:15–40'],tests:['h1','h4','h6','h7'],risks:['未定位到锁长期持有、数据库主从切换或不同 mailbox 的隔离负载测试。']},
+ {id:'a2-scan',group:'a2',step:'A2 · 4',title:'固定快照与分页恢复',what:'捕获 inbox/sent 原始字节和哈希；每页将原文、解析结果和游标同事务提交。',pre:'受信任模拟邮箱含 inbox 与 sent；快照完整写入。',success:'目录后续变化不影响任务；崩溃只重放未提交页。',refs:['src/adapters/mailbox.py:23–45','src/services/mail_sync.py:79–117','src/repositories/mail.py:1–77'],tests:['h1','h2','h3','h5','h8','mb1','mb2','mb3'],risks:['未定位到超大附件、超大邮箱及真实 IMAP/邮件供应商协议测试；当前适配器只读本地 .eml。']},
+ {id:'a2-pair',group:'a2',step:'A2 · 5',title:'全量关系识别与候选生成',what:'以邮件头连通分量决定是否是一对一；仅确定配对生成脱敏 candidate，不发布也不向量化。',pre:'扫描完成；消息头可解析且关系分量完整。',success:'复杂、重复、缺失引用会被整体标原因；合格对生成待人工审核候选。',refs:['src/services/pairing.py:13–64','src/services/mail_sync.py:118–175'],tests:['h1','h9','h11','p1','p2','p3'],risks:['未定位到自然语言主题相似配对；这是设计上不做的能力，不能声称自动覆盖真实历史会话。']},
+ {id:'a3-gate',group:'a3',step:'A3 · 6',title:'人工确认、审核与版本门槛',what:'配对确认后，人工提交事实来源与适用条件；revision 和行锁阻止过期或非法状态迁移。',pre:'候选属于当前 mailbox，配对为 paired，expected_revision 与当前一致。',success:'脱敏审核结果可查；只有 reviewed 候选可发布。',refs:['src/api/cases.py:17–49','src/services/knowledge.py:72–146'],tests:['k1','k6','k8','k9'],risks:['未定位到真实身份认证、角色授权或审计保留策略；reviewer 当前是请求字段而非已认证主体。']},
+ {id:'a3-import',group:'a3',step:'A3 · 7',title:'产品文档双入口（上传待实现）',what:'当前测试从受控目录按相对路径导入，且默认关闭；已确认的页面方案只上传 Markdown 内容，不向服务端提交文件路径。',pre:'本地导入需显式开启开发开关并使用受限相对 .md 路径；后续页面上传还依赖管理员身份边界。',success:'未开启时固定 403；开启后读取受控原文并准备发布。后续上传将由服务端生成来源标识，文件名不参与路径解析。',refs:['src/config.py:21–29','src/api/knowledge.py:28–38','src/services/knowledge.py:190–229','docs/mvp/todo.md:4'],tests:['k3','k4','k6','k11','k15'],risks:['页面上传、管理员授权和旧页面版本冲突保护均为已确认设计，尚未实现。']},
+ {id:'a3-publish',group:'a3',step:'A3 · 8',title:'切分、嵌入、版本原子发布',what:'核验模型身份和 token 上限，完成所有切分/嵌入后才写新版本、片段并归档旧版本。',pre:'模型 /info、/tokenize、/embed 协议可用；候选已审核或产品文档可信。',success:'同指纹重试复用版本；失败不暴露半成品，文本相同时可复用既有向量。',refs:['src/adapters/embedding.py:19–50','src/services/chunking.py:1–94','src/services/knowledge.py:231–287','src/repositories/knowledge.py:9–20'],tests:['k1','k2','k5','k7','k10','k12','k13','ch1','ch2','ch3','ch4','e1','e2','e3'],risks:['已运行的全量测试使用确定性替身覆盖模型边界；真实 TEI 连通性不等于召回准确率、吞吐或长期稳定性。']},
+ {id:'a3-archive',group:'a3',step:'A3 · 9',title:'归档发布快照校验',what:'归档同时校验 candidate.revision 与 expected_published_document_id，阻止旧页面下架新发布文档。',pre:'归档请求携带页面所见 revision 与已发布文档 ID；页面未见文档时显式传 null。',success:'发布状态快照不一致返回 409；匹配时才将目标文档归档，并保留历史片段。',refs:['src/api/cases.py:47–52','src/services/knowledge.py:173–192','defense-work：A3 归档并发修改说明'],tests:['k1','k14','k16'],risks:['恢复已归档案例不属于 MVP 或第二版范围；当前没有也不规划 unarchive 接口。']},
+ {id:'a4-query',group:'a4',step:'A4 · 10',title:'查询校验与查询向量',what:'原始查询只用于生成查询向量；规范化词只供全文检索。从受保护标识精确提取 DS/DSM，未知值保持为空而不猜测。',pre:'query 非空，模型身份和向量维度有效。',success:'嵌入身份、网络或向量异常统一安全返回 503；不静默降级为关键词检索。',refs:['src/services/retrieval.py:56–94','src/services/retrieval.py:125–143'],tests:['r2','r4'],risks:['既有记录未覆盖输入长度、恶意查询或速率限制；查询也不经过邮件脱敏管道。']},
+ {id:'a4-search',group:'a4',step:'A4 · 11',title:'按来源双路 PostgreSQL 检索',what:'对 product_doc 与 approved_case 分别运行 PostgreSQL english 全文和 pgvector 精确余弦检索；两通道共用 active、索引版本与显式型号/DSM 过滤。',pre:'0004_retrieval 已建立由 content 派生的 search_vector 与 GIN 索引。',success:'两来源不互相补位，归档文档不可见；每来源的每条通道至多取 20 个候选。',refs:['migrations/versions/0004_retrieval.py:12–17','src/repositories/knowledge.py:28–65'],tests:['r1','r2','r5'],risks:['既有记录未证明 EXPLAIN 性能、P95、索引膨胀或大语料召回；当前向量通道为精确排序。']},
+ {id:'a4-fuse',group:'a4',step:'A4 · 12',title:'RRF 融合并交给后续 Graph',what:'在每个来源内按片段去重，以固定 RRF=60 融合关键词与向量名次，并各保留至多 3 条；结果含来源、版本和两路名次。',pre:'同一来源的全文与向量通道已返回候选。',success:'最多返回 6 条可追溯候选，固定标记 evidence_assessed=false、has_reliable_evidence=false。',refs:['src/services/retrieval.py:12–17','src/services/retrieval.py:97–148'],tests:['r1','r3'],risks:['没有固定标注语料上的 Recall@K、MRR、citation-error rate 或 P95；RRF 只产出候选，不能直接作为给客户的答复或可靠依据。']},
+ {id:'boundary-graph',group:'a4',step:'范围边界',title:'证据判定与回复 Graph（未交付）',what:'A4 返回候选和名次后停止；并未生成回复、校验引用或自动发送邮件。',pre:'后续 B 阶段实现并定义回复、风险与人工审核契约。',success:'无；这是明确的交付边界，而非已实现步骤。',refs:['README.md:5','src/services/retrieval.py:145–148'],tests:[],risks:['未定位到测试，因为该 Graph、引用校验和回复生成尚未实现。不得把 A4 的候选召回表述为已经能自动答复客户。']}
+];
+const defenses = {
+  'a1-entry': {scenarios:['数据库迁移、vector 扩展或嵌入身份缺失时，API/worker 不应就绪。','真实 API 与 worker 进程应能按仓库入口启动并通过健康检查。'],coverage:'启动前置校验和真实进程启动已有证据；高并发与异常退出后的连接池恢复尚未证明。'},
+  'a1-db': {scenarios:['业务库、非测试库与 SQLite 均不得被测试配置误用。','任一嵌入身份不匹配、向量维度错误、全零或 NaN 时，事务必须回滚。','合法向量应可完整写入并读回。'],coverage:'配置隔离、坏向量拒绝和正常持久化均已有直接证据；真实模型升级与重嵌入迁移尚未演练。'},
+  'a2-register': {scenarios:['重复请求应复用同一个历史任务。','两个 worker 竞争同一邮箱时，只能有一个继续执行。','锁未获得的执行者不得改动任务进度。'],coverage:'幂等登记、任务可见性和双进程竞争均已有直接证据；长期持锁与数据库故障切换下的隔离尚未证明。'},
+  'a2-scan': {scenarios:['快照后源目录变动或新增邮件不得混入当前任务。','空邮箱应正常结束并可幂等重启。','进程在未提交页崩溃时，恢复后只能重放该页。','解析失败应留下可查询、可重试的任务。'],coverage:'快照、空邮箱、崩溃恢复和源失败均有证据；大邮箱、超大附件及真实 IMAP 协议尚未覆盖。'},
+  'a2-pair': {scenarios:['仅完整的一入一出、且协议头直接关联的邮件可形成候选。','重复或缺失 Message-ID、未知祖先、复杂会话必须整体拒绝配对。','不相关邮件与空集合应安全结束。'],coverage:'严格关系判定和不确定分支已有直接证据；按主题或语义猜测配对是刻意未交付能力。'},
+  'a3-gate': {scenarios:['只有确认配对且 revision 未过期的候选可进入审核。','缺少事实来源、非法状态或过期 revision 必须拒绝，且不改变已有发布文档。','已发布案例不能被拒绝操作遗留为失管 active 知识。'],coverage:'审核状态、版本门槛和事实来源均有证据；真实身份认证、角色授权与审计留存策略尚未实现。'},
+  'a3-import': {scenarios:['测试或开发中的路径穿越、绝对路径、Windows 路径、ADS 与可信根外链接必须拒绝。','可信 Markdown 可被读取，敏感内容在嵌入前应被清洗。','生产配置下，本地路径导入必须被拒绝。','后续页面上传只提交文件内容；即使文件名含 ../，也不能影响服务器文件系统。'],coverage:'受控路径导入、链接逃逸、脱敏入嵌入和生产默认禁用已有证据。前端上传及其管理员授权是已确认设计，尚未实施或验证。'},
+  'a3-publish': {scenarios:['模型身份、token 上限或嵌入结果异常时不得创建半成品。','发布写入或提交失败时，旧 active 版本仍可用。','同来源并发导入只能发布一次；修订和仅元数据变化遵循版本语义。'],coverage:'原子发布、失败回滚、并发与版本复用均有证据；真实模型的质量、吞吐和长期稳定性尚未证明。'},
+  'a3-archive': {scenarios:['发布与归档交错时，旧页面携带的 published_document_id 与当前值不一致，归档必须返回 409。','归档请求必须同时携带 expected_revision 与 expected_published_document_id；二者匹配时才可归档当前文档。','归档后 active 查询不得返回该文档，且不物理删除片段和历史版本。'],coverage:'已补齐文档快照校验：缺失/非法快照返回 400，旧页面快照返回 409，匹配当前文档时才归档。交错场景与归档保留历史片段均有直接测试证据。'},
+  'a4-query': {scenarios:['空查询、模型身份错误或异常向量应返回明确错误。','未知设备标识不得猜测过滤；原查询仍用于向量生成。','查询嵌入失败时不得静默退化为仅关键词检索。'],coverage:'输入边界、未知标识和安全失败已有证据；输入长度、恶意查询与限流尚未覆盖。'},
+  'a4-search': {scenarios:['两类来源必须分别检索，并共同过滤 active、索引版本和显式适用范围。','归档片段不得重新出现；每通道候选数必须受限。','全文检索应使用迁移建立的 GIN 索引。'],coverage:'来源隔离、过滤、上限与索引存在均有直接证据；大语料性能、P95 与索引膨胀尚未证明。'},
+  'a4-fuse': {scenarios:['同一片段在关键词和向量榜单中应合并 RRF 分数。','每类来源最多返回三条，且保留来源、版本和两路名次。','没有可靠答案时，不得把相似候选表述为可靠证据。'],coverage:'RRF 融合、来源上限与无可靠证据标记已有证据；固定标注语料上的召回、引用错误率和时延尚未测量。'},
+  'boundary-graph': {scenarios:['后续回复生成、引用校验与自动发送应被视为独立功能，不可由 A4 候选结果替代。'],coverage:'这是明确的未交付范围，没有可证明其行为的测试。'}
+};
+const codeExamples = {
+  'a1-entry': {why:'启动前先检查依赖，启动后才允许请求进入。',sections:[{title:'应用启动与请求标识',code:["@asynccontextmanager","async def lifespan(app):","    database = Database(settings or Settings())","    app.state.database = database","    try:","        await database.check_ready()","        await MailSyncService(database).ensure_initialization()","        yield","    finally:","        await database.close()","","@app.middleware('http')","async def identify_request(request, call_next):","    request.state.request_id = str(uuid.uuid4())","    response = await call_next(request)","    response.headers['X-Request-ID'] = request.state.request_id","    return response"].join('\n')}]},
+  'a1-db': {why:'数据库身份和向量值都要在事务提交前通过校验。',sections:[{title:'向量写入保护',code:["@event.listens_for(Session, 'before_flush')","def validate_embedding_writes(session, flush_context, instances):","    for record in session.new.union(session.dirty):","        if isinstance(record, EmbeddingIndex):","            raise ValueError('embedding identity can only be established by migrations')","        if isinstance(record, KnowledgeChunk):","            identity = session.info.get('embedding_identity')","            if not identity or record.index_version != identity['index_version']:","                raise ValueError('embedding identity mismatch')","            vector = np.asarray(record.embedding, dtype=np.float64)","            if (vector.shape != (identity['dimensions'],) or not np.isfinite(vector).all()","                    or np.linalg.norm(vector) == 0):","                raise ValueError('invalid embedding dimensions or values')"].join('\n')},{title:'事务入口',code:["async def _verify_identity(self, session):","    identity = await session.scalar(select(EmbeddingIndex.identity).where(EmbeddingIndex.id == 1))","    if identity != self.settings.embedding_identity():","        raise ValueError('embedding identity differs from migrated database')","    session.info['embedding_identity'] = identity","","@asynccontextmanager","async def session(self):","    async with self.sessions.begin() as session:","        await self._verify_identity(session)","        yield session"].join('\n')}]},
+  'a2-register': {why:'任务先幂等登记；同一邮箱同一时刻只有拿到锁的 worker 继续。',sections:[{title:'登记、加锁与状态转换',code:["async def ensure_initialization(self):","    async with self.database.session() as session:","        return await MailRepository.ensure_history(session, self.mailbox_id)","","async def run_history(self, max_pages=None):","    job_id = await self.ensure_initialization()","    async with locked_mailbox(self.database, self.mailbox_id) as session:","        if session is None:","            return False","        async with session.begin():","            await self.database._verify_identity(session)","            job = await session.get(MailSyncJob, job_id)","            if job.status == 'succeeded':","                return False","            job.status = 'running'","            job.failure_type = None","            job.retryable = False"].join('\n')},{title:'按阶段继续执行',code:["if job.stage == 'snapshot':","    await self._snapshot(session, job_id)","while job.stage == 'scanning':","    await self._scan_page(session, job_id)","if job.stage == 'pairing':","    await self._pair(session, job_id)","while job.stage == 'candidates':","    await self._candidates(session, job_id)","return True"].join('\n')}]},
+  'a2-scan': {why:'快照固定输入边界；每一页邮件与进度在同一事务提交。',sections:[{title:'创建不可变快照',code:["async def _snapshot(self, session, job_id):","    captured_at = datetime.now(timezone.utc).isoformat()","    snapshot = await asyncio.to_thread(self.adapter.capture)","    digest = hashlib.sha256()","    async with session.begin():","        job = await session.get(MailSyncJob, job_id)","        for ordinal, mail in enumerate(snapshot):","            digest.update(f'{mail.source_ref} {mail.content_hash}'.encode())","            session.add(MailSource(sync_job_id=job_id, ordinal=ordinal,","                                   folder=mail.folder, source_ref=mail.source_ref,","                                   content_hash=mail.content_hash, raw_content=mail.raw_content))","        job.initialization_boundary = {'captured_at': captured_at,","                                       'sha256': digest.hexdigest(), 'file_count': len(snapshot)}","        job.stage = 'scanning'"].join('\n')},{title:'一页扫描后再推进游标',code:["async def _scan_page(self, session, job_id):","    async with session.begin():","        job = await session.get(MailSyncJob, job_id)","        sources = list((await session.scalars(select(MailSource).where(","            MailSource.sync_job_id == job_id, MailSource.ordinal >= job.scanned_count","        ).order_by(MailSource.ordinal).limit(self.page_size))).all())","        added, skipped, failed = await MailRepository.save_page(session, job, sources)","        job.scanned_count += len(sources)","        job.added_count += added","        job.skipped_count += skipped","        job.failed_count += failed","        if job.scanned_count == job.initialization_boundary['file_count']:","            job.stage = 'pairing'"].join('\n')}]},
+  'a2-pair': {why:'把邮件及其引用组成完整连通分量，只接受没有歧义的一入一出。',sections:[{title:'关系图与分量',code:["for mail in messages:","    key = ('id', mail.message_id) if mail.message_id else ('record', str(mail.id))","    by_key[key].append(mail)","    links[key]","    for target in set(mail.in_reply_to + mail.references):","        neighbor = ('id', target)","        links[key].add(neighbor)","        links[neighbor].add(key)","","for start in list(links):","    if start in visited:","        continue","    component, pending = set(), [start]","    while pending:","        key = pending.pop()","        if key not in component:","            component.add(key)","            pending.extend(links[key] - component)"].join('\n')},{title:'关系判断',code:["if any(len(by_key[key]) > 1 for key in component):","    reason = 'duplicate_message_id'","elif any(not mail.message_id for mail in records):","    reason = 'missing_message_id'","elif any(not by_key[key] for key in component):","    reason = 'missing_reference'","elif len(records) > 2:","    reason = 'complex_relationship'","elif (len(inbox) == len(sent) == 1","      and inbox[0].message_id in sent[0].in_reply_to + sent[0].references):","    pairs.append((inbox[0].id, sent[0].id))","else:","    reason = 'unmatched'"].join('\n')}]},
+  'a3-gate': {why:'审核和发布都要通过状态、版本和人工事实来源三道门。',sections:[{title:'确认配对',code:["if candidate is None or pair.pairing_method != 'header' or action not in ('confirm', 'reject'):","    raise conflict()","target = 'paired' if action == 'confirm' else 'rejected'","if pair.status != target:","    if (pair.status == 'rejected' or candidate.published_document_id","            or candidate.status not in ('candidate', 'reviewed')):","        raise conflict()","    pair.status = target","    if action == 'reject':","        candidate.status = 'rejected'","        candidate.revision += 1"].join('\n')},{title:'审核版本和内容',code:["if (candidate.revision != payload['expected_revision']","        or candidate.status not in ('candidate', 'reviewed', 'active')","        or (pair is not None and pair.status != 'paired')):","    raise conflict()","fields = ('user_symptom', 'applicability', 'reply_template')","if (any(not payload.get(field, '').strip() for field in fields)","        or not payload.get('fact_sources')):","    raise KnowledgeError(400, 'invalid_review',","                         'Review requires content, applicability and fact sources')","for field in fields:","    setattr(candidate, field, clean(payload[field], mail=True))","candidate.status = 'reviewed'","candidate.revision += 1"].join('\n')}]},
+  'a3-import': {why:'路径先按跨平台危险形式筛掉，解析后再确认它仍在可信目录。',sections:[{title:'路径形式校验',code:["windows = PureWindowsPath(relative)","normalized = relative.replace('\\\\', '/')","parts = normalized.split('/')","if (not relative or windows.drive or windows.root or ':' in relative","        or any(part in ('', '.', '..') or part.endswith((' ', '.')) for part in parts)):","    raise KnowledgeError(400, 'invalid_path', 'A trusted relative Markdown path is required')"].join('\n')},{title:'最终路径与链接校验',code:["root = self.database.settings.knowledge_root.resolve(strict=True)","requested = root.joinpath(*parts)","path = requested.resolve(strict=True)","if not path.is_relative_to(root) or path.suffix.lower() != '.md' or not path.is_file():","    raise ValueError('outside trusted directory or unsupported format')","cursor = requested","while cursor != root:","    if cursor.is_symlink() or cursor.is_junction():","        raise ValueError('linked source')","    cursor = cursor.parent","with path.open('rb') as source:","    raw = source.read(self.database.settings.knowledge_max_bytes + 1)"].join('\n')}]},
+  'a3-publish': {why:'模型准备完成前不创建新文档；准备成功后再一次性切换 active 版本。',sections:[{title:'切分和嵌入准备',code:["def _prepare(self, markdown, title, cached):","    embedder = self.embedding_factory()","    try:","        embedder.verify_identity()","        chunks = split_markdown(markdown, title, embedder.count_tokens, embedder.max_input_length)","        missing = list(dict.fromkeys(chunk.content for chunk in chunks if chunk.content not in cached))","        encoded = embedder.embed_documents(missing) if missing else []","        if len(encoded) != len(missing):","            raise ValueError('embedding count mismatch')","        cached.update(zip(missing, encoded, strict=True))","        vectors = [cached[chunk.content] for chunk in chunks]","        return chunks, vectors","    finally:","        embedder.close()"].join('\n')},{title:'事务内发布新版本',code:["await lock_source(session, source_type, source_ref)","versions = await document_versions(session, source_type, source_ref)","chunks, vectors = await asyncio.to_thread(self._prepare, markdown, title, cached)","document = KnowledgeDocument(source_type=source_type, source_ref=source_ref,","    title=title, version=versions[0].version + 1 if versions else 1,","    status='active', content_hash=fingerprint, index_version=index_version)","session.add(document)","await session.flush()","for number, (chunk, vector) in enumerate(zip(chunks, vectors, strict=True)):","    session.add(KnowledgeChunk(document_id=document.id, chunk_index=number,","        content=chunk.content, embedding=vector, index_version=index_version))","await session.flush()","for version in versions:","    version.status = 'archived'"].join('\n')}]},
+  'a3-archive': {why:'归档先比较页面所见的审核版本和文档 ID；不一致只返回冲突，不改变知识状态。',sections:[{title:'归档当前知识版本',code:["async def archive(self, candidate_id, expected_revision, expected_published_document_id, reviewer):","    async with self.database.session() as session:","        candidate, _ = await self._candidate(session, candidate_id)","        if (candidate.revision != expected_revision","                or candidate.published_document_id != expected_published_document_id):","            raise conflict()","        if candidate.status == 'archived':","            return serialize_candidate(candidate)","        if not candidate.published_document_id:","            raise conflict()","        document = await session.get(KnowledgeDocument, candidate.published_document_id)","        document.status = 'archived'","        candidate.status = 'archived'","        self.audit(session, 'case_archived', candidate.id, reviewer)","        await session.flush()","        return serialize_candidate(candidate)"].join('\n')},{title:'检索入口只取 active',code:["def active_chunks_statement():","    return select(KnowledgeChunk).join(KnowledgeDocument).where(","        KnowledgeDocument.status == 'active'","    )"].join('\n')}]},
+  'a4-query': {why:'原始查询用于 embedding；向量不合法或模型身份失败都会返回错误而不是降级。',sections:[{title:'查询向量校验',code:["def _query_vector(self, query):","    embedding = self.embedding_factory()","    try:","        embedding.verify_identity()","        vectors = embedding.embed_queries([query])","        if len(vectors) != 1:","            raise ValueError('query embedding count mismatch')","        vector = np.asarray(vectors[0], dtype=np.float64)","        if (vector.shape != (self.database.settings.embedding_dimensions,)","                or not np.isfinite(vector).all() or np.linalg.norm(vector) == 0):","            raise ValueError('invalid query embedding')","        return vector.tolist()","    except (httpx.HTTPError, ValueError, TypeError, KeyError):","        raise RetrievalError(503, 'retrieval_embedding_failed',","                             'Knowledge retrieval embedding is unavailable; retry is safe') from None","    finally:","        embedding.close()"].join('\n')},{title:'检索的前半段',code:["if not isinstance(query, str) or not query.strip():","    raise RetrievalError(400, 'invalid_query', 'A non-empty knowledge query is required')","tokens = normalize_query(query)","identifiers, metadata = extract_query_metadata(query)","vector = await asyncio.to_thread(self._query_vector, query)","async with self.database.session() as session:","    for source_type in SOURCE_TYPES:","        keyword_rows = await keyword_search(session, source_type, tokens,","            self.database.settings.embedding_index_version,","            metadata['product_model'], metadata['os_version'], CHANNEL_CANDIDATE_LIMIT)","        vector_rows = await vector_search(session, source_type, vector,","            self.database.settings.embedding_index_version,","            metadata['product_model'], metadata['os_version'], CHANNEL_CANDIDATE_LIMIT)"].join('\n')}]},
+  'a4-search': {why:'关键词和向量检索必须使用同一组来源、状态和适用范围过滤。',sections:[{title:'共同过滤条件',code:["def _active_source_filters(source_type, index_version, product_model, os_version):","    filters = [KnowledgeDocument.status == 'active',","               KnowledgeDocument.source_type == source_type,","               KnowledgeChunk.index_version == index_version]","    if product_model is not None:","        filters.append(KnowledgeChunk.product_model == product_model)","    if os_version is not None:","        filters.append(KnowledgeChunk.os_version == os_version)","    return filters"].join('\n')},{title:'全文与向量查询',code:["rank = func.ts_rank_cd(KnowledgeChunk.search_vector, tsquery).label('score')","keyword = select(KnowledgeChunk, KnowledgeDocument, rank).join(KnowledgeDocument).where(","    *_active_source_filters(source_type, index_version, product_model, os_version),","    KnowledgeChunk.search_vector.op('@@')(tsquery)",").order_by(rank.desc(), KnowledgeChunk.id).limit(limit)","","distance = KnowledgeChunk.embedding.cosine_distance(query_vector).label('distance')","vector = select(KnowledgeChunk, KnowledgeDocument, distance).join(KnowledgeDocument).where(","    *_active_source_filters(source_type, index_version, product_model, os_version)",").order_by(distance, KnowledgeChunk.id).limit(limit)"].join('\n')}]},
+  'a4-fuse': {why:'相同片段可以同时从关键词和向量榜单得分，最后只保留每种来源的前三。',sections:[{title:'RRF 计算',code:["def add(rows, channel):","    for rank, (chunk, document, _) in enumerate(rows, 1):","        row = candidates.setdefault(str(chunk.id), {","            'chunk': chunk, 'document': document, 'score': 0.0,","            'keyword_rank': None, 'vector_rank': None","        })","        row['score'] += 1 / (RRF_K + rank)","        row[channel] = rank","","add(keyword_rows, 'keyword_rank')","add(vector_rows, 'vector_rank')"].join('\n')},{title:'排序与截取',code:["ordered = sorted(candidates.values(), key=lambda row: (","    -row['score'],","    min(value for value in (row['keyword_rank'], row['vector_rank']) if value is not None),","    str(row['chunk'].id)","))[:SOURCE_LIMIT]","","return [RetrievedChunk(chunk_id=str(row['chunk'].id),","                       source_type=source_type, rank=index,","                       rrf_score=row['score'],","                       keyword_rank=row['keyword_rank'], vector_rank=row['vector_rank'])","        for index, row in enumerate(ordered, 1)]"].join('\n')}]},
+  'boundary-graph': {why:'当前代码在返回候选后结束，尚未实现回复生成或自动发送。',sections:[]}
+};
+const exceptions = [
+ {nodeIds:['a1-entry','a1-db'],title:'A1：迁移、vector 扩展或嵌入身份不匹配',trigger:'check_ready 失败',outcome:'API/worker 不就绪、不开始业务事务',recovery:'修正迁移或完整身份后重启；不会自动迁移。',ref:'src/db.py:43–63'},
+ {nodeIds:['a2-register'],title:'A2：其他 worker 已持有邮箱锁',trigger:'try advisory lock 未获得',outcome:'当前执行者直接返回 false，不改任务进度',recovery:'锁连接释放后由下一轮 worker 接管。',ref:'src/services/mail_sync.py:34–45'},
+ {nodeIds:['a2-scan'],title:'A2：快照源不可用或处理失败',trigger:'目录缺失/读源、解析或处理异常',outcome:'任务标为 failed + retryable；快照事务回滚',recovery:'恢复源后重跑同一 job；锁连接失效时旧 worker 不回写状态。',ref:'src/services/mail_sync.py:65–77'},
+ {nodeIds:['a2-pair'],title:'A2：关系不确定',trigger:'重复/缺失 Message-ID、未知祖先、复杂会话、未匹配',outcome:'不成对、不生成候选，记录 unsupported_reason',recovery:'需要人工或后续另行设计；不以主题猜测恢复。',ref:'src/services/pairing.py:43–63'},
+ {nodeIds:['a3-gate'],title:'A3：非法审核状态或过期 revision',trigger:'未确认、缺事实来源、reject 已发布项或版本不一致',outcome:'409/400，候选与已有文档不改变',recovery:'用户刷新候选状态并重新审核。',ref:'src/services/knowledge.py:97–157'},
+ {nodeIds:['a3-import','a3-publish'],title:'A3：路径或模型准备失败',trigger:'可信路径校验失败，或身份/token/嵌入/向量无效',outcome:'路径 400；模型准备安全 503；不写半成品',recovery:'修正输入或模型后安全重试。',ref:'src/services/knowledge.py:190–250'},
+ {nodeIds:['a3-publish'],title:'A3：发布写入或提交失败',trigger:'分片写后 flush/commit 失败',outcome:'整笔事务回滚，旧 active 版本保持',recovery:'修复后同来源重试；来源锁自动释放。',ref:'src/services/knowledge.py:254–287'},
+ {nodeIds:['a3-archive'],title:'A3：旧页面归档快照过期',trigger:'页面读取 reviewed / revision=N、published_document_id=null 后，另一操作者发布文档 X',outcome:'服务端比较快照，返回 409；文档 X 保持 active',recovery:'刷新候选详情，确认当前文档后使用新的 revision 和文档 ID 重试。',ref:'src/api/cases.py:47–52；src/services/knowledge.py:173–192'},
+ {nodeIds:['a4-query'],title:'A4：查询为空或查询嵌入失败',trigger:'空白 query、模型身份错误、维度/数值异常',outcome:'400 或 503；不会退化为只有关键词的结果',recovery:'调用方修正查询或等待模型恢复后重试。',ref:'src/services/retrieval.py:78–95'},
+ {nodeIds:['a4-fuse'],title:'A4：无可靠答案',trigger:'RRF 仍可能有近似候选',outcome:'返回候选但 evidence_assessed / has_reliable_evidence 均为 false',recovery:'后续 Graph 需做引用、冲突与风险评估，或人工处理。',ref:'src/services/retrieval.py:145–148'}
+];
+const esc = value => String(value).replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+const scenarioStatus = {
+  'a1-entry':['proven','proven'], 'a1-db':['proven','proven','proven'],
+  'a2-register':['proven','proven','proven'], 'a2-scan':['proven','proven','proven','proven'],
+  'a2-pair':['proven','proven','proven'], 'a3-gate':['proven','proven','proven'],
+  'a3-import':['proven','proven','proven','pending'], 'a3-publish':['proven','proven','proven'],
+  'a3-archive':['proven','proven','proven'], 'a4-query':['partial','proven','proven'],
+  'a4-search':['proven','proven','partial'], 'a4-fuse':['proven','proven','proven'],
+  'boundary-graph':['pending']
+};
+const scenarioEvidence = {
+  'a1-entry':[['b2'],['b3']],
+  'a1-db':[['c1'],['m1','m2'],['m3']],
+  'a2-register':[['h1','h4'],['h6'],['h7']],
+  'a2-scan':[['h2','mb3'],['h3'],['h5'],['h8','mb1','mb2']],
+  'a2-pair':[['p1','h1'],['p2','h9'],['p3']],
+  'a3-gate':[['k1','k6'],['k6','k9'],['k8']],
+  'a3-import':[['k3','k4'],['k11'],['k15'],[]],
+  'a3-publish':[['e1','e2','e3','k12'],['k2','k10'],['k5','k7','k13']],
+  'a3-archive':[['k16'],['k16','k1'],['k14','k1']],
+  'a4-query':[['r4'],['r2'],['r4']],
+  'a4-search':[['r1'],['r1'],['r5']],
+  'a4-fuse':[['r1'],['r1'],['r3']],
+  'boundary-graph':[[]]
+};
+const statusLabel = {pending:'○ 待验证', proven:'✓ 已证明', partial:'△ 部分证明', 'needs-confirmation':'? 待确认'};
+// 每个节点先用同一套四问讲清业务意义，再展示下方的防御证据。
+const nodeBriefs = {
+  'a1-entry': {
+    conclusion:'服务不会在数据库或嵌入依赖未就绪时假装可用。',
+    example:'例如部署后发现 0004 迁移没有执行，API 和 worker 会在启动检查处停止；它们不会先接收邮件或创建历史任务。',
+    terms:[{term:'生命周期',meaning:'应用从启动到关闭的一段托管过程，适合在这里做一次性依赖检查。'},{term:'就绪检查',meaning:'服务先确认数据库、迁移和扩展都能用，再允许外部请求进入。'}],
+    misconception:'不要误解为“服务启动了就开始扫邮件”：API 只登记任务，真正处理历史邮件的是 worker。'
+  },
+  'a1-db': {
+    conclusion:'只有模型身份一致、数值正常的向量才能写进知识库。',
+    example:'例如模型名虽然没变但 revision 已升级，即使仍是 768 维，写入也会被拒绝；这样不会把两批不可比较的向量混在一起。',
+    terms:[{term:'嵌入身份',meaning:'模型名、revision、维度、前缀和索引版本的组合，相当于向量的规格书。'},{term:'事务回滚',meaning:'一笔写入中途发现错误，就整笔取消，不留下半条文档或片段。'}],
+    misconception:'不要误解为“身份校验通过就代表模型效果好”：它只保证数据没有混用，不评估召回质量。'
+  },
+  'a2-register': {
+    conclusion:'同一邮箱的历史初始化同一时刻只允许一个 worker 真正执行。',
+    example:'例如两个 worker 同时因重启而发现同一个邮箱要初始化，先拿到数据库锁的 worker 继续扫描，另一个直接退出且不改进度。',
+    terms:[{term:'幂等',meaning:'同一请求重复提交，结果仍是一份任务，而不是重复创建两份任务。'},{term:'邮箱锁',meaning:'PostgreSQL 给同一 mailbox_id 发的一把临时钥匙，拿到钥匙的执行者才可继续。'}],
+    misconception:'不要误解为“它解决了所有并发”：这里保护的是同一邮箱初始化，不是不同邮箱的大规模吞吐能力。'
+  },
+  'a2-scan': {
+    conclusion:'历史邮件先固定输入快照，再按页原子保存，崩溃后只重做未提交页。',
+    example:'例如任务扫到第二页时进程崩溃，第一页邮件和游标已一起提交，重启后从第二页继续；随后才拷进目录的新邮件不会混入本次任务。',
+    terms:[{term:'快照',meaning:'开始时把当时看到的邮件字节固定下来，后续源目录变化不影响这一轮。'},{term:'原子提交',meaning:'一页邮件和它的进度要么一起保存，要么一起不算，避免邮件和游标脱节。'}],
+    misconception:'不要误解为“已经支持真实邮箱”：当前适配器读取本地 .eml 文件，真实 IMAP 和超大邮箱仍不在此范围。'
+  },
+  'a2-pair': {
+    conclusion:'只有确定的一问一答邮件才会生成案例候选，复杂会话宁可不猜。',
+    example:'例如客户来信和唯一回复的 Message-ID 直接关联，系统才生成候选；若同一会话里有转发、缺失引用或三封以上邮件，则整体标为复杂关系。',
+    terms:[{term:'Message-ID',meaning:'邮件的唯一编号，用于可靠地指出谁回复了谁。'},{term:'连通分量',meaning:'把互相引用的邮件归成一个会话集合，再整体判断是否存在歧义。'}],
+    misconception:'不要误解为“系统理解了邮件主题”：它不按语义猜测配对，只相信明确的邮件头关系。'
+  },
+  'a3-gate': {
+    conclusion:'历史候选必须经人工确认、审核内容和事实来源三道门，才能发布为知识。',
+    example:'例如审核人只填写了回复模板却没有事实来源，服务会拒绝；另一人已更新过该候选时，旧页面也不能覆盖新内容。',
+    terms:[{term:'revision',meaning:'候选每次被有效修改后的版本号，用来发现页面拿着过期内容操作。'},{term:'事实来源',meaning:'人工说明结论依据在哪里，避免只凭一段看似合理的回复进入知识库。'}],
+    misconception:'不要误解为“reviewer 已完成权限认证”：当前 reviewer 只是请求字段，不等于真实登录身份和角色体系。'
+  },
+  'a3-import': {
+    conclusion:'测试保留受控本地导入；后续管理页面只上传 Markdown 内容，不能向服务端传文件路径。',
+    example:'例如测试夹具使用 guides/ds920.md 时，服务只从知识根目录读取；以后页面上传名为 ../guide.md 的文件时，服务只读取它的字节，文件名不会影响本机路径。',
+    terms:[{term:'受控本地导入',meaning:'测试和开发时由服务端在指定目录读取已准备好的文档，不让调用方选择任意位置。'},{term:'文件内容上传',meaning:'浏览器直接发送文件字节，后端不根据文件名或路径读取服务器文件。'}],
+    misconception:'不要误解为“页面上传已经上线”：当前实现仍是本地路径导入，且未开启即返回 403；管理员权限和上传接口仍待实现。'
+  },
+  'a3-publish': {
+    conclusion:'新知识版本要在全部切分和嵌入准备成功后，才一次性替换旧版本。',
+    example:'例如一份新版文档有三段，第二段嵌入失败，数据库不会留下只含第一段的 v2，检索仍只能看到完整的 v1。',
+    terms:[{term:'原子发布',meaning:'新版本要么完整上线，要么完全不上线，用户不会查到半成品。'},{term:'索引版本',meaning:'标明片段使用哪套向量规格，检索时只在同一规格内比较。'}],
+    misconception:'不要误解为“真实嵌入服务能连通就代表知识可靠”：准确率、吞吐和长期稳定性是另一组验证。'
+  },
+  'a3-archive': {
+    conclusion:'归档只下架页面当前看到的已发布文档；旧页面快照已被服务端拦截。',
+    example:'例如 A 打开 revision=N、尚无文档的候选，B 随后发布文档 X；A 的旧页面再点归档会收到 409，X 仍保持可检索。刷新并确认 X 后才可归档。',
+    terms:[{term:'已发布文档 ID',meaning:'这次页面实际看到的那份知识文档的唯一标识，用来确认要归档的目标没有被别人换掉。'},{term:'409',meaning:'状态冲突：页面信息已过期，调用方需要刷新后再决定。'}],
+    misconception:'不要误解为“归档会删除历史”：它只下架文档，历史文档和片段仍保留用于审计。'
+  },
+  'a4-query': {
+    conclusion:'原始问题用于生成查询向量，只有明确识别出的型号和 DSM 才会成为过滤条件。',
+    example:'例如用户问“DS920+ 的 DSM 7.2 如何处理”，系统保留原句生成向量，并精确过滤型号和版本；无法识别型号时不会猜一个相近型号。',
+    terms:[{term:'查询向量',meaning:'把用户原话转换成一组数字，用来按语义寻找相近知识。'},{term:'受保护标识',meaning:'例如 DS 型号、DSM 版本等应被完整识别的关键信息，不能被随意改写。'}],
+    misconception:'不要误解为“查询已经过安全治理”：输入长度、恶意查询和限流仍未在这一节点证明。'
+  },
+  'a4-search': {
+    conclusion:'产品说明和历史案例分别走全文与向量检索，并使用同一组有效性和适用范围过滤。',
+    example:'例如产品文档和案例各有一条 DS920+ / DSM 7.2 内容，系统分别查两类来源；已归档版本或 DS918+ 内容不会拿来凑答案。',
+    terms:[{term:'全文检索',meaning:'按词语匹配内容，适合精确术语和明确型号。'},{term:'向量检索',meaning:'按语义距离排序，适合不同说法表达同一问题。'},{term:'GIN 索引',meaning:'PostgreSQL 给全文检索准备的目录，加快在大量文本中找词。'}],
+    misconception:'不要误解为“两路都有结果就已验证正确”：它们只是候选来源，仍需后续证据判断。'
+  },
+  'a4-fuse': {
+    conclusion:'RRF 只合并同一来源内的两份排名，最多返回产品三条、案例三条候选。',
+    example:'例如某产品片段在关键词榜第 1、向量榜第 2，它会得到两次排名贡献；案例片段仍在自己的来源列表中，不会被产品片段挤掉。',
+    terms:[{term:'RRF',meaning:'把不同榜单的名次换成可相加的小分数的规则，名次越靠前贡献越大。'},{term:'排名',meaning:'候选在某一条检索通道里的位置，不等同于它一定正确。'}],
+    misconception:'不要误解为“Top 1 就能直接回复客户”：结果固定标记为尚未评估可靠依据。'
+  },
+  'boundary-graph': {
+    conclusion:'A4 到返回候选为止，尚未成为会写回复、做引用判断或发送邮件的 Agent。',
+    example:'例如检索得到产品三条和案例一条后，当前调用只返回这些候选与名次，不会生成邮件草稿，更不会向客户发送。',
+    terms:[{term:'Graph',meaning:'后续把分类、证据判断、生成和人工审核串起来的流程编排。'},{term:'引用校验',meaning:'检查回复里的每个关键结论是否真由本次检索到的资料支持。'}],
+    misconception:'不要误解为“已有检索就已有自动客服”：回复生成、风险判断和人工审核仍属于 B、C 阶段。'
+  }
+};
+const whatNarratives = {
+  'a1-entry':[
+    '这一环节解决的是服务在依赖尚未可用时仍对外假装正常的问题。',
+    '它发生在 API 或后台执行者刚启动、还没有开始处理任何业务前。',
+    '系统先确认数据库、迁移和向量能力已准备好，再登记历史初始化任务，并为每个请求附上关联标识。',
+    '成功时健康检查才会返回正常；前置条件不满足时服务不会开始业务处理，因此后续问题可以被追溯和安全恢复。'
+  ],
+  'a1-db':[
+    '这一环节解决的是不同模型或损坏向量混入同一知识库后，检索结果失去可比性的问题。',
+    '它发生在应用准备读写知识、或即将把新的向量提交到数据库时。',
+    '系统先核对数据库保存的嵌入身份，再检查向量维度、数值有效性和是否为零向量。',
+    '合法数据才能完整保存；身份不符或向量异常时整笔写入回滚，避免留下无法解释的知识数据。'
+  ],
+  'a2-register':[
+    '这一环节解决的是重复启动或多个后台执行者同时扫描同一邮箱的问题。',
+    '它发生在服务启动、人工重试或多个进程同时尝试做历史初始化时。',
+    '系统先复用同一邮箱已有的初始化任务，再让只有拿到互斥锁的执行者继续工作。',
+    '成功时一份邮箱只产生一条连续进度；没有拿到锁的执行者直接退出且不改状态，从而避免重复导入。'
+  ],
+  'a2-scan':[
+    '这一环节解决的是扫描期间文件变化或进程中断导致邮件漏读、重读的问题。',
+    '它发生在历史邮箱被分批读取，而源目录仍可能被外部修改的场景。',
+    '系统先固定一份原始邮件快照，再把每一页的解析结果与扫描进度放在同一次提交中。',
+    '成功时当前任务只处理快照内邮件；读取失败或进程中断时未完成页不会被当作成功，之后可以安全重放。'
+  ],
+  'a2-pair':[
+    '这一环节解决的是把复杂邮件会话误当成一问一答，并生成错误案例的问题。',
+    '它发生在历史邮件已经扫描完成、系统要决定哪些邮件可以成为知识候选时。',
+    '系统依据完整引用关系判断会话，只接受没有歧义的一封来信和一封回复，并对不确定关系保留原因。',
+    '成功时只生成待人工审核的脱敏候选；重复标识、缺失引用或复杂会话会被拒绝配对，避免错误知识进入后续流程。'
+  ],
+  'a3-gate':[
+    '这一环节解决的是未经确认的历史案例、过期编辑或空泛事实来源直接变成知识的问题。',
+    '它发生在人工准备确认配对、审核候选或发布修订版本时。',
+    '系统要求配对已确认、版本仍一致，并要求人工填写适用条件和事实来源后才允许进入下一状态。',
+    '成功时得到可追溯的已审核候选；状态或版本不满足时请求被拒绝，已有发布知识不会被意外改坏。'
+  ],
+  'a3-import':[
+    '这一环节把测试所需的本地文档导入，与未来管理页面的文件内容上传明确分开。',
+    '当前测试发生在服务端从受信任目录读取 Markdown 时；后续页面则由管理员选择文件并提交文件字节。',
+    '现有实现继续阻止路径穿越和链接跳出；已确认的上传方案不接收 path，文件名也不会参与服务器路径解析。',
+    '当前本地导入默认关闭，显式开发开关后才可用于受控测试；管理员授权和页面上传仍是待实现的后续工作。'
+  ],
+  'a3-publish':[
+    '这一环节解决的是模型处理或数据库提交中途失败时，让用户看到半成品知识版本的问题。',
+    '它发生在审核案例或产品文档准备切分、嵌入并替换现有知识版本时。',
+    '系统先完成身份核验、文本切分和全部向量准备，再在同一事务中写入新版本和片段，最后切换旧版本状态。',
+    '成功时新版本完整可用且相同内容可复用已有向量；准备或提交失败时旧版本继续可用，不会暴露半成品。'
+  ],
+  'a3-archive':[
+    '这一环节解决的是已经不应再被使用的案例仍被检索到，同时又要避免旧页面误下架别人刚发布的知识。',
+    '它发生在一位操作者打开已审核案例后，另一位操作者先完成发布，前者随后仍尝试归档的交错场景。',
+    '归档请求现在同时携带 candidate.revision 和 expected_published_document_id；服务端在候选行锁内比较两个值。',
+    '任一快照不匹配必须返回 409，匹配时才归档并保留历史引用；缺少或非法文档 ID 在 API 层直接以 400 拒绝。'
+  ],
+  'a4-query':[
+    '这一环节解决的是空查询、错误模型或异常向量被悄悄当作普通检索继续执行的问题。',
+    '它发生在系统收到需要查找产品知识或历史案例的用户问题时。',
+    '系统保留原始问题用于生成查询向量，只从可识别标识中提取明确过滤条件，并验证模型身份和向量有效性。',
+    '成功时查询带着可解释的适用范围进入检索；输入或模型异常时直接返回明确错误，而不是退化成不可靠的单路结果。'
+  ],
+  'a4-search':[
+    '这一环节解决的是产品说明和历史案例相互挤占，或归档和不适用内容重新出现的问题。',
+    '它发生在已有有效知识后，系统要为一个问题分别找事实说明和可参考的案例表达时。',
+    '系统对两类来源分别执行关键词与向量查找，并统一限制为有效版本、相同知识空间和明确适用范围。',
+    '成功时两类候选各自保留且归档内容不可见；过滤条件不满足时不会以不适用内容凑结果。'
+  ],
+  'a4-fuse':[
+    '这一环节解决的是同一片段在两条检索路径中重复出现，或一种来源压制另一种来源的问题。',
+    '它发生在关键词和向量检索都已经返回候选、需要形成后续处理可消费的结果时。',
+    '系统在每类来源内部合并重复片段的排名贡献，固定返回有限数量的候选并保留来源和版本信息。',
+    '成功时后续流程获得可追溯的候选集合；没有可靠答案时仍只返回候选而不声称已经得到可直接答复客户的依据。'
+  ],
+  'boundary-graph':[
+    '这一边界解决的是把知识检索候选误解为已经完成回复、引用核验或自动发送的问题。',
+    '它发生在双路检索已经结束、结果准备交给下一阶段处理时。',
+    '当前系统在返回候选和排名后停止，没有继续生成回复或执行对外动作。',
+    '因此没有自动答复这一可观察结果；后续 Graph 必须作为独立功能设计和验证，才能承担证据判断与人工审核。'
+  ]
+};
+function statusReason(status, defense) {
+  if (status === 'proven') return '本轮或既有测试证据中的关键断言直接证明该可观察结果；最近全量回归已通过。';
+  if (status === 'pending') return '当前范围尚未交付该行为，因此没有可运行的直接断言。';
+  if (status === 'needs-confirmation') return '测试未运行、未提供或无法可靠关联到该场景。';
+  return defense.coverage;
+}
+// 源码与测试仅保留在脚本数据中用于复盘取证；前台只渲染四类防御信息。
+function renderDefense(node) {
+  const defense=defenses[node.id];
+  const statuses=scenarioStatus[node.id] || defense.scenarios.map(()=>'needs-confirmation');
+  const evidence=scenarioEvidence[node.id] || defense.scenarios.map(()=>[]);
+  if (statuses.some((status,index)=>status === 'proven' && !evidence[index]?.length)) throw new Error(`Missing direct-test evidence for ${node.id}`);
+  const scenarios=defense.scenarios.map((item,index)=>{const status=statuses[index] || 'needs-confirmation'; return `<li class="scenario scenario-${status}"><span class="status status-${status}"><b>${statusLabel[status]}</b></span><b>${esc(item)}</b><p>${esc(statusReason(status, defense))}</p></li>`;}).join('');
+  const risks=node.risks.map(item=>`<li>${esc(item)}</li>`).join('');
+  const narrative=(whatNarratives[node.id] || [node.what, node.pre, node.success]).map(sentence=>`<p>${esc(sentence)}</p>`).join('');
+  const brief=nodeBriefs[node.id] || {conclusion:node.what,example:'前置条件满足后，' + node.success,terms:[{term:'前置条件',meaning:node.pre}],misconception:'不要把节点标题以外的后续能力视为已交付。'};
+  const terms=brief.terms.map(item=>'<li><b>' + esc(item.term) + '</b>：' + esc(item.meaning) + '</li>').join('');
+  const explanation='<div class="brief-grid"><section class="brief-card"><h4>一句话结论</h4><p>' + esc(brief.conclusion) + '</p></section><section class="brief-card"><h4>具体业务例子</h4><p>' + esc(brief.example) + '</p></section><section class="brief-card terms"><h4>必要术语</h4><ul class="term-list">' + terms + '</ul></section><section class="brief-card misconception"><h4>不要误解</h4><p>' + esc(brief.misconception) + '</p></section></div>';
+  return '<h3>' + esc(node.step) + '　' + esc(node.title) + '</h3>' + explanation + '<div class="defense-grid"><section class="defense-card"><h4>做了什么</h4>' + narrative + '</section><section class="defense-card"><h4>应测场景</h4><ul class="scenario-list">' + scenarios + '</ul></section><section class="defense-card risk"><h4>可能漏掉什么</h4><ul>' + risks + '</ul></section></div>';
+}
+function selectNode(id) { const node=nodes.find(n=>n.id===id); document.querySelectorAll('.node').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.id===id))); document.getElementById('detail').innerHTML=renderDefense(node); }
+const flow=document.getElementById('flow'); nodes.forEach(node=>{const button=document.createElement('button');button.type='button';button.className=`node ${node.group}`;button.dataset.id=node.id;button.setAttribute('aria-pressed','false');button.innerHTML=`<span class="step">${esc(node.step)}</span><strong>${esc(node.title)}</strong><span class="responsibility">${esc(node.what)}</span>`;button.addEventListener('click',()=>selectNode(node.id));flow.append(button);});
+const toggle=document.getElementById('toggle-flow'); toggle.addEventListener('click',()=>{const expanded=!flow.classList.contains('expanded'); flow.classList.toggle('expanded', expanded); flow.classList.toggle('compact', !expanded); toggle.textContent=expanded ? '缩小流程' : '展开流程'; toggle.setAttribute('aria-expanded', String(expanded));});
+selectNode(nodes[0].id);
+</script>
+</body>
+</html>

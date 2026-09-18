@@ -2,7 +2,7 @@
 from fastapi import APIRouter, Request
 from pydantic import BaseModel, ConfigDict, Field
 
-from services.knowledge import KnowledgeService
+from services.knowledge import KnowledgeError, KnowledgeService
 
 
 router = APIRouter(prefix='/api/v1/knowledge', tags=['knowledge'])
@@ -27,5 +27,10 @@ def knowledge_service(request):
 
 @router.post('/import')
 async def import_knowledge(body: ImportRequest, request: Request):
-    """同步返回完整有效版本；失败可重试且不返回文件内容。"""
+    """只在显式开发开关下读取服务端受控目录，避免 HTTP 请求选择本机路径。"""
+    # 1. 生产默认拒绝路径导入；后续页面上传必须提交文件内容而非 path。
+    if not request.app.state.database.settings.knowledge_local_import_enabled:
+        raise KnowledgeError(403, 'local_import_disabled',
+                             'Local-path knowledge import is disabled')
+    # 2. 开关开启后仍由服务层校验可信根、链接、大小和编码。
     return await knowledge_service(request).import_document(**body.model_dump())

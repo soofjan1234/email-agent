@@ -56,6 +56,19 @@ async def test_history_snapshot_and_candidates(database):
         assert 'SMB' in candidates[0].user_symptom
 
 
+async def test_unmatched_history_is_projected_once_for_b1(database):
+    """A 完成后明确未回复的历史收件进入 B1，重复轮询不产生副本。"""
+    seed_mailbox(database.settings.mailbox_root)
+    service = MailSyncService(database, page_size=1)
+    await service.run_history()
+    assert await service.project_unmatched_history() == 1
+    assert await service.project_unmatched_history() == 0
+    async with database.session() as session:
+        rows = list((await session.scalars(select(Email).where(
+            Email.client_request_id.startswith(database.settings.mailbox_id + ':history:')))).all())
+        assert len(rows) == 1 and rows[0].graph_thread_id
+
+
 async def test_snapshot_survives_source_changes_and_new_mail(database):
     """快照固定后新增文件不进入历史任务，已快照原文不因文件变化丢失。"""
     root = database.settings.mailbox_root

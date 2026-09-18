@@ -1,14 +1,14 @@
 # MVP 整体实施计划
 
-依据 2026-09-16 用户确认的[总体设计](design.md)、[技术选型](architecture/tech-design.md)、[数据库设计](architecture/database-design.md)和[接口设计](architecture/api-design.md)。本计划保留产品文档与历史案例双路知识；仅规划实施，不代表业务代码已交付。进度唯一维护在[状态账本](status.md)。
+依据 2026-09-16 用户确认的[总体设计](design.md)、[技术选型](architecture/tech-design.md)、[数据库设计](architecture/database-design.md)和[接口设计](architecture/api-design.md)。本计划保留产品文档与历史案例双路知识；实际交付进度唯一维护在[状态账本](status.md)。
 
 ## 1. 当前基础与执行边界
 
 - 计划制定时已有 `evals/harness/`、`tests/eval/`、模型评测夹具和 `deploy/embedding/`，尚无业务应用；A1 执行后的真实进度统一见状态账本。
 - 历史专项测试与模型报告作为可复用证据，不能替代真实 PostgreSQL、Graph 恢复、业务幂等或页面验收。
-- 首次启动后台全量初始化模拟邮箱，之后恢复或跳过；完整扫描后只处理确定的一对一关系。历史邮件不启动新邮件 Graph，不提供历史范围选择。
+- 首次启动后台全量初始化 IMAP 收件和已发送邮件，之后恢复或跳过；明确 `unmatched` 的历史收件进入 B1 新邮件 Graph，其余历史记录不提供自动处理或历史范围选择。
 - 产品文档可在运行期间导入；案例必须人工复核发布后才可检索。继续保留产品事实与案例措辞的职责区分。
-- 不实现真实邮箱、真实发件、工单、复杂历史配对、多租户或多 Agent；不开展第二版的检索策略选优和阈值调参。
+- B1 实现只读真实 IMAP 增量，不实现真实 SMTP 发件、工单、复杂历史配对、多租户或多 Agent；不开展第二版的检索策略选优和阈值调参。
 - 工作区已有未提交的评测与设计修改。执行前记录现状，按阶段检查差异，不覆盖或回滚无关改动，不把已有变更冒充本阶段交付。
 
 ## 2. 阶段与依赖
@@ -23,7 +23,7 @@
 
 ## 3. 代码落点与复用原则
 
-以下是拟创建路径，不是现有实现。业务源码直接放在 `src/`，不增加项目包名这一层；`src/` 是源码搜索起点，不作为导入包。评测包继续保留。`src/api/` 提供已设计接口，`services/` 组织业务事务，`repositories/` 隐藏数据访问，`workflow/` 保存 Graph 定义，`adapters/` 封装模拟邮箱与模型。`web/` 为 Vue 页面；`deploy/mvp/` 为应用 Compose；`tests/integration/` 必须使用独立真实 PostgreSQL 测试库。
+以下是计划约定的代码落点；A、B 阶段的对应路径已经实现。业务源码直接放在 `src/`，不增加项目包名这一层；`src/` 是源码搜索起点，不作为导入包。评测包继续保留。`src/api/` 提供接口，`services/` 组织业务事务，`repositories/` 隐藏数据访问，`workflow/` 保存 Graph 定义，`adapters/` 封装邮箱与模型。`web/` 为 Vue 页面；`deploy/mvp/` 为应用 Compose；`tests/integration/` 必须使用独立真实 PostgreSQL 测试库。
 
 可复用 `evals/harness/normalize.py`、`redact.py`、`agent_schema.py`、`embedder.py`、`generator.py` 中已验证的规则或适配代码。先读现有实现再提取必要的业务能力，评测通过兼容导入保留；不直接把评测运行器当作应用调度器。已有 `pairing.py` 的歧义拦截不能证明新版全量关联的一对一判定。
 

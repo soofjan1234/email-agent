@@ -38,6 +38,8 @@ def _active_source_filters(source_type, index_version, product_model, os_version
 
 async def keyword_search(session, source_type, normalized_tokens, index_version, product_model, os_version, limit):
     """用 PostgreSQL english 全文检索返回每个来源的独立排名，不跨来源补位。"""
+    # 受控上限避免长邮件的分词结果构造过深 SQL 表达式；向量通道仍使用完整原查询。
+    normalized_tokens = normalized_tokens[:16]
     if not normalized_tokens:
         return []
     # 自然语言中常有文档不存在的补充词；逐词 OR 保留标识召回，再交给 RRF 处理排序。

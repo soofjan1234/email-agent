@@ -1,16 +1,16 @@
 # 阶段 B：新邮件到审核模拟发送
 
-依据[整体计划](../plan.md)，范围与验收以其上游设计为准。以下路径均为拟实施路径；命令在对应文件与依赖建立后执行。
+依据[整体计划](../plan.md)，范围与验收以其上游设计为准。B1—B3 路径已经实现并通过本地自动回归；真实 IMAP、真实生成服务与跨进程条件仍按下列通过标准继续验收。
 
 ## B1：证明新邮件能够持久化启动并中断恢复
 
 **依赖**：A1 可先做最小恢复探针；正式切片依赖 A2。
 
-**文件**：创建 `src/workflow/graph.py`、`src/workflow/state.py`、`src/services/dispatch.py`、`src/api/emails.py`、`tests/integration/test_graph_recovery.py`、`tests/integration/test_incremental_sync.py`；修改 `src/worker.py`、`src/services/mail_sync.py`。
+**文件**：创建 `src/adapters/imap.py`、`src/workflow/graph.py`、`src/workflow/state.py`、`src/services/dispatch.py`、`src/api/emails.py`、`tests/integration/test_graph_recovery.py`、`tests/integration/test_incremental_sync.py`、`tests/unit/test_imap_adapter.py`、迁移 `migrations/versions/0005_workflow_sync.py`；修改 `src/config.py`、`src/models.py`、`src/worker.py`、`src/main.py`、`src/services/mail_sync.py`、`src/api/mail_sync.py`。
 
 **先写失败测试**：先用最小 Fake 节点运行到 interrupt，退出进程后用新进程连接同一数据库恢复同一 thread；当前未接入 Checkpointer，应失败。并发两个调度进程必须只执行同一邮件一次。
 
-**最小实施步骤**：接入 PostgreSQL Checkpointer 与稳定 thread/generation。增量同步幂等保存新收件，薄调度器发现未启动任务并启动 Graph；不维护第二套节点状态机。邮件状态仅查询投影，恢复以 checkpoint 为准。覆盖初始化边界之后的新增文件，不把旧历史邮件送进 Graph。实现失败节点重放、投影修复及保留策略验证。
+**最小实施步骤**：接入 PostgreSQL Checkpointer 与稳定 thread/generation。真实 IMAP 以 `{UIDVALIDITY, last_committed_uid}` 执行只读收件增量，邮件入库、游标推进和任务计数同事务提交；`Message-ID` 只用于去重。历史初始化完成后，将明确 `unmatched` 的历史收件幂等写入 `emails` 并启动 Graph。薄调度器发现未启动邮件并启动或恢复 Graph；不维护第二套节点状态机。邮件状态仅查询投影，恢复以 checkpoint 为准。UIDVALIDITY 改变时保留游标并标记需对账，B1 不调用 SMTP。实现失败节点重放和投影修复；活跃 checkpoint 的保留清理由 B3 定义终态后实现。
 
 **验证命令**：
 
@@ -19,7 +19,7 @@ docker compose --env-file .env -f deploy/mvp/compose.yaml build api
 docker compose --env-file .env -f deploy/mvp/compose.yaml run --rm api python -m pytest tests/integration/test_incremental_sync.py tests/integration/test_graph_recovery.py -q
 ```
 
-**通过条件**：真实进程重启后仍定位同一 interrupt；同 thread 不并发，增量重复提交无重复邮件，投影损坏不改变 Graph 路径。
+**通过条件**：真实进程重启后仍定位同一 interrupt；同 thread 不并发，历史 `unmatched` 与初始化边界后 IMAP UID 均只创建一封业务邮件，增量重复提交无重复邮件，UIDVALIDITY 不一致不推进游标，投影损坏不改变 Graph 路径。
 
 ## B2：基于知识生成可审核的安全草稿
 

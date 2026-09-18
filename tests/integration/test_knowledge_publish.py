@@ -92,10 +92,47 @@ async def test_case_review_publish_retry_archive(database):
         ids = [c.id for c in chunks]
         assert all(c.source_metadata['candidate_id'] == str(candidate_id) for c in chunks)
         assert all(c.product_model == 'NAS-X' for c in chunks)
-    await service.archive(candidate_id, reviewed['revision'], 'tester')
+    await service.archive(candidate_id, reviewed['revision'], uuid.UUID(document['id']), 'tester')
     async with database.session() as session:
         assert (await session.get(KnowledgeDocument, uuid.UUID(document['id']))).status == 'archived'
         assert all([await session.get(KnowledgeChunk, key) is not None for key in ids])
+
+
+async def test_archive_rejects_stale_published_document_snapshot(database):
+    """旧页面不能用发布前的快照下架另一位审核人刚发布的知识。"""
+    pair_id, candidate_id = await seed_candidate(database)
+    embedder = FakeEmbedding(database.settings.embedding_dimensions)
+    service = KnowledgeService(database, embedding_factory=lambda: embedder)
+    await service.confirm_pair(pair_id, 'confirm', 'tester')
+    page_snapshot = await service.review(candidate_id, review_body())
+    document = await service.publish(candidate_id, page_snapshot['revision'])
+    app = create_app(database.settings)
+    app.state.embedding_factory = lambda: embedder
+
+    async with app.router.lifespan_context(app):
+        async with AsyncClient(transport=ASGITransport(app=app), base_url='http://test') as client:
+            path = f'/api/v1/case-candidates/{candidate_id}/archive'
+            missing_snapshot = await client.post(path, json={
+                'expected_revision': page_snapshot['revision'], 'reviewer': 'tester'})
+            invalid_snapshot = await client.post(path, json={
+                'expected_revision': page_snapshot['revision'],
+                'expected_published_document_id': 'not-a-uuid',
+                'reviewer': 'tester'})
+            stale_snapshot = await client.post(path, json={
+                'expected_revision': page_snapshot['revision'],
+                'expected_published_document_id': None,
+                'reviewer': 'tester'})
+            assert missing_snapshot.status_code == 400
+            assert invalid_snapshot.status_code == 400
+            assert stale_snapshot.status_code == 409
+            current_snapshot = await client.post(path, json={
+                'expected_revision': page_snapshot['revision'],
+                'expected_published_document_id': document['id'],
+                'reviewer': 'tester'})
+            assert current_snapshot.status_code == 200
+
+    async with database.session() as session:
+        assert (await session.get(KnowledgeDocument, uuid.UUID(document['id']))).status == 'archived'
 
 
 async def test_failed_update_keeps_previous_version_and_retry(database, tmp_path):
@@ -164,6 +201,7 @@ async def test_concurrent_import_publishes_once(database, tmp_path):
 
 async def test_api_state_guards_and_safe_errors(database):
     """接口拒绝未确认审核、过期修改和非法路径，不返回受控原文。"""
+    database.settings.knowledge_local_import_enabled = True
     pair_id, candidate_id = await seed_candidate(database)
     app = create_app(database.settings)
     async with app.router.lifespan_context(app):
@@ -277,9 +315,23 @@ async def test_product_import_keeps_blockquote_and_redacts_before_embedding(data
         assert 'alice@example.test' in (await session.get(KnowledgeDocument, uuid.UUID(document['id']))).raw_content
 
 
+async def test_local_path_import_is_disabled_without_explicit_setting(database, tmp_path):
+    """生产默认不允许 HTTP 请求按服务器路径读取测试文档。"""
+    database.settings.knowledge_root = tmp_path
+    (tmp_path / 'guide.md').write_text('# Guide\n\nCheck SMB.', encoding='utf-8')
+    app = create_app(database.settings)
+    app.state.embedding_factory = lambda: FakeEmbedding(database.settings.embedding_dimensions)
+    async with app.router.lifespan_context(app):
+        async with AsyncClient(transport=ASGITransport(app=app), base_url='http://test') as client:
+            response = await client.post('/api/v1/knowledge/import', json={'path': 'guide.md'})
+    assert response.status_code == 403
+    assert response.json()['code'] == 'local_import_disabled'
+
+
 async def test_api_embedding_failure_is_safe_and_retry_works(database, tmp_path):
     """接口可在运行期间导入，模型失败只返回固定错误，重试完成同一来源。"""
     database.settings.knowledge_root = tmp_path
+    database.settings.knowledge_local_import_enabled = True
     (tmp_path / 'guide.md').write_text('# Guide\n\nCheck SMB.', encoding='utf-8')
     app = create_app(database.settings)
     embedder = FakeEmbedding(database.settings.embedding_dimensions, fail_after=0)
@@ -321,6 +373,6 @@ async def test_active_query_excludes_candidate_and_archived(database):
     statement = active_chunks_statement().where(KnowledgeChunk.document_id == uuid.UUID(document['id']))
     async with database.session() as session:
         assert list((await session.scalars(statement)).all())
-    await service.archive(candidate_id, reviewed['revision'], 'tester')
+    await service.archive(candidate_id, reviewed['revision'], uuid.UUID(document['id']), 'tester')
     async with database.session() as session:
         assert not list((await session.scalars(statement)).all())

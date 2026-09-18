@@ -8,6 +8,7 @@ import sys
 from config import Settings
 from db import Database
 from services.mail_sync import MailSyncService
+from services.dispatch import WorkflowDispatcher
 
 
 async def run_once(settings=None):
@@ -15,7 +16,11 @@ async def run_once(settings=None):
     database = Database(settings or Settings())
     try:
         await database.check_ready()
-        await MailSyncService(database).run_history()
+        service = MailSyncService(database)
+        await service.run_history()
+        await service.project_unmatched_history()
+        await service.run_next_incremental()
+        await WorkflowDispatcher(database).dispatch_pending()
     finally:
         await database.close()
 
@@ -32,10 +37,14 @@ async def serve():
         await database.check_ready()
         service = MailSyncService(database)
         await service.ensure_initialization()
-        logging.info('worker ready; historical initialization enabled')
+        dispatcher = WorkflowDispatcher(database)
+        logging.info('worker ready; history, incremental sync and workflow dispatch enabled')
         while not stopped.is_set():
             try:
                 await service.run_history()
+                await service.project_unmatched_history()
+                await service.run_next_incremental()
+                await dispatcher.dispatch_pending()
             except Exception:
                 logging.warning('historical initialization failed; see sync job status')
             try:

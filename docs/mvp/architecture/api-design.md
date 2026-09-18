@@ -21,7 +21,7 @@
 
 MVP 不接受 `start_time`、`end_time` 或手动 `historical_backfill` 请求，提交这些参数返回 `400`。历史初始化由程序启动检查自动创建或恢复，规则见总体设计 6.2、6.3；内部任务仍使用 `historical_backfill` 模式。
 
-第一版调用 `MockMailboxAdapter`。首次提交返回 `202` 和同步任务 ID；相同幂等键及相同参数返回已有任务，相同幂等键但参数不同返回 `409`。历史初始化未完成或同一邮箱已有运行中的同步任务时返回 `409`，避免并发拉取和历史邮件误入新邮件流程。
+适配器按 `MAILBOX_ADAPTER` 选择本地历史夹具或只读 IMAP；真实增量使用 IMAP UID 游标。首次提交返回 `202` 和同步任务 ID；相同幂等键及相同参数返回已有任务，相同幂等键但参数不同返回 `409`。历史初始化未完成或同一邮箱已有运行中的同步任务时返回 `409`，避免并发拉取和初始化边界混乱。
 
 ### `GET /api/v1/mail-sync-jobs`
 
@@ -44,7 +44,7 @@ MVP 不接受 `start_time`、`end_time` 或手动 `historical_backfill` 请求�
 
 `stage` 按 `snapshot → scanning → pairing → candidates → completed` 推进。扫描数量按物理文件计，新增数量按去重邮件计；失败数量表示保留了原文但解析失败的新增邮件，与新增数量可重叠。边界只返回快照 ID、捕获时间、摘要和文件数，不含磁盘路径或原文。未支持数量按去重邮件计，不是会话数。
 
-A2 的增量入口只完成初始化保护和幂等任务登记，实际增量执行由 B1 接入；在该阶段提交成功的增量任务保持 pending，不表示已经同步了新邮件。
+B1 的增量入口继续只负责初始化保护和幂等任务登记；独立 worker 以只读 IMAP 执行任务。成功任务返回本次游标前后值及邮件计数；`UIDVALIDITY` 改变时返回可查询的 `cursor_reset_required` 失败，不自动重置游标。接口不接受客户端传入 IMAP 游标、文件夹、主机、时间范围或密码，运行配置是唯一来源。
 
 ## 3. 邮件查询
 
@@ -82,7 +82,7 @@ A2 的增量入口只完成初始化保护和幂等任务登记，实际增量�
 
 ### `POST /api/v1/knowledge/import`
 
-仅供本地管理操作使用。请求指定受信任的仓库内相对路径；后端禁止绝对路径、路径穿越和工作区外文件。
+当前仅供开发和测试环境中的本地管理操作使用，且必须显式设置 `KNOWLEDGE_LOCAL_IMPORT_ENABLED=true`；未开启时返回 403 `local_import_disabled`。请求指定受信任的仓库内相对路径；后端禁止绝对路径、路径穿越和工作区外文件。后续管理页面不会复用该路径契约，而会改为提交 Markdown 文件内容；已确认但尚未实现的上传边界见 `todo.md` 第 4 项。
 
 A3 请求示例：`{"path":"nas/smb.md","title":"SMB guide","product_model":"NAS-X","os_version":"2.1","category":"network"}`。仅 `path` 必填，路径相对于配置的 `KNOWLEDGE_ROOT`（默认 `data/knowledge`）；服务端不接受请求修改根目录。仅接受 UTF-8 Markdown，拒绝符号链接、目录联接及 Windows 数据流，默认文件上限 2 MB。适用字段由调用者明确提供，不从正文猜测。
 
@@ -133,7 +133,7 @@ A3 请求示例：`{"path":"nas/smb.md","title":"SMB guide","product_model":"NAS
 
 停止检索已发布案例，但保留历史引用和审计记录。已发布案例的修改必须生成新版本。
 
-请求为 `{"expected_revision":2,"reviewer":"operator"}`。归档可重复，返回候选详情；已归档案例不能通过旧发布请求重新激活。
+请求为 `{"expected_revision":2,"expected_published_document_id":"UUID 或 null","reviewer":"operator"}`。`expected_published_document_id` 必填，`null` 表示页面打开时尚未发布文档；服务端同时核对该快照与当前文档，不一致返回 `409`，避免旧页面下架其他审核人刚发布的知识。归档可重复，返回候选详情；已归档案例不能通过旧发布请求重新激活。恢复归档案例不属于 MVP 或第二版范围，当前不设计 `unarchive` 接口。
 
 ## 运行检查
 

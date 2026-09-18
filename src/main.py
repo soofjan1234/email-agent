@@ -10,8 +10,12 @@ from config import Settings
 from db import Database
 from services.mail_sync import MailSyncService
 from api.cases import router as cases_router
+from api.emails import router as emails_router
+from api.reviews import router as reviews_router
+from api.outbox import router as outbox_router
 from api.knowledge import router as knowledge_router
 from services.knowledge import KnowledgeError
+from services.reviews import ReviewError
 
 def create_app(settings=None):
     """通过 lifespan 管理连接池，启动失败时不提供假就绪状态。"""
@@ -31,6 +35,9 @@ def create_app(settings=None):
     app.include_router(router)
     app.include_router(cases_router)
     app.include_router(knowledge_router)
+    app.include_router(emails_router)
+    app.include_router(reviews_router)
+    app.include_router(outbox_router)
 
     @app.middleware('http')
     async def identify_request(request, call_next):
@@ -47,6 +54,7 @@ def create_app(settings=None):
 
     @app.exception_handler(SyncError)
     @app.exception_handler(KnowledgeError)
+    @app.exception_handler(ReviewError)
     async def sync_error(request, exc):
         """把领域状态冲突转换为统一 HTTP 错误。"""
         return error_response(request, exc.status, exc.code, exc.message)

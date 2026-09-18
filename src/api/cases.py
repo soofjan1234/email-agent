@@ -45,7 +45,9 @@ class PublishRequest(BaseModel):
 
 
 class ArchiveRequest(PublishRequest):
-    """归档保留操作者与所见版本。"""
+    """归档必须携带操作者、所见审核版本和已发布文档快照。"""
+    # 页面未见已发布文档时显式提交 null，缺失字段则拒绝旧调用方。
+    expected_published_document_id: uuid.UUID | None = Field(...)
     reviewer: str = Field(min_length=1, max_length=128)
 
 
@@ -127,4 +129,5 @@ async def publish_candidate(candidate_id: uuid.UUID, body: PublishRequest, reque
 @router.post('/case-candidates/{candidate_id}/archive')
 async def archive_candidate(candidate_id: uuid.UUID, body: ArchiveRequest, request: Request):
     """撤销检索资格但保留引用。"""
-    return await knowledge_service(request).archive(candidate_id, body.expected_revision, body.reviewer)
+    return await knowledge_service(request).archive(
+        candidate_id, body.expected_revision, body.expected_published_document_id, body.reviewer)

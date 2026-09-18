@@ -170,16 +170,20 @@ class KnowledgeService:
             self.audit(session, 'case_published', candidate.id, candidate.reviewer)
             return serialize_document(document)
 
-    async def archive(self, candidate_id, expected_revision, reviewer):
-        """归档当前有效案例并保留全部历史文档与片段，重复归档无额外副作用。"""
+    async def archive(self, candidate_id, expected_revision, expected_published_document_id, reviewer):
+        """仅归档页面快照中的当前文档，避免旧页面下架后来发布的知识。"""
         async with self.database.session() as session:
             candidate, _ = await self._candidate(session, candidate_id)
-            if candidate.revision != expected_revision:
+            # 1. 审核版本和发布文档都必须仍与页面所见一致。
+            if (candidate.revision != expected_revision
+                    or candidate.published_document_id != expected_published_document_id):
                 raise conflict()
+            # 2. 重复归档同一快照不再改变任何数据。
             if candidate.status == 'archived':
                 return serialize_candidate(candidate)
             if not candidate.published_document_id:
                 raise conflict()
+            # 3. 只下架已核对的文档，历史片段继续保留供审计。
             document = await session.get(KnowledgeDocument, candidate.published_document_id)
             document.status = 'archived'
             candidate.status = 'archived'
@@ -215,13 +219,17 @@ class KnowledgeService:
         except (OSError, ValueError, RuntimeError):
             raise KnowledgeError(400, 'invalid_path', 'Cannot read a trusted UTF-8 Markdown document') from None
 
-    async def import_document(self, path, title=None, product_model=None, os_version=None, category=None):
+    async def import_document(self, path, title=None, product_model=None, os_version=None, category=None,
+                              source_metadata=None):
         """运行期间从固定可信根目录读取快照；相同内容和配置复用已发布版本。"""
         relative, raw = await asyncio.to_thread(self._read_document, path)
         title = clean(title or Path(relative).stem)
         markdown = clean(raw)
         metadata = {key: clean(value) if value else None for key, value in dict(
             product_model=product_model, os_version=os_version, category=category).items()}
+        if source_metadata:
+            metadata.update({clean(key): clean(value) for key, value in source_metadata.items()
+                             if clean(key) and clean(value)})
         metadata['relative_path'] = relative
         source_ref = self.database.settings.knowledge_source_id + ':' + relative
         async with self.database.session() as session:

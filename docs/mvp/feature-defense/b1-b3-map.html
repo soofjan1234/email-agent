@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>阶段 B · 邮件闭环防御地图</title>
+  <style>
+    :root { color-scheme: light; --bg:#f5f7fb; --card:#fff; --ink:#172033; --muted:#5f6b7c; --line:#d9e0eb; --accent:#2457d6; --accent-soft:#eaf0ff; --warn:#9b5d00; --warn-soft:#fffaf0; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--bg); color:var(--ink); font:14px/1.55 system-ui,"Microsoft YaHei",sans-serif; }
+    header { padding:24px max(20px,calc((100vw - 1540px)/2)); background:linear-gradient(115deg,#17295d,#2457d6); color:#fff; }
+    header h1 { margin:0 0 6px; font-size:26px; line-height:1.25; }
+    main { max-width:1540px; margin:20px auto; padding:0 20px 28px; }
+    h2 { font-size:16px; margin:0 0 12px; } h3 { font-size:15px; margin:18px 0 6px; } p { margin:0 0 10px; }
+    .intro, .boundary { color:#e4ebff; } .boundary { font-size:13px; }
+    .panel { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:18px; box-shadow:0 2px 10px #14204b0d; }
+    .map { margin-bottom:16px; }
+    .toolbar { display:flex; align-items:start; justify-content:space-between; gap:16px; margin:0 0 10px; }
+    .toolbar strong { font-size:16px; }
+    button { font:inherit; cursor:pointer; border:1px solid var(--accent); background:var(--card); color:var(--accent); border-radius:8px; padding:7px 10px; font-weight:700; }
+    button:hover, button:focus-visible { background:var(--accent-soft); outline:2px solid transparent; }
+    .flow { display:grid; grid-template-columns:repeat(7,minmax(150px,1fr)); gap:10px; overflow:auto; padding:4px; }
+    .flow.compact { display:flex; align-items:stretch; min-height:72px; }
+    .flow.compact .node { flex:0 0 126px; min-height:64px; padding:9px 10px; }
+    .flow.compact .responsibility { display:none; }
+    .node { appearance:none; text-align:left; min-height:116px; padding:12px; color:var(--ink); border:1px solid var(--line); }
+    .node[aria-pressed="true"] { border:2px solid var(--accent); background:var(--accent-soft); box-shadow:0 0 0 3px #2457d625; }
+    .step { display:block; color:var(--accent); font-weight:700; font-size:12px; margin-bottom:7px; }
+    .responsibility { display:block; margin-top:7px; color:var(--muted); font-size:12px; font-weight:400; }
+    .b1,.b2,.b3 { grid-column:span 1; }
+    .brief-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; margin:14px 0; }
+    .brief-card { min-width:0; padding:12px; border:1px solid var(--line); border-radius:9px; background:#fbfcff; }
+    .brief-card h4 { margin:0 0 7px; font-size:13px; color:var(--accent); }
+    .brief-card p { margin:0; }
+    .brief-card.terms { background:#f6f8ff; }
+    .brief-card.misconception { border-left:4px solid var(--warn); background:var(--warn-soft); }
+    .brief-card.misconception h4 { color:var(--warn); }
+    .term-list { list-style:none; margin:0; padding:0; }
+    .term-list li + li { margin-top:7px; }
+    .defense-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; }
+    .defense-card { min-width:0; padding:12px; border:1px solid var(--line); border-radius:9px; background:#fbfcff; }
+    .defense-card h4 { margin:0 0 7px; font-size:13px; color:var(--accent); }
+    .defense-card p { margin:5px 0; }
+    .scenario-list { list-style:none; padding:0; margin:0; }
+    .scenario { margin:0 0 9px; padding:9px; border:1px solid var(--line); border-radius:7px; }
+    .scenario:last-child { margin-bottom:0; }
+    .scenario p { color:var(--muted); font-size:12px; }
+    .scenario .status { display:block; margin-bottom:4px; font-size:12px; }
+    .scenario-proven { border-left:4px solid #16825d; background:#f0fbf6; }
+    .scenario-proven .status { color:#16825d; }
+    .scenario-partial { border-left:4px solid #b87400; background:#fffaf0; }
+    .scenario-partial .status { color:#9b5d00; }
+    .scenario-pending { border-left:4px solid #a43a3a; background:#fff5f5; }
+    .scenario-pending .status { color:#a43a3a; }
+    .risk { border-left:4px solid #a43a3a; background:#fff5f5; }
+    .risk h4 { color:#a43a3a; }
+    ul { padding-left:20px; margin:7px 0; }
+    footer { margin-top:14px; color:var(--muted); font-size:12px; }
+    @media (max-width:980px) { .defense-grid { grid-template-columns:1fr; } }
+    @media (max-width:780px) { header { padding:20px 12px; } main { padding:0 12px 20px; } .flow:not(.compact) { grid-template-columns:1fr; overflow:visible; } .node,.b1,.b2,.b3 { grid-column:auto; min-height:auto; } .panel { padding:16px; } .brief-grid { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>B1–B3 功能防御地图</h1>
+    <p class="intro">新邮件持久化与恢复 → 有依据的安全草稿 → 审核恢复与模拟发送</p>
+    <p class="boundary">实现阶段：B1—B3 后端已交付并通过本地自动测试。场景按直接证据分别标为 <span class="status">✓ 已证明</span>、<span class="status">△ 部分证明</span>或<span class="status">○ 待验证</span>；真实邮箱、真实生成服务与跨进程运行仍待受控验收。</p>
+  </header>
+  <main>
+    <section class="panel map" aria-labelledby="map-title">
+      <div class="toolbar">
+        <div>
+          <h2 id="map-title">主流程（7 个节点，点击查看防御义务）</h2>
+          <p class="note">默认紧凑导航；展开后显示完整职责。状态只反映本次已核验的真实运行证据，不以计划或测试名称替代证明。</p>
+        </div>
+      <button id="toggle-flow" type="button" aria-expanded="false">展开流程</button>
+      </div>
+      <nav id="flow" class="flow compact" aria-label="阶段 B 功能步骤" role="tablist"></nav>
+    </section>
+    <section class="panel" aria-labelledby="detail-title" aria-live="polite">
+      <h2 id="detail-title">节点防御复盘</h2>
+      <div id="detail"></div>
+    </section>
+    <footer>异常、拒绝、恢复与并发已融入对应节点的应测场景。未充分证明的风险会保留在“可能漏掉什么”中；本页不把计划、拟建测试或本次版式调整说成已经验证的功能。</footer>
+  </main>
+
+  <script>
+const statusLabel={proven:'✓ 已证明',partial:'△ 部分证明',pending:'○ 待验证'};
+const statusReason={
+  proven:'当前自动测试存在直接断言，能够证明这个可观察结果。',
+  partial:'核心机制已有自动测试证据，但场景中的更强条件或外部环境尚未完整覆盖。',
+  pending:'当前没有直接测试证据，不能把实现或测试名称当作已经证明。'
+};
+const detailedNodes=[
+  {id:'b1-ingest',group:'b1',step:'B1 · 1',title:'历史未回复与增量邮件入库',what:'历史初始化中明确未回复的收件，以及初始化边界之后的 IMAP 新邮件，均以稳定身份保存。',summary:'先用 Sent 关联确认历史未回复，再以 UID 游标读取新增邮件，两类输入进入同一流程且不重复。',example:'历史邮件 A 没有关联人工发件，初始化后进入处理；此后 UID 更大的邮件 B 由增量同步进入，重复执行不会产生副本。',terms:[['初始化边界','历史扫描结束与 IMAP 增量处理开始之间的 UID 分界。'],['增量同步','按 UIDVALIDITY 和上次已提交 UID 获取新增邮件。']],misconception:'不要误解：所有历史邮件都会重新处理；只有明确 unmatched 的历史收件进入 Graph。',narrative:['这一环节同时覆盖历史未回复和边界后的新邮件。','历史阶段扫描收件与已发送文件夹，以协议头识别明确未回复邮件。','增量阶段使用 UID 游标只读获取新增邮件，并使用稳定身份幂等保存。','邮件写入与游标推进同事务，重复扫描不会增加副本。'],scenarios:[['历史未回复进入','历史收件 A 没有关联人工发件。','A 被幂等投影并启动 Graph。'],['边界后的新邮件进入','UID 大于初始化边界的邮件 B 到达。','B 被保存并具备启动条件。'],['重复增量同步','同一批新邮件被再次读取。','邮件记录保持唯一，不产生第二份业务对象。']],risks:['真实供应商 IMAP 与 UIDVALIDITY 变化尚未受控验收。','重复批次已由真实 PostgreSQL 集成测试覆盖，但尚未做跨真实进程压力验证。']},
+  {id:'b1-dispatch',group:'b1',step:'B1 · 2',title:'幂等发现与单次启动',what:'薄调度器只发现未启动邮件，不维护第二套流程状态。',summary:'调度器只负责“发现并启动一次”，流程进度由持久化流程本身负责。',example:'两个调度进程同时看到邮件 A，最终只有一个执行者启动 A 的处理，另一个不会重复推进。',terms:[['薄调度器','只发现和触发任务，不复制业务状态机。'],['单次启动','同一邮件在同一代处理中最多启动一次。']],misconception:'不要误解：调度器看到邮件状态不代表它拥有或决定流程状态。',narrative:['这一环节解决多个调度器重复启动同一邮件的问题。','它发生在新邮件已经落库、等待启动时。','调度器只竞争未启动任务并交给可恢复流程，自己不维护节点进度。','成功时并发发现仍只有一个实际执行者。'],scenarios:[['双调度器并发发现','两个进程同时发现邮件 A。','最多一个进程成功启动 A。'],['启动请求重放','同一启动动作因超时被再次发起。','重放复用原处理，不创建新流程。']],risks:['尚未运行双进程竞争测试。','尚未证明进程超时后的请求重放保持同一处理身份。']},
+  {id:'b1-recovery',group:'b1',step:'B1 · 3',title:'持久化中断与进程恢复',what:'流程在等待点持久化，重启后定位同一邮件的同一中断。',summary:'进程可以消失，但邮件的处理身份和等待位置不能丢失。',example:'邮件 A 已生成草稿并等待小王审核，此时服务重启；恢复后页面仍展示 A 的同一份等待任务。',terms:[['中断','流程主动停在需要人工输入的位置。'],['处理身份','把邮件、处理代次和恢复位置关联起来的稳定身份。']],misconception:'不要误解：重启恢复不是从头再跑一次，也不是复制一条新的等待任务。',narrative:['这一环节解决进程重启后丢失人工等待位置的问题。','它发生在流程运行中断、服务退出或重新部署时。','系统从持久记录恢复同一处理身份及其最后等待点。','成功时邮件 A 回到原中断，已完成步骤不会重复产生业务副作用。'],scenarios:[['真实进程重启恢复','流程停在人工等待点后进程退出。','新进程恢复同一邮件的同一等待点。'],['失败节点重放','节点执行失败后重新进入。','只重做允许重放的未完成步骤。']],risks:['尚未运行跨真实进程恢复测试。','尚未证明失败节点重放不会重复业务记录。']},
+  {id:'b1-projection',group:'b1',step:'B1 · 4',title:'状态投影与保留边界',what:'查询状态只是流程事实的投影，损坏后可修复但不改变路径。',summary:'页面看到的状态可以重建，真正的恢复依据必须保持独立。',example:'邮件 A 的列表状态意外缺失，系统从流程事实修复展示；A 不会因此跳到下一步或重新开始。',terms:[['状态投影','面向查询和页面展示的派生状态。'],['保留策略','完成或过期记录保存多久及如何清理的规则。']],misconception:'不要误解：修改查询状态不能用来强行推进流程。',narrative:['这一环节解决查询状态损坏时误改真实处理路径的问题。','它发生在页面状态缺失、落后或需要清理旧记录时。','系统以持久流程事实修复投影，并单独验证保留策略。','成功时页面恢复一致，流程路径和处理中断不被改变。'],scenarios:[['投影损坏修复','查询状态被删除或写错。','展示状态可重建，流程路径保持不变。'],['保留策略执行','流程记录达到计划中的保留条件。','只清理允许清理的记录，不破坏仍需恢复的任务。']],risks:['尚未验证投影重建与流程事实的一致性。','保留策略尚未通过恢复场景证明。']},
+  {id:'b2-classify',group:'b2',step:'B2 · 5',title:'邮件分类与条件路由',what:'按垃圾、VIP 与普通邮件进入已定义的不同路径。',summary:'先判断邮件属于哪类，再决定是否继续检索和生成。',example:'广告邮件 A 被提前结束，VIP 邮件 B 被标记为高关注，普通咨询 C 进入知识检索。',terms:[['条件路由','根据分类结果选择后续处理分支。'],['提前结束','明确停止无需继续生成的邮件路径。']],misconception:'不要误解：分类只是路由条件，不代表内容已经安全或答案已经正确。',narrative:['这一环节解决所有邮件都走同一套昂贵或不合适流程的问题。','它发生在新邮件处理开始后。','系统识别垃圾、VIP 和普通邮件，并选择对应分支。','成功时各类邮件路径可复现，垃圾邮件不会继续生成草稿。'],scenarios:[['三类邮件固定路由','分别输入垃圾、VIP 和普通邮件。','三类输入进入各自约定路径。'],['未知或非法分类','分类结果不在允许集合内。','结果被拒绝或转人工，不猜测新分支。']],risks:['尚未运行固定样例的路由测试。','尚未证明非法分类不会落入默认生成路径。']},
+  {id:'b2-evidence',group:'b2',step:'B2 · 6',title:'证据评估与查询改写',what:'区分产品事实与案例措辞，证据不足时有限改写查询。',summary:'产品结论必须由产品资料支持，案例只能帮助表达。',example:'邮件 A 询问型号 X 的能力，只检索到相似案例但没有产品资料，系统不会把案例里的做法写成确定事实。',terms:[['产品事实','需要产品资料直接支持的能力或操作结论。'],['案例措辞','可参考表达方式、但不能证明产品能力的历史内容。'],['查询改写','在有限次数内换一种检索表达。']],misconception:'不要误解：检索到相似案例不等于拥有可靠产品依据。',narrative:['这一环节解决候选内容与可靠依据被混为一谈的问题。','它发生在分类后需要判断能否回答时。','系统分别评估产品资料和案例，证据不足时有限改写查询。','成功时只有受支持的事实进入生成，改写达到上限后停止。'],scenarios:[['仅案例命中','只有历史案例，没有产品资料支持结论。','不生成确定性产品方案。'],['无答案与冲突','没有可用依据，或不同资料彼此冲突。','形成受限结果或转人工，并保留原因。'],['查询改写到达上限','多次改写仍未得到依据。','停止循环，不继续消耗模型调用。']],risks:['尚未用真实数据库检索片段验证事实与措辞分离。','查询改写计数与终止条件尚未运行证明。']},
+  {id:'b2-generate',group:'b2',step:'B2 · 7',title:'受限草稿生成',what:'基于本次证据生成草稿，高风险或缺信息时收紧内容。',summary:'能回答时给出有依据草稿，不能安全回答时明确边界并等待人工。',example:'客户要求执行高风险操作，系统只生成风险提示和人工接管建议，不给出危险步骤。',terms:[['受限草稿','主动减少确定性结论和操作步骤的安全草稿。'],['高风险','错误建议可能造成安全、数据或业务损害的内容。']],misconception:'不要误解：文本里出现“请谨慎”不等于已经满足高风险保护。',narrative:['这一环节解决模型在证据不足或高风险场景下仍给出确定方案的问题。','它发生在证据评估完成、准备形成客服回复时。','系统以本次证据生成，并在缺信息、冲突或高风险时限制内容。','成功时普通问题得到可审核草稿，危险步骤不会进入草稿。'],scenarios:[['有依据普通问题','产品资料直接支持客户问题。','草稿只陈述有依据结论并保留引用。'],['缺信息或高风险','回答所需信息缺失或操作风险较高。','生成受限草稿或转人工，不提供危险步骤。']],risks:['尚未完成真实模型抽测。','尚未证明高风险场景不会通过措辞变体泄露危险步骤。']},
+  {id:'b2-validate',group:'b2',step:'B2 · 8',title:'后端校验与有限重试',what:'校验结构、引用归属和结论支持关系，失败只允许有限重试。',summary:'模型输出必须经过后端规则确认，非法结果不能进入审核等待。',example:'模型返回了格式正确但引用不属于本次检索的草稿，后端拒绝它；连续失败达到上限后转人工。',terms:[['越界引用','引用了本次检索结果之外的内容。'],['有限重试','每类重试有独立计数和明确上限。'],['提示注入','邮件内容试图改变系统既定规则。']],misconception:'不要误解：JSON 能解析只说明格式有效，不说明引用真实或结论受支持。',narrative:['这一环节解决格式合法但事实不受支持的输出混入审核的问题。','它发生在每次模型生成之后。','系统校验结构、引用集合、支持关系和提示注入，并分别限制网络重试、改写与重新生成次数。','成功时只有校验通过的草稿进入人工等待；持续非法输出保留失败原因后转人工。'],scenarios:[['非法 JSON','模型输出无法按约定结构解析。','有限重新生成，达到上限后转人工。'],['越界引用','草稿引用不属于本次检索。','拒绝草稿，不进入正式审核等待。'],['提示注入','邮件要求忽略既定规则或泄露提示。','攻击内容不改变系统约束。'],['计数器上限','任一重试类型达到上限。','流程终止对应循环并记录失败原因。']],risks:['尚未运行非法输出、越界引用和提示注入夹具。','三类计数器的独立上限尚未证明。']},
+  {id:'b3-review',group:'b3',step:'B3 · 9',title:'真实中断与审核身份',what:'审核请求必须命中真实等待点，并核对处理与恢复身份。',summary:'人工只能处理当前确实在等待的那一份草稿。',example:'小王打开邮件 A 的旧页面，但 A 已被其他人处理；旧请求被拒绝，不覆盖当前结果。',terms:[['审核中断','流程为等待人工决定而保存的正式停点。'],['过期审核','页面携带的处理版本已不是当前版本。']],misconception:'不要误解：知道邮件编号不代表可以批准任意旧草稿。',narrative:['这一环节解决旧页面、伪造身份或重复请求覆盖当前审核的问题。','它发生在人工提交批准、编辑批准、拒绝或转人工时。','系统核对真实中断及对应处理身份，再接受审核事实。','成功时只有当前等待中的草稿可被处理，过期或冲突请求按契约返回。'],scenarios:[['四种审核动作','对当前等待草稿提交四种允许动作之一。','动作被准确记录，并进入对应后续路径。'],['旧等待点请求','使用已经过期的处理身份提交。','返回冲突，不修改当前审核事实。']],risks:['尚未运行四种动作与旧等待点组合测试。','尚未证明伪造或错配身份不会推进流程。']},
+  {id:'b3-resume',group:'b3',step:'B3 · 10',title:'审核落库与恢复重放',what:'先幂等保存审核事实，再从恢复入口推进原流程。',summary:'审核决定先成为稳定事实，随后恢复失败也可以安全补做。',example:'小王批准邮件 A，审核已保存但恢复前进程退出；下一次重试读取同一审核事实并继续，不要求小王再次批准。',terms:[['审核事实','持久保存的人工动作与最终内容。'],['恢复重放','重新执行尚未完成的恢复步骤。']],misconception:'不要误解：接口返回失败不一定表示审核事实没有保存，重试必须先查已有事实。',narrative:['这一环节解决审核已保存但流程尚未恢复时丢失决定的问题。','它发生在审核事务完成到流程继续之间。','系统幂等写入审核事实，再由统一恢复入口推进；重试先识别已有事实。','成功时中断后可以补齐恢复，重复请求不会覆盖或遗失人工决定。'],scenarios:[['审核后恢复前崩溃','审核事实已保存，恢复尚未执行。','重试补齐恢复并复用原审核事实。'],['重复恢复请求','同一审核恢复被多次触发。','流程只推进一次，不产生重复副作用。']],risks:['尚未注入审核落库后崩溃点。','尚未证明恢复请求重放不会丢失未完成步骤。']},
+  {id:'b3-outbox',group:'b3',step:'B3 · 11',title:'模拟发件与副作用唯一',what:'只有批准路径写模拟发件，并在重放时保持唯一。',summary:'批准最多产生一条模拟发件；拒绝和转人工绝不写发件记录。',example:'邮件 A 的模拟发件已经写入，但保存后续位置前服务退出；恢复后系统识别已有记录，不再追加第二条。',terms:[['模拟发件','只在本地记录发送结果，不访问真实邮件网络。'],['副作用唯一','同一业务决定最多产生一次外部可观察记录。']],misconception:'不要误解：模拟发件通过不代表真实邮件已经发送，也不证明真实网络能力。',narrative:['这一环节解决批准重放导致重复发送记录的问题。','它发生在批准或编辑批准之后。','系统以稳定业务身份写入模拟发件，并在恢复前检查已有结果。','成功时批准最多一条记录；拒绝或转人工保持零条，真实网络发件次数始终为零。'],scenarios:[['批准与编辑批准','审核动作允许发送。','各自最多产生一条模拟发件。'],['拒绝与转人工','审核动作不允许发送。','不产生模拟发件。'],['写入后崩溃重放','发件已写入但后续位置未保存。','恢复复用已有记录，不重复写入。']],risks:['尚未运行模拟发件写入后崩溃测试。','尚未以可观察断言证明真实网络发件次数为零。']},
+  {id:'b3-candidate',group:'b3',step:'B3 · 12',title:'候选生成与审计边界',what:'批准结果生成唯一来源候选，并记录脱敏审计；候选不会自动生效。',summary:'把审核结果留作可追溯候选，但必须经过后续复核才能成为可检索知识。',example:'邮件 A 被编辑批准后生成候选 C；C 带着来源和版本信息等待复核，不会立刻进入知识检索。',terms:[['来源候选','由本次批准答复生成、等待后续复核的知识候选。'],['审计','记录谁在何时做了什么及使用了哪个版本。'],['自动生效','无需复核就进入可用知识；本阶段明确不做。']],misconception:'不要误解：生成候选不等于发布知识，也不等于它已经可以被检索。',narrative:['这一环节解决批准内容来源不明、版本不可追溯或候选自动发布的问题。','它发生在批准路径完成模拟发件时。','系统生成唯一来源候选，并记录动作、最终内容引用、模型与提示版本；普通日志保持脱敏。','成功时候选可追溯但仍非 active，重复批准不会增加第二个候选。'],scenarios:[['唯一来源候选','批准或编辑批准成功。','最多生成一个带来源的候选，状态不是 active。'],['重复批准','相同审核请求并发或重放。','候选保持唯一。'],['审计与日志脱敏','任一审核动作完成。','审计信息完整，普通日志不包含完整邮件或凭据。']],risks:['尚未运行候选唯一性与非 active 状态测试。','尚未审查真实日志输出是否覆盖所有敏感字段。']}
+];
+const nodes=[
+  {id:'b1-ingest',group:'b1',step:'B1 · 1',title:'增量接入与幂等入库',what:'从初始化边界后的持久化同步位置接入新邮件，并以稳定身份去重保存。',summary:'先确定哪些邮件真正新增，再保证重复拉取不会制造副本。',example:'历史初始化结束后邮件 A 到达；点击拉取新邮件时从已保存位置继续，A 即使再次出现也只保存一次。',terms:[['初始化边界','区分历史邮件与后续新增邮件的固定起点。'],['持久化同步位置','上一次已成功提交的增量读取位置。']],misconception:'不要误解：历史初始化保存的是全部历史收件和已发送邮件；增量流程只处理边界后的新收件。',narrative:['增量同步从已持久化的位置继续读取新邮件。','新邮件与其同步位置必须作为同一提交单元保存。','稳定邮件身份用于抵御重复批次或重复请求。'],scenarios:[['重复拉取同一批邮件','同一批新邮件再次被同步。','邮件记录唯一，不产生第二份业务对象。'],['写入中断','新邮件已读取但同步位置尚未提交。','恢复后重放未提交部分，不跳过邮件。']],risks:['尚未证明真实邮箱提供方的游标或 continuation token 行为。','尚未运行写入与增量位置同事务的故障注入测试。']},
+  {id:'b1-run',group:'b1',step:'B1 · 2',title:'单次启动与可恢复流程',what:'调度器只发现并启动一次；流程身份和等待点由持久化流程保存。',summary:'多个执行者可以发现同一邮件，但只能有一个实际处理，并且重启后回到原位置。',example:'两个调度器同时发现邮件 A，只有一个启动处理；A 等待审核时服务重启，恢复后仍是原来的等待任务。',terms:[['薄调度器','只负责发现和触发，不复制业务状态机。'],['处理身份','关联邮件、处理代次与恢复位置的稳定标识。']],misconception:'不要误解：重启恢复不是从头重跑，也不是再创建一份等待任务。',narrative:['调度器竞争未启动邮件，但不保存另一套节点状态。','流程在人工等待等位置持久化。','失败或重启后从同一处理身份恢复，已完成步骤不重复产生副作用。'],scenarios:[['双调度器并发','两个进程同时发现邮件 A。','最多一个进程成功启动处理。'],['真实进程重启','流程停在人工等待点后服务退出。','新进程恢复同一等待点。']],risks:['尚未运行双进程竞争与真实进程恢复测试。','尚未证明失败节点重放不会重复业务记录。']},
+  {id:'b2-route',group:'b2',step:'B2 · 3',title:'分类路由与证据判断',what:'按邮件类型选择路径，并区分产品事实、案例措辞和不足证据。',summary:'先决定是否应继续处理，再决定是否有足够依据回答。',example:'广告邮件提前结束；普通咨询只命中相似案例而无产品资料时，不会被写成确定的产品结论。',terms:[['条件路由','根据分类结果选择后续处理分支。'],['产品事实','必须由产品资料直接支持的能力或操作结论。']],misconception:'不要误解：检索到相似案例，不等于已获得可靠的产品依据。',narrative:['垃圾、VIP 和普通邮件进入明确的不同路径。','系统分别评估产品资料与案例内容。','证据不足时有限改写查询，到上限后停止并转受限结果或人工。'],scenarios:[['三类邮件路由','输入垃圾、VIP 与普通邮件。','进入各自约定路径，垃圾邮件不生成草稿。'],['只有案例或资料冲突','没有直接产品依据，或资料彼此冲突。','不生成确定性方案，并保留原因。']],risks:['尚未用真实检索数据验证事实与案例措辞分离。','查询改写的计数与停止条件尚未运行证明。']},
+  {id:'b2-draft',group:'b2',step:'B2 · 4',title:'受限草稿与后端校验',what:'按本次证据生成草稿，并校验结构、引用归属和结论支持关系。',summary:'模型输出不是最终结果；只有受证据支持且通过规则校验的草稿才能等待审核。',example:'模型返回格式正确但引用不属于本次检索的草稿，后端拒绝它；连续失败达到上限后转人工。',terms:[['受限草稿','在高风险或缺信息时减少确定性结论和操作步骤。'],['越界引用','引用不属于本次检索结果的内容。']],misconception:'不要误解：JSON 可以解析只表示格式正确，不表示结论受支持。',narrative:['有充分依据时生成可审核草稿。','缺信息、冲突或高风险时收紧内容或转人工。','后端分别限制网络重试、查询改写和重新生成，非法输出不能进入审核。'],scenarios:[['高风险或缺信息','回答所需信息缺失或操作风险较高。','生成受限草稿或转人工，不提供危险步骤。'],['非法输出或越界引用','输出无法解析，或引用不属于本次检索。','拒绝结果；达到对应上限后停止循环。']],risks:['尚未完成真实模型抽测。','尚未运行非法输出、越界引用与提示注入夹具。']},
+  {id:'b3-review',group:'b3',step:'B3 · 5',title:'真实审核与恢复重放',what:'审核必须命中当前等待点；先幂等落库审核事实，再恢复原流程。',summary:'人工只能处理当前那份草稿；决定保存成功后，即使恢复失败也能安全补做。',example:'小王批准邮件 A 后服务在恢复前退出；重试读取同一审核事实继续处理，不要求再次批准。',terms:[['审核中断','流程为等待人工决定而保存的正式停点。'],['审核事实','持久保存的人工动作与最终内容。']],misconception:'不要误解：接口返回失败不一定说明审核没有保存，重试前必须先检查已有审核事实。',narrative:['审核请求先核对当前中断和处理身份。','批准、编辑批准、拒绝和转人工均作为稳定审核事实保存。','统一恢复入口推进原流程，重复请求不得覆盖人工决定。'],scenarios:[['旧页面审核','使用过期的处理身份提交审核。','返回冲突，不修改当前审核事实。'],['审核后恢复前崩溃','审核事实已保存但尚未恢复。','重试复用原审核事实并补齐恢复。']],risks:['尚未运行四种审核动作与旧等待点的组合测试。','尚未注入审核落库后崩溃点。']},
+  {id:'b3-send',group:'b3',step:'B3 · 6',title:'模拟发件与副作用唯一',what:'仅批准路径写入模拟发件，并在重放时复用已有结果。',summary:'一次批准最多产生一条模拟发件；拒绝和转人工绝不产生发件记录。',example:'邮件 A 的模拟发件已写入但服务崩溃；恢复后识别已有记录，不会追加第二条。',terms:[['模拟发件','只在本地记录发送结果，不访问真实邮件网络。'],['副作用唯一','同一业务决定最多产生一次可观察记录。']],misconception:'不要误解：模拟发件成功不代表已经向真实邮箱发送。',narrative:['批准和编辑批准允许写入模拟发件。','拒绝和转人工保持零条模拟发件。','恢复前检查稳定业务身份对应的已有发送结果，防止重放重复写入。'],scenarios:[['批准与编辑批准','审核动作允许发送。','各自最多产生一条模拟发件。'],['写入后重放','发件已写入但后续位置未保存。','恢复复用已有记录，不重复写入。']],risks:['尚未运行模拟发件写入后崩溃测试。','尚未以可观察断言证明真实网络发件次数始终为零。']},
+  {id:'b3-audit',group:'b3',step:'B3 · 7',title:'候选生成与脱敏审计',what:'批准结果生成可追溯的唯一候选，并记录脱敏审计；候选不会自动生效。',summary:'把经审核的结果留作后续知识候选，但不能绕过复核直接被检索使用。',example:'邮件 A 被编辑批准后生成候选 C；C 带来源与版本信息等待复核，状态仍不是 active。',terms:[['来源候选','由本次批准答复生成、等待后续复核的知识候选。'],['审计','记录谁在何时做了什么及所用版本的追溯信息。']],misconception:'不要误解：生成候选不等于发布知识，也不等于它已经可以被检索。',narrative:['批准结果以稳定来源生成唯一候选。','审计记录审核动作、最终内容引用、模型与提示版本。','普通日志脱敏；候选需后续复核才可能生效。'],scenarios:[['重复批准','相同审核请求并发或重放。','候选保持唯一。'],['审计与日志检查','任一审核动作完成。','审计信息完整，普通日志不包含完整邮件或凭据。']],risks:['尚未运行候选唯一性和非 active 状态测试。','尚未审查真实日志是否覆盖所有敏感字段。']}
+];
+const scenarioStatus={
+  'b1-ingest':['partial','pending'],
+  'b1-run':['partial','partial'],
+  'b2-route':['proven','partial'],
+  'b2-draft':['partial','proven'],
+  'b3-review':['proven','proven'],
+  'b3-send':['proven','partial'],
+  'b3-audit':['proven','pending']
+};
+const esc=value=>String(value).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+function renderDefense(node){
+  const terms=node.terms.map(([term,meaning])=>`<li><b>${esc(term)}</b>：${esc(meaning)}</li>`).join('');
+  const narrative=node.narrative.map(sentence=>`<p>${esc(sentence)}</p>`).join('');
+  const statuses=scenarioStatus[node.id] || node.scenarios.map(()=>'pending');
+  const scenarios=node.scenarios.map(([title,trigger,outcome],index)=>{const status=statuses[index] || 'pending'; return `<li class="scenario scenario-${status}"><span class="status"><b>${statusLabel[status]}</b></span><b>${esc(title)}</b><p>触发：${esc(trigger)}</p><p>应观察：${esc(outcome)}</p><p>状态原因：${statusReason[status]}</p></li>`;}).join('');
+  const risks=node.risks.map(item=>`<li>${esc(item)}</li>`).join('');
+  return `<h3>${esc(node.step)}　${esc(node.title)}</h3><div class="brief-grid"><section class="brief-card"><h4>一句话结论</h4><p>${esc(node.summary)}</p></section><section class="brief-card"><h4>具体业务例子</h4><p>${esc(node.example)}</p></section><section class="brief-card terms"><h4>必要术语</h4><ul class="term-list">${terms}</ul></section><section class="brief-card misconception"><h4>不要误解</h4><p>${esc(node.misconception)}</p></section></div><div class="defense-grid"><section class="defense-card"><h4>做了什么</h4>${narrative}</section><section class="defense-card"><h4>应测场景</h4><ul class="scenario-list">${scenarios}</ul></section><section class="defense-card risk"><h4>可能漏掉什么</h4><ul>${risks}</ul></section></div>`;
+}
+function selectNode(id){
+  const node=nodes.find(item=>item.id===id);
+  document.querySelectorAll('.node').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.id===id)));
+  document.getElementById('detail').innerHTML=renderDefense(node);
+}
+const flow=document.getElementById('flow');
+nodes.forEach(node=>{
+  const button=document.createElement('button');
+  button.type='button'; button.className=`node ${node.group}`; button.dataset.id=node.id; button.setAttribute('aria-pressed','false');
+  button.innerHTML=`<span class="step">${esc(node.step)}</span><strong>${esc(node.title)}</strong><span class="responsibility">${esc(node.what)}</span>`;
+  button.addEventListener('click',()=>selectNode(node.id));
+  flow.append(button);
+});
+const toggle=document.getElementById('toggle-flow');
+toggle.addEventListener('click',()=>{
+  const expanded=!flow.classList.contains('expanded');
+  flow.classList.toggle('expanded',expanded); flow.classList.toggle('compact',!expanded);
+  toggle.textContent=expanded?'缩小流程':'展开流程'; toggle.setAttribute('aria-expanded',String(expanded));
+});
+selectNode(nodes[0].id);
+  </script>
+</body>
+</html>

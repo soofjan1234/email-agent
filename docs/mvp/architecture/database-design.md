@@ -123,9 +123,11 @@ A3 增加 `revision`、`reviewer`、`fact_sources` 和受控 `raw_review`。所�
 - `mail_sources`：固定快照的文件序号、相对来源、目录类别、内容哈希和原始字节。快照成功提交后不再依赖源文件可用性；任务接口不返回这些原文。
 - `mail_messages`：从快照解析的协议头、主题、正文及未支持原因，引用 `mail_sources`。按邮箱、目录、Message-ID 与内容哈希去重；相同 Message-ID 的不同原文全部保留并作为歧义排除。
 
-`historical_email_pairs` 增加 `mailbox_id`、`sync_job_id`，每个邮箱内的收件与回复分别唯一，原文引用指向内部 `mail_messages` 标识；不把历史记录写入供新邮件 Graph 使用的 `emails` 表。
+`historical_email_pairs` 增加 `mailbox_id`、`sync_job_id`，每个邮箱内的收件与回复分别唯一，原文引用指向内部 `mail_messages` 标识；B1 仅将 `inbox` 中明确标记为 `unmatched` 的历史记录幂等投影为供新邮件 Graph 使用的 `emails` 表，其余历史记录不进入 Graph。
 
 初始化使用固定文件集合及原始字节快照作为边界，两个目录的快照和边界摘要一次事务提交。后续按快照序号逐页读取，邮件与游标同事务提交；全量关联识别完成后，再逐页生成候选。执行期间使用同一 PostgreSQL 连接的邮箱会话锁，连接关闭即释放，已提交页保持可恢复，不增加租约状态机。
+
+真实 IMAP 增量另以每邮箱唯一的同步状态保存 `uidvalidity`、`last_committed_uid` 和初始化任务来源；每个 `incremental` 任务保存本次读取前后的游标及计数，供查询和审计。`UIDVALIDITY` 不匹配时不更新该状态而将任务标记为需要对账。新收件以邮箱标识、文件夹、IMAP UID 与内容哈希构造稳定业务去重键；历史 `unmatched` 收件以历史任务和原始邮件去重键构造稳定业务去重键。两类来源写入 `emails` 时同时固定 `graph_thread_id` 与代次，Graph checkpoint 才是恢复事实，`emails.status` 只是可重建查询投影。
 
 ### 3.10 `embedding_indexes`
 
@@ -134,6 +136,8 @@ A3 增加 `revision`、`reviewer`、`fact_sources` 和受控 `raw_review`。所�
 同一向量列不混用多个编码空间。模型或模板变更须通过独立索引/迁移和重新嵌入切换，不允许应用会话改写现有身份。该记录描述开发索引，不替代生产冻结记录。
 
 审计基础额外保存 `request_id` 和 `checkpoint_id`，与邮件、Graph thread 标识共同关联请求及运行上下文。
+
+迁移 `0005_workflow_sync` 增加 IMAP 游标、Graph checkpoint 和邮件处理投影基础字段；`0006_review_recovery` 增加审核补偿标记；`0007_workflow_projection` 补齐分类、优先级、风险、草稿与引用查询投影。当前迁移头为 `0007_workflow_projection`。
 
 ## 4. 一致性与安全要求
 

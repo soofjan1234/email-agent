@@ -2,6 +2,7 @@
 from dataclasses import dataclass
 from email import policy
 from email.parser import BytesParser
+from email.utils import parseaddr
 import hashlib
 from pathlib import Path
 import re
@@ -48,7 +49,7 @@ class MockMailboxAdapter:
 def parse_message(raw: bytes):
     """解析纯文本 MIME 正文，异常或不支持格式保留原文并禁止自动配对。"""
     result = {'message_id': None, 'in_reply_to': [], 'references': [],
-              'subject': '', 'body_text': '', 'parse_error': None}
+              'from_address': '', 'subject': '', 'body_text': '', 'parse_error': None}
     try:
         message = BytesParser(policy=policy.default).parsebytes(raw)
         ids = message.get_all('Message-ID', [])
@@ -62,6 +63,7 @@ def parse_message(raw: bytes):
             if MESSAGE_ID.sub('', value).strip():
                 result['parse_error'] = 'invalid_headers'
         result['subject'] = str(message.get('Subject', '')).replace('\x00', '')
+        result['from_address'] = parseaddr(str(message.get('From', '')))[1].replace('\x00', '')
         body = message.get_body(preferencelist=('plain',))
         if body is not None and body.get_content_disposition() != 'attachment':
             result['body_text'] = body.get_content().replace('\x00', '')

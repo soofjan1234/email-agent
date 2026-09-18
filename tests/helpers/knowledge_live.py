@@ -25,7 +25,8 @@ async def main():
         'Check SMB service before changing settings. ' * 240 +
         '\n\n> FINAL WARNING: Never format disks. Contact alice@example.test.\n', encoding='utf-8')
     settings = Settings(database_url=url, knowledge_root=root.resolve(),
-                        knowledge_source_id='a3-live-' + key, mailbox_id='a3-live-' + key)
+                        knowledge_source_id='a3-live-' + key, mailbox_id='a3-live-' + key,
+                        knowledge_local_import_enabled=True)
     app = create_app(settings)
     async with app.router.lifespan_context(app):
         db = app.state.database

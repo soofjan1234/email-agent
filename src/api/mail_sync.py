@@ -42,6 +42,7 @@ def serialize_job(job):
             'scanned_count': job.scanned_count, 'added_count': job.added_count,
             'skipped_count': job.skipped_count, 'failed_count': job.failed_count,
             'initialization_boundary': job.initialization_boundary, 'scan_cursor': job.scan_cursor,
+            'cursor_before': job.cursor_before, 'cursor_after': job.cursor_after,
             'pairing_progress': {'count': job.paired_count, 'complete': job.stage in ('candidates', 'completed')},
             'candidate_progress': {'count': job.candidate_count, 'complete': job.stage == 'completed'},
             'unsupported_count': sum(job.unsupported_reasons.values()),

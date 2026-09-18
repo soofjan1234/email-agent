@@ -11,7 +11,7 @@ from models import EmbeddingIndex, KnowledgeChunk
 
 
 # A4 的知识索引结构必须已由独立迁移创建，运行进程不自动升级数据库。
-SCHEMA_REVISION = '0004_retrieval'
+SCHEMA_REVISION = '0008_evaluation_runs'
 
 
 @event.listens_for(Session, 'before_flush')

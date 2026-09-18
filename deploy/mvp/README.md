@@ -1,10 +1,10 @@
 # MVP 本地启动与验证
 
-应用提供数据库底座、A2 历史初始化及 A3 知识审核/发布和产品导入。API 启动登记任务，worker 自动扫描模拟邮箱、识别完整一对一关系并生成脱敏候选；候选经人工审核后才能发布，历史邮件不触发 Agent。阶段进度见[状态账本](../../docs/mvp/status.md)，验证证据见[验证记录](../../docs/mvp/validation.md)。
+应用提供 A1—A4 知识底座及 B1—B3 邮件闭环后端。API 登记同步和审核请求；worker 初始化历史邮箱、投影明确未回复的历史收件、执行只读 IMAP 增量并启动或恢复 LangGraph。审核通过后只写模拟发件箱，不调用 SMTP。阶段进度见[状态账本](../../docs/mvp/status.md)，验证证据见[验证记录](../../docs/mvp/validation.md)。
 
 ## 数据库与配置
 
-优先复用本机 PostgreSQL。当前业务库为 `email_agent`，测试库为 `email_agent_snowflake_test`；旧 `email_agent_test` 保留历史测试记录，不再用于当前模型验证。其他机器需先创建业务库和独立测试库，并确保已安装 pgvector 扩展文件。首次迁移账户需要在目标库中创建扩展及业务表的权限。当前迁移版本为 `0003_knowledge`。
+优先复用本机 PostgreSQL。当前业务库为 `email_agent`，测试库为 `email_agent_snowflake_test`；旧 `email_agent_test` 保留历史测试记录，不再用于当前模型验证。其他机器需先创建业务库和独立测试库，并确保已安装 pgvector 扩展文件。首次迁移账户需要在目标库中创建扩展及业务表的权限。当前迁移头为 `0007_workflow_projection`。
 
 把根目录 `.env.example` 的配置填入忽略的 `.env`，不要覆盖已有模型凭据。原生进程使用 `DATABASE_URL`、`TEST_DATABASE_URL` 的 `localhost:5432`；Docker Desktop 使用 `MVP_DATABASE_URL`、`MVP_TEST_DATABASE_URL` 的 `host.docker.internal:5432`。密码需要使用 URL 编码；配置与凭据不进入镜像。
 
@@ -18,7 +18,9 @@
 
 以下命令从仓库根目录执行。先确认本机 PostgreSQL 可连接，再执行一次性迁移；API/worker 不自动迁移。
 
-首次启动 worker 前创建 `data/mock-mailbox/inbox/` 和 `data/mock-mailbox/sent/`，放入准备导入的历史 `.eml` 文件。Compose 将邮箱目录只读挂载到容器；`MAILBOX_ID` 必须与原生进程保持一致。空的两个目录会正常完成初始化；目录缺失则任务失败并保留可重试状态，不会被误判为空邮箱成功。
+使用模拟历史邮箱时，首次启动 worker 前创建 `data/mock-mailbox/inbox/` 和 `data/mock-mailbox/sent/`，放入准备导入的历史 `.eml` 文件。Compose 将邮箱目录只读挂载到容器；`MAILBOX_ID` 必须与原生进程保持一致。空的两个目录会正常完成初始化；目录缺失则任务失败并保留可重试状态，不会被误判为空邮箱成功。
+
+使用真实邮箱时设置 `MAILBOX_ADAPTER=imap`，并填写 `IMAP_HOST`、`IMAP_PORT`、`IMAP_USE_SSL`、`IMAP_USERNAME`、`IMAP_PASSWORD`、`IMAP_MAILBOX_FOLDER` 和 `IMAP_SENT_FOLDER`。适配器只读选择文件夹，以 `{UIDVALIDITY,last_committed_uid}` 增量读取，并用 `BODY.PEEK[]` 避免设置已读；不会发送、移动、删除或标记邮件。切勿把真实密码提交到仓库，已经在聊天或日志中暴露的密码应立即轮换。
 
 worker 首次成功捕获的文件集合、哈希和原始字节形成持久化边界。快照形成后新增的文件留给后续增量，文件修改不会改变当前历史处理结果。完成后重启跳过，不提供手动重复历史导入或时间范围选项。
 
@@ -58,11 +60,17 @@ try {
 
 `--once` 会执行一次历史初始化，已成功则跳过；不是仅做健康检查。服务模式遇到可恢复失败会在后续轮询中继续处理。`MAIL_SYNC_PAGE_SIZE` 控制每个事务的处理数量，`WORKER_POLL_SECONDS` 控制恢复轮询间隔。
 
-任务查询：`GET /api/v1/mail-sync-jobs`、`GET /api/v1/mail-sync-jobs/{id}`。可按 mode/status 分页查询；详情返回扫描游标、配对与候选数量、未支持原因以及失败信息，不返回原文。增量入口已实现初始化保护和幂等登记，实际增量处理与 Graph 调度仍待 B1；当前返回 202 的增量任务会保持 pending。
+任务查询：`GET /api/v1/mail-sync-jobs`、`GET /api/v1/mail-sync-jobs/{id}`。可按 mode/status 分页查询；详情返回扫描游标、配对与候选数量、未支持原因以及失败信息，不返回原文。增量入口具备初始化保护和幂等登记；worker 执行待处理增量任务，邮件与游标在同一事务提交，随后幂等启动 Graph。`UIDVALIDITY` 改变时任务进入 `cursor_reset_required`，不会静默覆盖旧游标。
+
+## B1—B3 邮件闭环
+
+`GET /api/v1/emails` 与 `GET /api/v1/emails/{id}` 返回邮件查询投影；Graph checkpoint 才是流程恢复事实。普通邮件最多检索两次、生成两次，产品依据缺失、提示注入、依赖失败或输出校验失败时安全转人工。Graph 在真实 `interrupt()` 等待审核。
+
+审核通过 `POST /api/v1/emails/{id}/reviews` 提交，必须携带当前 `graph_thread_id`、`checkpoint_id` 和唯一 `review_request_id`。支持 `approve`、`edit_and_approve`、`reject`、`manual`；批准操作幂等写入一条模拟发件记录和一条非活跃案例候选，拒绝或转人工不写发件箱。`GET /api/v1/outbox` 只查询模拟发件记录。B1—B3 没有真实 SMTP 副作用。
 
 ## 知识审核与产品导入
 
-准备 `data/knowledge/`，把 UTF-8 Markdown 产品文档放在该目录内。原生配置 `KNOWLEDGE_ROOT=data/knowledge`，Compose 只读挂载到 `/app/data/knowledge`，因此更新宿主机文件后无需重建镜像或重启 API。`KNOWLEDGE_SOURCE_ID` 在原生和容器保持一致，默认 `local-products`；`KNOWLEDGE_MAX_BYTES` 默认 2000000。不支持绝对路径、目录穿越、符号链接或目录联接。
+准备 `data/knowledge/`，把 UTF-8 Markdown 产品文档放在该目录内。原生配置 `KNOWLEDGE_ROOT=data/knowledge`，Compose 只读挂载到 `/app/data/knowledge`，因此更新宿主机文件后无需重建镜像或重启 API。`KNOWLEDGE_SOURCE_ID` 在原生和容器保持一致，默认 `local-products`；`KNOWLEDGE_MAX_BYTES` 默认 2000000。仅测试或开发时把 `KNOWLEDGE_LOCAL_IMPORT_ENABLED=true`；未显式开启时 `/api/v1/knowledge/import` 返回 403。该接口不适用于后续管理页面上传。不支持绝对路径、目录穿越、符号链接或目录联接。
 
 先启动既有本地 TEI 服务，或确认指定端点已运行匹配模型：
 
@@ -109,4 +117,4 @@ $env:PYTHONPATH = (Resolve-Path ./src).Path
 
 它会建立唯一的产品和案例样本，验证 Snowflake 查询嵌入、型号/DSM 精确过滤、双来源候选和“不把候选当作充分依据”的返回边界。Docker 使用同一脚本：`docker compose --env-file .env -f deploy/mvp/compose.yaml run --rm api python tests/helpers/retrieval_live.py`。
 
-重新解析依赖仅在有意升级时执行：`uv pip compile pyproject.toml --extra dev --python-version 3.12 --output-file requirements.lock`，随后重新验证两个运行环境。LangGraph 与 PostgreSQL Checkpointer 已锁定依赖；恢复和业务调度仍由 B1 实现及验证。
+重新解析依赖仅在有意升级时执行：`uv pip compile pyproject.toml --extra dev --python-version 3.12 --output-file requirements.lock`，随后重新验证两个运行环境。LangGraph 与 PostgreSQL Checkpointer 已锁定依赖；B1—B3 已实现恢复、业务调度、审核补偿和模拟副作用幂等，真实邮箱与真实生成服务仍需在受控环境验收。

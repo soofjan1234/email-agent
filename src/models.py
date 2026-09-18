@@ -3,7 +3,7 @@ import uuid
 from datetime import datetime
 
 from pgvector.sqlalchemy import Vector
-from sqlalchemy import CheckConstraint, Computed, DateTime, ForeignKey, Index, Integer, LargeBinary, String, Text, UniqueConstraint, func, text
+from sqlalchemy import Boolean, CheckConstraint, Computed, DateTime, ForeignKey, Index, Integer, LargeBinary, String, Text, UniqueConstraint, func, text
 from sqlalchemy.dialects.postgresql import JSONB, TSVECTOR, UUID
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
@@ -43,6 +43,21 @@ class Email(MutableRecord, Base):
     graph_thread_id: Mapped[str | None] = mapped_column(Text, unique=True)
     workflow_generation: Mapped[int] = mapped_column(default=1, server_default='1')
     status: Mapped[str] = mapped_column(String(64), default='received', server_default='received')
+    category: Mapped[str | None] = mapped_column(Text)
+    priority: Mapped[str | None] = mapped_column(Text)
+    risk: Mapped[str | None] = mapped_column(Text)
+    reply_draft: Mapped[str | None] = mapped_column(Text)
+    citations: Mapped[list] = mapped_column(JSONB, default=list, server_default='[]')
+
+
+class MailboxSyncState(Base):
+    """每邮箱唯一的真实 IMAP 增量位置；UID 必须与 UIDVALIDITY 成对解释。"""
+    __tablename__ = 'mailbox_sync_states'
+    mailbox_id: Mapped[str] = mapped_column(Text, primary_key=True)
+    uidvalidity: Mapped[str] = mapped_column(Text)
+    last_committed_uid: Mapped[int] = mapped_column(Integer)
+    history_sync_job_id: Mapped[uuid.UUID] = mapped_column(ForeignKey('mail_sync_jobs.id'))
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
 
 
 class KnowledgeDocument(MutableRecord, Base):
@@ -110,6 +125,7 @@ class Review(Record, Base):
     risk: Mapped[str] = mapped_column(Text)
     reviewer: Mapped[str] = mapped_column(Text)
     comment: Mapped[str | None] = mapped_column(Text)
+    result_applied_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
 
 
 class SimulatedOutbox(Record, Base):
@@ -121,6 +137,117 @@ class SimulatedOutbox(Record, Base):
     subject: Mapped[str] = mapped_column(Text)
     body_text: Mapped[str] = mapped_column(Text)
     sent_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+
+class EvaluationRun(Record, Base):
+    """一次评估绑定不可变资料冻结、模型身份和随机种子。"""
+    __tablename__ = 'evaluation_runs'
+    __table_args__ = (
+        UniqueConstraint('evaluation_run_id', name='evaluation_run_identifier'),
+        CheckConstraint("purpose IN ('retrieval','draft_latency','review')", name='evaluation_run_purpose'),
+    )
+    evaluation_run_id: Mapped[str] = mapped_column(Text)
+    purpose: Mapped[str] = mapped_column(String(32))
+    knowledge_freeze_sha256: Mapped[str] = mapped_column(String(64))
+    embedding_identity: Mapped[dict] = mapped_column(JSONB)
+    generator_identity: Mapped[dict | None] = mapped_column(JSONB)
+    prompt_version: Mapped[str | None] = mapped_column(Text)
+    judge_model: Mapped[str | None] = mapped_column(Text)
+    judge_prompt_version: Mapped[str | None] = mapped_column(Text)
+    judge_run_id: Mapped[str | None] = mapped_column(Text)
+    random_seed: Mapped[int] = mapped_column(Integer)
+    code_version: Mapped[str] = mapped_column(Text)
+
+
+class EvaluationSample(Record, Base):
+    """评估样本在运行内冻结，只保存来源和纳入决定。"""
+    __tablename__ = 'evaluation_samples'
+    __table_args__ = (
+        UniqueConstraint('evaluation_run_id', 'email_id', name='evaluation_sample_once'),
+        CheckConstraint("sample_source IN ('real','synthetic_v2')", name='evaluation_sample_source'),
+        CheckConstraint("(included AND exclusion_reason IS NULL) OR (NOT included AND exclusion_reason IS NOT NULL)",
+                        name='evaluation_sample_inclusion_reason'),
+    )
+    evaluation_run_id: Mapped[uuid.UUID] = mapped_column(ForeignKey('evaluation_runs.id'))
+    email_id: Mapped[uuid.UUID] = mapped_column(ForeignKey('emails.id'))
+    sample_source: Mapped[str] = mapped_column(String(32))
+    included: Mapped[bool] = mapped_column(Boolean)
+    exclusion_reason: Mapped[str | None] = mapped_column(Text)
+
+
+class RetrievalObservation(Record, Base):
+    """一个样本在一个固定检索通道中的候选或可审计失败。"""
+    __tablename__ = 'retrieval_observations'
+    __table_args__ = (
+        UniqueConstraint('evaluation_sample_id', 'channel', 'raw_rank', name='retrieval_observation_rank'),
+        CheckConstraint("channel IN ('keyword','vector','rrf')", name='retrieval_observation_channel'),
+        CheckConstraint("status IN ('succeeded','empty','failed','timed_out')", name='retrieval_observation_status'),
+        CheckConstraint('raw_rank >= 1', name='retrieval_observation_positive_rank'),
+    )
+    evaluation_sample_id: Mapped[uuid.UUID] = mapped_column(ForeignKey('evaluation_samples.id'))
+    channel: Mapped[str] = mapped_column(String(16))
+    raw_rank: Mapped[int] = mapped_column(Integer)
+    candidate_chunk_id: Mapped[uuid.UUID | None] = mapped_column(ForeignKey('knowledge_chunks.id'))
+    candidate_version: Mapped[int | None] = mapped_column(Integer)
+    duration_ms: Mapped[int] = mapped_column(Integer)
+    status: Mapped[str] = mapped_column(String(16))
+    failure_code: Mapped[str | None] = mapped_column(Text)
+
+
+class RetrievalJudgment(Record, Base):
+    """保留 Codex 初标与人工更正，任何更正不覆盖原始判定。"""
+    __tablename__ = 'retrieval_judgments'
+    __table_args__ = (
+        UniqueConstraint('retrieval_observation_id', name='retrieval_judgment_observation_once'),
+        CheckConstraint("codex_label IN ('relevant','partially_relevant','not_relevant','no_answer')",
+                        name='retrieval_judgment_codex_label'),
+        CheckConstraint("final_label IS NULL OR final_label IN ('relevant','partially_relevant','not_relevant','no_answer')",
+                        name='retrieval_judgment_final_label'),
+        CheckConstraint("audit_status IN ('pending','confirmed','corrected','unable_to_judge')",
+                        name='retrieval_judgment_audit_status'),
+    )
+    retrieval_observation_id: Mapped[uuid.UUID] = mapped_column(ForeignKey('retrieval_observations.id'))
+    blinded_rank: Mapped[int] = mapped_column(Integer)
+    codex_label: Mapped[str] = mapped_column(String(32))
+    confidence: Mapped[int] = mapped_column(Integer)
+    rationale: Mapped[str] = mapped_column(Text)
+    audit_status: Mapped[str] = mapped_column(String(32), default='pending', server_default='pending')
+    final_label: Mapped[str | None] = mapped_column(String(32))
+
+
+class EvaluationExecution(Record, Base):
+    """草稿评估每次使用隔离执行邮件和新的 Graph thread。"""
+    __tablename__ = 'evaluation_executions'
+    __table_args__ = (
+        UniqueConstraint('evaluation_run_id', 'source_email_id', 'attempt', name='evaluation_execution_attempt'),
+        UniqueConstraint('execution_email_id', name='evaluation_execution_email_once'),
+        CheckConstraint("status IN ('succeeded','failed','timed_out','archived')", name='evaluation_execution_status'),
+        CheckConstraint('attempt >= 1', name='evaluation_execution_positive_attempt'),
+    )
+    evaluation_run_id: Mapped[uuid.UUID] = mapped_column(ForeignKey('evaluation_runs.id'))
+    source_email_id: Mapped[uuid.UUID] = mapped_column(ForeignKey('emails.id'))
+    execution_email_id: Mapped[uuid.UUID] = mapped_column(ForeignKey('emails.id'))
+    attempt: Mapped[int] = mapped_column(Integer)
+    graph_thread_id: Mapped[str] = mapped_column(Text, unique=True)
+    status: Mapped[str] = mapped_column(String(16))
+    failure_code: Mapped[str | None] = mapped_column(Text)
+
+
+class EvaluationSpan(Record, Base):
+    """一条执行的阶段耗时、状态与受控重试次数。"""
+    __tablename__ = 'evaluation_spans'
+    __table_args__ = (
+        UniqueConstraint('evaluation_execution_id', 'stage', name='evaluation_span_once'),
+        CheckConstraint("status IN ('succeeded','failed','skipped')", name='evaluation_span_status'),
+        CheckConstraint('duration_ms >= 0', name='evaluation_span_nonnegative_duration'),
+        CheckConstraint('retry_count >= 0', name='evaluation_span_nonnegative_retry'),
+    )
+    evaluation_execution_id: Mapped[uuid.UUID] = mapped_column(ForeignKey('evaluation_executions.id'))
+    stage: Mapped[str] = mapped_column(Text)
+    started_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    duration_ms: Mapped[int] = mapped_column(Integer)
+    status: Mapped[str] = mapped_column(String(16))
+    retry_count: Mapped[int] = mapped_column(Integer, default=0, server_default='0')
 
 
 class HistoricalEmailPair(MutableRecord, Base):
@@ -214,6 +341,8 @@ class MailSyncJob(MutableRecord, Base):
     unsupported_reasons: Mapped[dict] = mapped_column(JSONB, default=dict, server_default='{}')
     failure_type: Mapped[str | None] = mapped_column(Text)
     retryable: Mapped[bool] = mapped_column(default=False, server_default='false')
+    cursor_before: Mapped[dict | None] = mapped_column(JSONB)
+    cursor_after: Mapped[dict | None] = mapped_column(JSONB)
 
 
 class MailSource(Record, Base):
@@ -242,6 +371,7 @@ class MailMessage(Record, Base):
     message_id: Mapped[str | None] = mapped_column(Text)
     in_reply_to: Mapped[list] = mapped_column(JSONB)
     references: Mapped[list] = mapped_column(JSONB)
+    from_address: Mapped[str | None] = mapped_column(Text)
     subject: Mapped[str] = mapped_column(Text)
     body_text: Mapped[str] = mapped_column(Text)
     parse_error: Mapped[str | None] = mapped_column(Text)

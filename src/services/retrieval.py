@@ -2,6 +2,7 @@
 import asyncio
 from dataclasses import dataclass
 import re
+import time
 
 import httpx
 import numpy as np
@@ -121,6 +122,46 @@ class RetrievalService:
                                rank=index, rrf_score=row['score'], keyword_rank=row['keyword_rank'],
                                vector_rank=row['vector_rank'])
                 for index, row in enumerate(ordered, 1)]
+
+    @staticmethod
+    def _channel_rows(source_type, rows, channel):
+        """把单通道原始排名映射为与 RRF 一致的受控片段对象。"""
+        return [RetrievedChunk(chunk_id=str(chunk.id), document_id=str(document.id), source_type=source_type,
+            source_ref=document.source_ref, version=document.version, title=document.title, content=chunk.content,
+            product_model=chunk.product_model, os_version=chunk.os_version, category=chunk.category, rank=rank,
+            rrf_score=0.0, keyword_rank=rank if channel == 'keyword' else None,
+            vector_rank=rank if channel == 'vector' else None)
+            for rank, (chunk, document, _) in enumerate(rows[:SOURCE_LIMIT], 1)]
+
+    async def retrieve_product_channels(self, query):
+        """评估专用只读入口：同一查询返回产品资料的关键词、向量和 RRF Top-3。"""
+        if not isinstance(query, str) or not query.strip():
+            raise RetrievalError(400, 'invalid_query', 'A non-empty knowledge query is required')
+        # 1. 固定原查询、元数据过滤和候选上限，评估不允许查询改写。
+        tokens = normalize_query(query)
+        _, metadata = extract_query_metadata(query)
+        started = time.perf_counter()
+        vector = await asyncio.to_thread(self._query_vector, query)
+        encoding_ms = round((time.perf_counter() - started) * 1000)
+        async with self.database.session() as session:
+            keyword_started = time.perf_counter()
+            keyword_rows = await keyword_search(session, 'product_doc', tokens,
+                self.database.settings.embedding_index_version, metadata['product_model'], metadata['os_version'],
+                CHANNEL_CANDIDATE_LIMIT)
+            keyword_ms = round((time.perf_counter() - keyword_started) * 1000)
+            vector_started = time.perf_counter()
+            vector_rows = await vector_search(session, 'product_doc', vector,
+                self.database.settings.embedding_index_version, metadata['product_model'], metadata['os_version'],
+                CHANNEL_CANDIDATE_LIMIT)
+            vector_ms = round((time.perf_counter() - vector_started) * 1000)
+        rrf_started = time.perf_counter()
+        rrf_rows = self._fuse('product_doc', keyword_rows, vector_rows)
+        rrf_ms = round((time.perf_counter() - rrf_started) * 1000)
+        return {'keyword': self._channel_rows('product_doc', keyword_rows, 'keyword'),
+                'vector': self._channel_rows('product_doc', vector_rows, 'vector'), 'rrf': rrf_rows,
+                'durations_ms': {'query_embedding': encoding_ms, 'keyword': keyword_ms,
+                                 'vector': vector_ms, 'rrf': rrf_ms},
+                'query_metadata': metadata}
 
     async def retrieve(self, query):
         """按产品和案例分别执行全文/精确向量检索，再返回最多六个可引用候选。"""

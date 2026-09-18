@@ -233,3 +233,21 @@ PostgreSQL 检索、LangGraph Checkpointer、审核恢复、有限循环和业�
 真实 Snowflake 服务实际核验模型 `Snowflake/snowflake-arctic-embed-m-v1.5`、revision `e58a8f756156a1293d763f17e3aae643474e9b8a`、输入上限 512。原生和容器各创建唯一产品、案例样本；结果均为产品 1 条、案例 1 条，显式型号/版本过滤命中，RRF 参数为 60。此为功能连通性验证，不是 Recall@K、MRR、P95、真实邮件语料或生产负载结论。
 
 业务库最终处于 `0004_retrieval`，且 `knowledge_chunks`、`emails`、`mail_sync_jobs`、`case_candidates` 均为 0；所有样本仅写入独立测试库。临时 Snowflake 服务已停止，未启动长期 API/worker；本机 PostgreSQL 与项目数据库保留。A4 不包含 HTTP 查询入口、LangGraph 调用、依据评估、回复生成或人工审核页面，这些属于 B、C 阶段。代码未提交或推送。
+
+## 2026-09-17 B1—B3 邮件闭环后端
+
+B1 已实现只读 IMAP 适配器及 `{UIDVALIDITY,last_committed_uid}` 游标。历史初始化捕获 `UIDNEXT - 1` 边界并同时读取显式 Sent 文件夹；增量只检索更大 UID，使用 `BODY.PEEK[]`，邮件入库、业务邮件投影、任务计数和游标推进同一事务提交。`Message-ID` 只用于去重，`UIDVALIDITY` 改变时保留旧状态并返回 `cursor_reset_required`。历史初始化中明确 `unmatched` 的收件会幂等进入同一 Graph 入口。
+
+B2 以 PostgreSQL Checkpointer 保存唯一运行状态，薄调度器对同一 thread 使用 advisory lock，不维护第二套流程状态。垃圾邮件直接归档；VIP、提示注入、依赖不可用、缺少产品事实或校验失败均进入人工路径。检索最多两次且只改写一次，生成最多两次；结构、引用 ID、来源类型和产品事实引用由后端校验。Graph 使用真实 `interrupt()` 等待人工审核，邮件表只保存可修复的查询投影。
+
+B3 先保存唯一人工审核事实，再恢复同一 checkpoint；恢复或副作用提交中断后，同一请求可补偿重放。批准或编辑后批准只产生一条模拟发件记录和一条非活跃案例候选；拒绝或转人工不产生发件记录。候选正文在写入前脱敏。全部路径均未实现或调用 SMTP。
+
+| 验证 | 实际结果 |
+| --- | --- |
+| Windows `.venv/Scripts/python.exe -m pytest -q` | 144 项通过，27.67 秒 |
+| `alembic heads` | `0007_workflow_projection (head)` |
+| `docker compose --env-file .env -f deploy/mvp/compose.yaml config --quiet` | 退出码 0 |
+| IMAP 单元测试 | 覆盖只读选择、UID 边界、`BODY.PEEK[]`、增量范围和 `UIDVALIDITY` 变化；使用 fake IMAP，未连接供应商 |
+| PostgreSQL 集成测试 | 覆盖增量事务、历史未回复投影、Graph 中断/恢复、依据校验、重复审核和模拟副作用重放 |
+
+本轮没有使用聊天中出现的邮箱凭据，没有连接真实阿里云企业邮箱，没有读取或改动真实邮件，也没有调用真实生成服务。未执行本轮 Docker 镜像构建、容器全量测试、真实多进程竞争或进程退出后恢复；这些属于外部验收边界。邮箱密码一旦在聊天或日志出现，应先轮换，再用专用测试邮箱执行受控验收。代码未提交或推送。
